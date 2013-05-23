@@ -1,6 +1,7 @@
 
 
 #include "unrimpnode.h"
+#include <OpenGLRenderer/OpenGLRenderer.h>
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
@@ -157,9 +158,8 @@ void UnrimpNode::updateFBO()
                                             QRectF(0, 0, m_size.width(), m_size.height()),
                                             QRectF(0, 0, 1, 1));
 
-	
-    delete m_texture;
-    m_texture = m_quickWindow->createTextureFromId(m_renderTexture->getId(), m_size);
+	delete m_texture;
+    m_texture = m_quickWindow->createTextureFromId(static_cast<OpenGLRenderer::Texture2D*>(texture2D)->getOpenGLTexture(), m_size);
 
     m_material.setTexture(m_texture);
     m_materialO.setTexture(m_texture);
@@ -223,6 +223,13 @@ void UnrimpNode::init()
 			{
 				// Create the vertex buffer object (VBO)
 				// -> Clip space vertex positions, left/bottom is (-1,-1) and right/top is (1,1)
+// 				static const float VERTEX_POSITION[] =
+// 				{					// Vertex ID	Triangle on screen
+// 					 0.0f, 1.0f,	// 0				0
+// 					 1.0f, 0.0f,	// 1			   .   .
+// 					 -0.5f, 0.0f	// 2			  2.......1
+// 				};
+				
 				static const float VERTEX_POSITION[] =
 				{					// Vertex ID	Triangle on screen
 					 0.0f, 1.0f,	// 0				0
