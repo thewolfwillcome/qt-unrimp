@@ -11,26 +11,30 @@
 
 #include "UnrimpExamples/FirstTriangle/FirstTriangle.h"
 #include "UnrimpExamples/VertexBuffer/VertexBuffer.h"
+#include "UnrimpExamples/FirstTexture/FirstTexture.h"
+#include "UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.h"
 
 
 UnrimpNode::UnrimpNode()
-    : QSGGeometryNode()
-    , m_geometry(QSGGeometry::defaultAttributes_TexturedPoint2D(), 4)
-    , m_texture(0)
-    , m_quickWindow(0)
-    , m_unrimpContext(0)
-    , m_qtContext(0)
-    , m_samples(0)
-    , m_AAEnabled(false)
+	: QSGGeometryNode()
+	, m_geometry(QSGGeometry::defaultAttributes_TexturedPoint2D(), 4)
+	, m_texture(0)
+	, m_quickWindow(0)
+	, m_unrimpContext(0)
+	, m_qtContext(0)
+	, m_samples(0)
+	, m_AAEnabled(false)
+	, m_newExampleName("FirstTriangle")
+	, m_availableExamples({"FirstTriangle", "VertexBuffer", "FirstTexture", "FirstRenderToTexture"})
 	, m_example(new FirstTriangle)
-    , m_initialized(false)
-    , m_dirtyFBO(false)
+	, m_initialized(false)
+	, m_dirtyFBO(false)
 	, m_exampleChanged(false)
 {
-    setMaterial(&m_material);
-    setOpaqueMaterial(&m_materialO);
-    setGeometry(&m_geometry);
-    setFlag(UsePreprocess);
+	setMaterial(&m_material);
+	setOpaqueMaterial(&m_materialO);
+	setGeometry(&m_geometry);
+	setFlag(UsePreprocess);
 }
 
 UnrimpNode::~UnrimpNode()
@@ -38,17 +42,17 @@ UnrimpNode::~UnrimpNode()
 	m_frameBuffer = nullptr;
 	m_renderTexture = nullptr;
 	m_renderer = nullptr;
-    delete m_unrimpContext;
+	delete m_unrimpContext;
 }
 
 QString UnrimpNode::example()
 {
-	return m_example->name();
+	return m_newExampleName;
 }
 
 bool UnrimpNode::setExample(QString exampleName)
 {
-	if (exampleName == example())
+	if (exampleName == example() || !m_availableExamples.contains(exampleName))
 		return false;
 	
 	m_newExampleName = exampleName;
@@ -122,10 +126,12 @@ void UnrimpNode::update()
 			m_example = QSharedPointer<ExampleBase>(new FirstTriangle);
 		else if (m_newExampleName == "VertexBuffer")
 			m_example = QSharedPointer<ExampleBase>(new VertexBuffer);
+		else if (m_newExampleName == "FirstTexture")
+			m_example = QSharedPointer<ExampleBase>(new FirstTexture);
+		else if (m_newExampleName == "FirstRenderToTexture")
+			m_example = QSharedPointer<ExampleBase>(new FirstRenderToTexture);
 		
 		m_example->Init(m_renderer);
-		
-		m_newExampleName.clear();
 		m_exampleChanged = false;
 	}
 

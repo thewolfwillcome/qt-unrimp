@@ -69,6 +69,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRC_FILES
 	UnrimpExamples/FirstTriangle/FirstTriangle.cpp
 	UnrimpExamples/VertexBuffer/VertexBuffer.cpp
+	UnrimpExamples/FirstTexture/FirstTexture.cpp
+	UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.cpp
 	UnrimpExamples/Color4.cpp
 	UnrimpExamples/ExampleBase.cpp
 )

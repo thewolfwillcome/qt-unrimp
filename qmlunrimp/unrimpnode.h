@@ -53,6 +53,7 @@ private:
     bool m_AAEnabled;
     QSize m_size;
 	QString m_newExampleName;
+	QVector<QString> m_availableExamples;
 
     Renderer::IRendererPtr m_renderer;
 	Renderer::ITexture2DPtr m_renderTexture;

@@ -2,86 +2,83 @@ import QtQuick 2.0
 import Unrimp 1.0
 
 Rectangle {
-    id: unrimp
-    width: 1024
-    height: 768
-    color: "black"
+	id: unrimp
+	width: 1024
+	height: 768
+	color: "black"
 
-    Image {
-        id: back
-        anchors.fill: parent
-        source: "GrassandSky.png"
-        Behavior on opacity { NumberAnimation { } }
-    }
+	Image {
+		id: back
+		anchors.fill: parent
+		source: "GrassandSky.png"
+		Behavior on opacity { NumberAnimation { } }
+	}
 
-    UnrimpItem {
-        id: unrimpitem
-        width: 600; height: 400
-        anchors.left: move_handle1.left
-        anchors.leftMargin: -5
-        anchors.top: move_handle1.bottom
-        anchors.topMargin: 6
-        
-        exampleName: "FirstTriangle"
+	UnrimpItem {
+		id: unrimpitem
+		width: 600; height: 400
+		anchors.left: move_handle1.left
+		anchors.leftMargin: -5
+		anchors.top: move_handle1.bottom
+		anchors.topMargin: 6
 
+		exampleName: "FirstTriangle"
 
-        Behavior on opacity { NumberAnimation { } }
-        Behavior on width { NumberAnimation { } }
-        Behavior on height { NumberAnimation { } }
+		Behavior on opacity { NumberAnimation { } }
+		Behavior on width { NumberAnimation { } }
+		Behavior on height { NumberAnimation { } }
 
-        states: [
-            State {
-                name: "State1"
+		states: [
+			State {
+				name: "State1"
 
-                PropertyChanges {
-                    target: unrimpitem
-                    width: unrimp.width
-                    height: unrimp.height
-                }
-                PropertyChanges {
-                    target: move_handle1
-                    x: 5
-                    y: -move_handle1.height - 6
-                }
+				PropertyChanges {
+					target: unrimpitem
+					width: unrimp.width
+					height: unrimp.height
+				}
+				PropertyChanges {
+					target: move_handle1
+					x: 5
+					y: -move_handle1.height - 6
+				}
 
-                PropertyChanges {
-                    target: changeAA_handle1
-                    anchors.top: unrimpitem.top
-                    anchors.topMargin: 5
-                }
-                PropertyChanges {
-                    target: maximize_handle1
-                    anchors.top: unrimpitem.top
-                    anchors.topMargin: 5
-                }
-                
-                PropertyChanges {
-                    target: example1_handle1
-                    anchors.top: unrimpitem.top
-                    anchors.topMargin: 5
-                }
-                PropertyChanges {
-                    target: example2_handle1
-                    anchors.top: unrimpitem.top
-                    anchors.topMargin: 5
-                }
-                
-                PropertyChanges {
-                    target: back
-                    opacity: 0
-                }
-            }
-        ]
-    }
-	
+				PropertyChanges {
+					target: changeAA_handle1
+					anchors.top: unrimpitem.top
+					anchors.topMargin: 5
+				}
+				PropertyChanges {
+					target: maximize_handle1
+					anchors.top: unrimpitem.top
+					anchors.topMargin: 5
+				}
+				
+				PropertyChanges {
+					target: back
+					opacity: 0
+				}
+			}
+		]
+	}
+
 	MoveItem {
 		id: move_handle1
-		x: 200
+		x: 250
 		y: 200
 		window: unrimp
 		
 		Behavior on x { NumberAnimation { } }
 		Behavior on y { NumberAnimation { } }
+	}
+	
+	
+	TitleBarText {
+		text: "Current Example: "+unrimpitem.exampleName
+		anchors.left: showhide_handle1.right
+		anchors.right: changeAA_handle1.left
+		anchors.top: move_handle1.top
+		anchors.bottom: move_handle1.bottom
 	}
 
 	ShowHideButton {
@@ -93,70 +90,50 @@ Rectangle {
 		onClicked: unrimpitem.opacity = unrimpitem.opacity == 1 ? 0 : 1
 	}
 
-    Rectangle {
-        id: changeAA_handle1
-        width: 25
-        height: 25
-        radius: 5
-        gradient: Gradient {
-            GradientStop {
-                position: 0
-                color: "#c83e3e3e"
-            }
+	Rectangle {
+		id: changeAA_handle1
+		width: 25
+		height: 25
+		radius: 5
+		gradient: Gradient {
+			GradientStop {
+				position: 0
+				color: "#c83e3e3e"
+			}
 
-            GradientStop {
-                position: 1
-                color: "#c8919191"
-            }
-        }
-        anchors.top: move_handle1.top
-        anchors.right: maximize_handle1.left
-        anchors.rightMargin: 6
-        border.color: "#1a1a1a"
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: { unrimpitem.smooth = !unrimpitem.smooth }
-        }
-
-        Text {
-            anchors.fill: parent
-            text: "AA"
-            font.bold: true
-            font.pixelSize: parent.height * 0.55
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-
-            Rectangle {
-                height: parent.height
-                width: 2
-                anchors.centerIn: parent
-                color: "#BB1111"
-                rotation: 40
-                visible: !unrimpitem.smooth
-            }
-         }
-        border.width: 2
-    }
-    
-	ExampleButton {
-		id: example1_handle1
-		text: "Ext1"
+			GradientStop {
+				position: 1
+				color: "#c8919191"
+			}
+		}
 		anchors.top: move_handle1.top
-		anchors.right: example2_handle1.left
-        anchors.rightMargin: 6
-		exampleName: "FirstTriangle"
-		exampleItem: unrimpitem
-	}
-	
-	ExampleButton {
-		id: example2_handle1
-		text: "Ext2"
-		anchors.top: move_handle1.top
-		anchors.right: changeAA_handle1.left
-        anchors.rightMargin: 6
-		exampleName: "VertexBuffer"
-		exampleItem: unrimpitem
+		anchors.right: maximize_handle1.left
+		anchors.rightMargin: 6
+		border.color: "#1a1a1a"
+
+		MouseArea {
+			anchors.fill: parent
+			onClicked: { unrimpitem.smooth = !unrimpitem.smooth }
+		}
+
+		Text {
+			anchors.fill: parent
+			text: "AA"
+			font.bold: true
+			font.pixelSize: parent.height * 0.55
+			verticalAlignment: Text.AlignVCenter
+			horizontalAlignment: Text.AlignHCenter
+
+			Rectangle {
+				height: parent.height
+				width: 2
+				anchors.centerIn: parent
+				color: "#BB1111"
+				rotation: 40
+				visible: !unrimpitem.smooth
+			}
+			}
+		border.width: 2
 	}
 
 	MaximizeButton {
@@ -167,51 +144,123 @@ Rectangle {
 		
 		onClicked: { unrimpitem.state = unrimpitem.state == '' ? 'State1' : '' }
 	}
-    
 
-    Item {
-        id: camerawrapper
-        property real yaw: 0
-        property real pitch: 0
-        property real zoom: 1
+	Item {
+		id: camerawrapper
+		property real yaw: 0
+		property real pitch: 0
+		property real zoom: 1
 
-        onYawChanged: unrimpitem.camera.yaw = yaw
-        onPitchChanged: unrimpitem.camera.pitch = pitch
-        onZoomChanged: unrimpitem.camera.zoom = zoom
+		onYawChanged: unrimpitem.camera.yaw = yaw
+		onPitchChanged: unrimpitem.camera.pitch = pitch
+		onZoomChanged: unrimpitem.camera.zoom = zoom
 
-        Behavior on yaw { NumberAnimation{ } }
-        Behavior on pitch { NumberAnimation{ } }
-        Behavior on zoom { NumberAnimation{ } }
-    }
-
-    CameraController {
-		id: camera_controller_container
-		anchors.left: moveItem_cameraControl.left
-		anchors.leftMargin: -5
-		anchors.top: moveItem_cameraControl.bottom
-		anchors.topMargin: 6
-	}
-
-    MoveItem {
-		id: moveItem_cameraControl
-		x: 31
-        y: 269
-		window: unrimp
+		Behavior on yaw { NumberAnimation{ } }
+		Behavior on pitch { NumberAnimation{ } }
+		Behavior on zoom { NumberAnimation{ } }
 	}
 	
-	ShowHideButton {
-		id: showHide_cameraControl
+	ListModel {
+		id: myModel
+		ListElement {
+			name: "FirstTriangle"
+			type: "Basic"
+		}
+		ListElement {
+			name: "VertexBuffer"
+			type: "Basic"
+		}
+		ListElement {
+			name: "FirstTexture"
+			type: "Basic"
+		}
+		ListElement {
+			name: "FirstRenderToTexture"
+			type: "Basic"
+		}
+		ListElement {
+			name: "FirstMultipleRenderTargets"
+			type: "Basic"
+		}
+		/*ListElement { // not possbile here because a swap chain is a window not a framebuffer object
+			name: "FirstMultipleSwapChains"
+			type: "Basic"
+		}*/
+		ListElement {
+			name: "FirstInstancing"
+			type: "Basic"
+		}
+		ListElement {
+			name: "FirstGeometryShader"
+			type: "Basic"
+		}
+		ListElement {
+			name: "FirstTessellation"
+			type: "Basic"
+		}
+		ListElement {
+			name: "FirstPostProcessing"
+			type: "Advanced"
+		}
+		ListElement {
+			name: "Fxaa"
+			type: "Advanced"
+		}
+		ListElement {
+			name: "FirstGpgpu"
+			type: "Advanced"
+		}
+		ListElement {
+			name: "InstancedCubes"
+			type: "Advanced"
+		}
+		ListElement {
+			name: "IcosahedronTessellation"
+			type: "Advanced"
+		}
+	}
+	
+	ExamplesList {
+		id: example_list_container
+		model: myModel
+		anchors.left: moveItem_exampleList.left
+		anchors.leftMargin: -5
+		anchors.top: moveItem_exampleList.bottom
+		anchors.topMargin: 6
+		width:200
 		
-		anchors.left: moveItem_cameraControl.right
-        anchors.leftMargin: 6
-        anchors.top: moveItem_cameraControl.top
-		onClicked: camera_controller_container.opacity = camera_controller_container.opacity == 1 ? 0 : 1
+		onCurrentExampleChanged: {
+			unrimpitem.exampleName = name;
+		}
+	}
+
+	MoveItem {
+		id: moveItem_exampleList
+		x: 30
+		y: 200
+		window: unrimp
+	}
+
+	ShowHideButton {
+		id: showHide_exampleList
+		
+		anchors.left: moveItem_exampleList.right
+		anchors.leftMargin: 6
+		anchors.top: moveItem_exampleList.top
+		onClicked: example_list_container.opacity = example_list_container.opacity == 1 ? 0 : 1
+	}
+	TitleBarText {
+		text: "Examples"
+		anchors.left: showHide_exampleList.right
+		anchors.right: maximize_window.left
+		anchors.top: moveItem_exampleList.top
+		anchors.bottom: moveItem_exampleList.bottom
 	}
 
 	MaximizeButton {
-		id: maximize_handle2
-		anchors.top: moveItem_cameraControl.top
-		anchors.right: camera_controller_container.right
+		id: maximize_window
+		anchors.top: moveItem_exampleList.top
+		anchors.right: example_list_container.right
 		anchors.rightMargin: 5
 		
 		property bool fullscreen: false
