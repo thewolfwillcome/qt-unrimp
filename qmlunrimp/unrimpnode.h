@@ -9,6 +9,8 @@
 #include <QtQuick/QSGOpaqueTextureMaterial>
 #include <QtQuick/QQuickWindow>
 
+class ExampleBase;
+
 class UnrimpNode : public QSGGeometryNode
 {
 public:
@@ -31,6 +33,10 @@ public:
     void restoreUnrimpState();
 
     void preprocess();
+	
+	
+	QString example();
+	bool setExample(QString exampleName);
 
 private:
     QSGTextureMaterial m_material;
@@ -46,16 +52,17 @@ private:
     int m_samples;
     bool m_AAEnabled;
     QSize m_size;
+	QString m_newExampleName;
 
     Renderer::IRendererPtr m_renderer;
 	Renderer::ITexture2DPtr m_renderTexture;
 	Renderer::IFramebufferPtr m_frameBuffer;
-	Renderer::IProgramPtr m_program;
-	Renderer::IVertexArrayPtr m_VertexArray;
+	QSharedPointer<ExampleBase> m_example;
 
     bool m_initialized;
     bool m_dirtyFBO;
 	bool m_dirtySize;
+	bool m_exampleChanged;
 };
 
 #endif // UNRIMPNODE_H

@@ -18,10 +18,12 @@ Rectangle {
     UnrimpItem {
         id: unrimpitem
         width: 600; height: 400
-        anchors.left: toolbar1.left
+        anchors.left: move_handle1.left
         anchors.leftMargin: -5
-        anchors.top: toolbar1.bottom
+        anchors.top: move_handle1.bottom
         anchors.topMargin: 6
+        
+        exampleName: "FirstTriangle"
 
 
         Behavior on opacity { NumberAnimation { } }
@@ -38,13 +40,13 @@ Rectangle {
                     height: unrimp.height
                 }
                 PropertyChanges {
-                    target: toolbar1
+                    target: move_handle1
                     x: 5
-                    y: -toolbar1.height - 6
+                    y: -move_handle1.height - 6
                 }
 
                 PropertyChanges {
-                    target: toolbar4
+                    target: changeAA_handle1
                     anchors.top: unrimpitem.top
                     anchors.topMargin: 5
                 }
@@ -62,7 +64,7 @@ Rectangle {
     }
 
     Rectangle {
-        id: toolbar1
+        id: move_handle1
         x: 200
         y: 200
         width: 25
@@ -99,17 +101,17 @@ Rectangle {
 
         MouseArea {
             anchors.fill: parent
-            drag.target: toolbar1
+            drag.target: move_handle1
             drag.axis: "XandYAxis"
             drag.minimumX: 0
             drag.minimumY: 0
-            drag.maximumX: unrimp.width - toolbar1.width
-            drag.maximumY: unrimp.height - toolbar1.height
+            drag.maximumX: unrimp.width - move_handle1.width
+            drag.maximumY: unrimp.height - move_handle1.height
         }
     }
 
     Rectangle {
-        id: toolbar2
+        id: showhide_handle1
         width: 25
         radius: 5
         gradient: Gradient {
@@ -123,10 +125,10 @@ Rectangle {
                 color: "#c8919191"
             }
         }
-        anchors.left: toolbar1.right
+        anchors.left: move_handle1.right
         anchors.leftMargin: 6
-        anchors.top: toolbar1.top
-        anchors.bottom: toolbar1.bottom
+        anchors.top: move_handle1.top
+        anchors.bottom: move_handle1.bottom
         border.color: "#1a1a1a"
 
         MouseArea {
@@ -162,7 +164,7 @@ Rectangle {
     }
 
     Rectangle {
-        id: toolbar4
+        id: changeAA_handle1
         width: 25
         height: 25
         radius: 5
@@ -177,7 +179,7 @@ Rectangle {
                 color: "#c8919191"
             }
         }
-        anchors.top: toolbar1.top
+        anchors.top: move_handle1.top
         anchors.right: toolbar3.left
         anchors.rightMargin: 6
         border.color: "#1a1a1a"
@@ -206,6 +208,100 @@ Rectangle {
          }
         border.width: 2
     }
+    
+    Rectangle {
+        id: example1_handle1
+        width: 30
+        height: 25
+        radius: 5
+        gradient: Gradient {
+            GradientStop {
+                position: 0
+                color: "#c83e3e3e"
+            }
+
+            GradientStop {
+                position: 1
+                color: "#c8919191"
+            }
+        }
+        anchors.top: move_handle1.top
+        anchors.right: example2_handle1.left
+        anchors.rightMargin: 6
+        border.color: "#1a1a1a"
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: { unrimpitem.exampleName = "FirstTriangle" }
+        }
+
+        Text {
+            anchors.fill: parent
+            text: "EX1"
+            font.bold: true
+            font.pixelSize: parent.height * 0.55
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+
+            Rectangle {
+                height: parent.height
+                width: 2
+                anchors.centerIn: parent
+                color: "#BB1111"
+                rotation: 40
+                visible: unrimpitem.exampleName != "FirstTriangle"
+            }
+         }
+        border.width: 2
+    }
+    
+    
+    
+    Rectangle {
+        id: example2_handle1
+        width: 30
+        height: 25
+        radius: 5
+        gradient: Gradient {
+            GradientStop {
+                position: 0
+                color: "#c83e3e3e"
+            }
+
+            GradientStop {
+                position: 1
+                color: "#c8919191"
+            }
+        }
+        anchors.top: move_handle1.top
+        anchors.right: changeAA_handle1.left
+        anchors.rightMargin: 6
+        border.color: "#1a1a1a"
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: { unrimpitem.exampleName = "VertexBuffer" }
+        }
+
+        Text {
+            anchors.fill: parent
+            text: "EX2"
+            font.bold: true
+            font.pixelSize: parent.height * 0.55
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+
+            Rectangle {
+                height: parent.height
+                width: 2
+                anchors.centerIn: parent
+                color: "#BB1111"
+                rotation: 40
+                visible: unrimpitem.exampleName != "VertexBuffer"
+            }
+         }
+        border.width: 2
+    }
 
     Rectangle {
         id: toolbar3
@@ -223,7 +319,7 @@ Rectangle {
                 color: "#c8919191"
             }
         }
-        anchors.top: toolbar1.top
+        anchors.top: move_handle1.top
         anchors.right: unrimpitem.right
         anchors.rightMargin: 5
         border.color: "#1a1a1a"

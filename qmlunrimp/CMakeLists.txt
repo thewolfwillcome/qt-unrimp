@@ -65,6 +65,13 @@ set(CMAKE_AUTOMOC ON)
 # As moc files are generated in the binary dir, tell CMake
 # to always look for includes there:
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(SRC_FILES
+	UnrimpExamples/FirstTriangle/FirstTriangle.cpp
+	UnrimpExamples/VertexBuffer/VertexBuffer.cpp
+	UnrimpExamples/Color4.cpp
+	UnrimpExamples/ExampleBase.cpp
+)
   
 include_directories("${UNRIMPBASE_PATH}/include")
 # We need c++0x/c++11 support:
@@ -79,7 +86,7 @@ endif()
 
 link_directories(${UNRIMP_LIB_DIR})
 
-add_executable(qmlunrimp main.cpp unrimpitem.cpp unrimpnode.cpp)
+add_executable(qmlunrimp  main.cpp unrimpitem.cpp unrimpnode.cpp ${SRC_FILES})
 target_link_libraries(qmlunrimp OpenGLRendererStatic)
 if(UNIX)
 	target_link_libraries(qmlunrimp X11)

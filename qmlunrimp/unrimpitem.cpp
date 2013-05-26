@@ -7,12 +7,31 @@
 UnrimpItem::UnrimpItem(QQuickItem *parent)
     : QQuickItem(parent)
     , m_timerID(0)
+	, m_node(nullptr)
 {
     setFlag(ItemHasContents);
     setSmooth(false);
 
     startTimer(16);
 }
+
+QString UnrimpItem::example()
+{
+	if (!m_node)
+		return "FirstTriangle";
+	return m_node->example();
+}
+
+void UnrimpItem::setExample(QString exampleName)
+{
+	if (m_node) {
+		if (m_node->setExample(exampleName)) {
+			//emit exampleChanged(exampleName);
+			emit exampleChanged();
+		}
+	}
+}
+
 
 QSGNode *UnrimpItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 {
@@ -24,7 +43,7 @@ QSGNode *UnrimpItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
     UnrimpNode *node = static_cast<UnrimpNode *>(oldNode);
     if (!node)
     {
-        node = new UnrimpNode();
+        m_node = node = new UnrimpNode();
         node->setQuickWindow(window());
     }
 

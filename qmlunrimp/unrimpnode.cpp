@@ -9,6 +9,9 @@
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 
+#include "UnrimpExamples/FirstTriangle/FirstTriangle.h"
+#include "UnrimpExamples/VertexBuffer/VertexBuffer.h"
+
 
 UnrimpNode::UnrimpNode()
     : QSGGeometryNode()
@@ -19,8 +22,10 @@ UnrimpNode::UnrimpNode()
     , m_qtContext(0)
     , m_samples(0)
     , m_AAEnabled(false)
+	, m_example(new FirstTriangle)
     , m_initialized(false)
     , m_dirtyFBO(false)
+	, m_exampleChanged(false)
 {
     setMaterial(&m_material);
     setOpaqueMaterial(&m_materialO);
@@ -30,32 +35,38 @@ UnrimpNode::UnrimpNode()
 
 UnrimpNode::~UnrimpNode()
 {
-	m_VertexArray = nullptr;
-	m_program = nullptr;
 	m_frameBuffer = nullptr;
 	m_renderTexture = nullptr;
 	m_renderer = nullptr;
     delete m_unrimpContext;
 }
 
+QString UnrimpNode::example()
+{
+	return m_example->name();
+}
+
+bool UnrimpNode::setExample(QString exampleName)
+{
+	if (exampleName == example())
+		return false;
+	
+	m_newExampleName = exampleName;
+	m_exampleChanged = true;
+	return true;
+}
+
+
 void UnrimpNode::saveUnrimpState()
 {
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
-    /*ctx->functions()->glBindBuffer(GL_ARRAY_BUFFER, 0);
-    ctx->functions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    ctx->functions()->glBindRenderbuffer(GL_RENDERBUFFER, 0);
-    ctx->functions()->glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);*/
 
     ctx->doneCurrent();
     m_qtContext->makeCurrent(m_quickWindow);
-
-    //glPushAttrib(GL_ALL_ATTRIB_BITS);
 }
 
 void UnrimpNode::restoreUnrimpState()
 {
-    //glPopAttrib();
-
     m_qtContext = QOpenGLContext::currentContext();
     m_qtContext->functions()->glUseProgram(0);
     m_qtContext->doneCurrent();
@@ -73,31 +84,7 @@ void UnrimpNode::preprocess()
 	// Set the render target to render into
 	m_renderer->omSetRenderTarget(m_frameBuffer);
 	
-	// Clear the color buffer of the current render target with green
-	float color_green[4] = {1.0f, 1.0f, 0.0f, 1.0f};
-	m_renderer->clear(Renderer::ClearFlag::COLOR, color_green, 1.0f, 0);
-	
-	if (m_renderer->beginScene())
-	{
-		// Set the used program
-		m_renderer->setProgram(m_program);
-
-		{ // Setup input assembly (IA)
-			// Set the used vertex array
-			m_renderer->iaSetVertexArray(m_VertexArray);
-
-			// Set the primitive topology used for draw calls
-			m_renderer->iaSetPrimitiveTopology(Renderer::PrimitiveTopology::TRIANGLE_LIST);
-		}
-
-		// Render the specified geometric primitive, based on an array of vertices
-		m_renderer->draw(0, 3);
-
-		// End scene rendering
-		// -> Required for Direct3D 9
-		// -> Not required for Direct3D 10, Direct3D 11, OpenGL and OpenGL ES 2
-		m_renderer->endScene();
-	}
+	m_example->Render(m_renderer);
 
 	// Restore the previously set render target
 	m_renderer->omSetRenderTarget(renderTarget);
@@ -108,7 +95,7 @@ void UnrimpNode::setQuickWindow(QQuickWindow *window)
 {
     m_quickWindow = window;
 
-    // create a new shared OpenGL context to be used exclusively by Ogre
+    // create a new shared OpenGL context to be used exclusively by Unrimp
     m_unrimpContext = new QOpenGLContext();
     m_unrimpContext->setFormat(m_quickWindow->requestedFormat());
     m_unrimpContext->setShareContext(QOpenGLContext::currentContext());
@@ -126,6 +113,21 @@ void UnrimpNode::update()
         updateFBO();
         m_dirtyFBO = false;
     }
+    
+    if (m_exampleChanged)
+	{
+		m_example->Deinit();
+		
+		if (m_newExampleName == "FirstTriangle")
+			m_example = QSharedPointer<ExampleBase>(new FirstTriangle);
+		else if (m_newExampleName == "VertexBuffer")
+			m_example = QSharedPointer<ExampleBase>(new VertexBuffer);
+		
+		m_example->Init(m_renderer);
+		
+		m_newExampleName.clear();
+		m_exampleChanged = false;
+	}
 
     saveUnrimpState();
 }
@@ -198,71 +200,8 @@ void UnrimpNode::init()
 
 	// Create the renderer instance
 	m_renderer = createOpenGLRendererInstance2(0, true);
-	Renderer::IRendererPtr renderer(m_renderer);
-	Renderer::IShaderLanguagePtr shaderLanguage(m_renderer->getShaderLanguage());
-		if (nullptr != shaderLanguage)
-		{
-			{ // Create the program
-				// Get the shader source code (outsourced to keep an overview)
-				const char *vertexShaderSourceCode = nullptr;
-				const char *fragmentShaderSourceCode = nullptr;
-				#include "FirstTriangle_GLSL_110.h"
-				
-				// Create the vertex shader
-				Renderer::IVertexShader *vertexShader = shaderLanguage->createVertexShader(vertexShaderSourceCode);
-				
-				// Create the fragment shader
-				Renderer::IFragmentShader *fragmentShader = shaderLanguage->createFragmentShader(fragmentShaderSourceCode);
-				
-				// Create the program
-				m_program = shaderLanguage->createProgram(vertexShader, fragmentShader);
-			}
-
-			// Is there a valid program?
-			if (nullptr != m_program)
-			{
-				// Create the vertex buffer object (VBO)
-				// -> Clip space vertex positions, left/bottom is (-1,-1) and right/top is (1,1)
-// 				static const float VERTEX_POSITION[] =
-// 				{					// Vertex ID	Triangle on screen
-// 					 0.0f, 1.0f,	// 0				0
-// 					 1.0f, 0.0f,	// 1			   .   .
-// 					 -0.5f, 0.0f	// 2			  2.......1
-// 				};
-				
-				static const float VERTEX_POSITION[] =
-				{					// Vertex ID	Triangle on screen
-					 0.0f, 1.0f,	// 0				0
-					 1.0f, 0.0f,	// 1			   .   .
-					 -0.5f, 0.0f	// 2			  2.......1
-				};
-				Renderer::IVertexBufferPtr vertexBuffer(m_renderer->createVertexBuffer(sizeof(VERTEX_POSITION), VERTEX_POSITION, Renderer::BufferUsage::STATIC_DRAW));
-				
-				// Create vertex array object (VAO)
-				// -> The vertex array object (VAO) keeps a reference to the used vertex buffer object (VBO)
-				// -> This means that there's no need to keep an own vertex buffer object (VBO) reference
-				// -> When the vertex array object (VAO) is destroyed, it automatically decreases the
-				//    reference of the used vertex buffer objects (VBO). If the reference counter of a
-				//    vertex buffer object (VBO) reaches zero, it's automatically destroyed.
-				const Renderer::VertexArrayAttribute vertexArray[] =
-				{
-					{ // Attribute 0
-						// Data destination
-						Renderer::VertexArrayFormat::FLOAT_2,	// vertexArrayFormat (Renderer::VertexArrayFormat::Enum)
-						"Position",								// name[64] (char)
-						"POSITION",								// semantic[64] (char)
-						0,										// semanticIndex (unsigned int)
-						// Data source
-						vertexBuffer,							// vertexBuffer (Renderer::IVertexBuffer *)
-						0,										// offset (unsigned int)
-						sizeof(float) * 2,						// stride (unsigned int)
-						// Data source, instancing part
-						0										// instancesPerElement (unsigned int)
-					}
-				};
-				m_VertexArray = m_program->createVertexArray(sizeof(vertexArray) / sizeof(Renderer::VertexArrayAttribute), vertexArray);
-			}
-		}
-			
+	
+	m_example->Init(m_renderer);
+	
     m_initialized = true;
 }
