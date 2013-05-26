@@ -13,6 +13,7 @@
 #include "UnrimpExamples/VertexBuffer/VertexBuffer.h"
 #include "UnrimpExamples/FirstTexture/FirstTexture.h"
 #include "UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.h"
+#include "UnrimpExamples/InstancedCubes/InstancedCubes.h"
 
 
 UnrimpNode::UnrimpNode()
@@ -26,10 +27,13 @@ UnrimpNode::UnrimpNode()
 	, m_AAEnabled(false)
 	, m_newExampleName("FirstTriangle")
 	, m_availableExamples({
+							// Basic
 							{"FirstTriangle", 			&ExampleFabricator<FirstTriangle> },
 						    {"VertexBuffer", 			&ExampleFabricator<VertexBuffer> },
 							{"FirstTexture", 			&ExampleFabricator<FirstTexture> },
-							{"FirstRenderToTexture", 	&ExampleFabricator<FirstRenderToTexture> }
+							{"FirstRenderToTexture", 	&ExampleFabricator<FirstRenderToTexture> },
+							// Advanced
+							{"InstancedCubes", 			&ExampleFabricator<InstancedCubes> }
 						  })
 	, m_example(new FirstTriangle)
 	, m_initialized(false)
@@ -44,6 +48,8 @@ UnrimpNode::UnrimpNode()
 
 UnrimpNode::~UnrimpNode()
 {
+	m_example->Deinit();
+
 	m_frameBuffer = nullptr;
 	m_renderTexture = nullptr;
 	m_renderer = nullptr;
@@ -57,35 +63,42 @@ QString UnrimpNode::example()
 
 bool UnrimpNode::setExample(QString exampleName)
 {
+	// check if given example name is known
 	if (exampleName == example() || !m_availableExamples.contains(exampleName))
 		return false;
 	
+	// save example name and mark the material (texture) dirty
+	// this causes an update, in which the new example is created.
+	// This makes sure that the current active example is changed on the right time
+	// (e.g. the unrimp opengl context is active and we are in the correct thread context )
 	m_newExampleName = exampleName;
 	m_exampleChanged = true;
+	
+	markDirty(DirtyMaterial);
 	return true;
 }
 
 
 void UnrimpNode::saveUnrimpState()
 {
-    QOpenGLContext *ctx = QOpenGLContext::currentContext();
+	QOpenGLContext *ctx = QOpenGLContext::currentContext();
 
-    ctx->doneCurrent();
-    m_qtContext->makeCurrent(m_quickWindow);
+	ctx->doneCurrent();
+	m_qtContext->makeCurrent(m_quickWindow);
 }
 
 void UnrimpNode::restoreUnrimpState()
 {
-    m_qtContext = QOpenGLContext::currentContext();
-    m_qtContext->functions()->glUseProgram(0);
-    m_qtContext->doneCurrent();
+	m_qtContext = QOpenGLContext::currentContext();
+	m_qtContext->functions()->glUseProgram(0);
+	m_qtContext->doneCurrent();
 
-    m_unrimpContext->makeCurrent(m_quickWindow);
+	m_unrimpContext->makeCurrent(m_quickWindow);
 }
 
 void UnrimpNode::preprocess()
 {
-    restoreUnrimpState();
+	restoreUnrimpState();
 
 	// Backup the currently used render target
 	Renderer::IRenderTargetPtr renderTarget(m_renderer->omGetRenderTarget());
@@ -93,35 +106,37 @@ void UnrimpNode::preprocess()
 	// Set the render target to render into
 	m_renderer->omSetRenderTarget(m_frameBuffer);
 	
+	// Do the drawing :)
 	m_example->Render(m_renderer);
 
 	// Restore the previously set render target
 	m_renderer->omSetRenderTarget(renderTarget);
-    saveUnrimpState();
+	
+	saveUnrimpState();
 }
 
 void UnrimpNode::setQuickWindow(QQuickWindow *window)
 {
-    m_quickWindow = window;
+	m_quickWindow = window;
 
-    // create a new shared OpenGL context to be used exclusively by Unrimp
-    m_unrimpContext = new QOpenGLContext();
-    m_unrimpContext->setFormat(m_quickWindow->requestedFormat());
-    m_unrimpContext->setShareContext(QOpenGLContext::currentContext());
-    m_unrimpContext->create();
+	// create a new shared OpenGL context to be used exclusively by Unrimp
+	m_unrimpContext = new QOpenGLContext();
+	m_unrimpContext->setFormat(m_quickWindow->requestedFormat());
+	m_unrimpContext->setShareContext(QOpenGLContext::currentContext());
+	m_unrimpContext->create();
 }
 
 void UnrimpNode::update()
 {
-    restoreUnrimpState();
+	restoreUnrimpState();
 
-    if (!m_initialized)
-        init();
+	if (!m_initialized)
+		init();
 
-    if (m_dirtyFBO) {
-        updateFBO();
-        m_dirtyFBO = false;
-    }
+	if (m_dirtyFBO) {
+		updateFBO();
+		m_dirtyFBO = false;
+	}
     
     if (m_exampleChanged)
 	{
@@ -133,7 +148,7 @@ void UnrimpNode::update()
 		m_exampleChanged = false;
 	}
 
-    saveUnrimpState();
+	saveUnrimpState();
 }
 
 void UnrimpNode::updateFBO()
@@ -147,58 +162,56 @@ void UnrimpNode::updateFBO()
 
 	// Set the render target to render into
 	m_renderer->omSetRenderTarget(m_frameBuffer);
-	
-	
-	const Renderer::Viewport viewport =
-		{
-			0.0f,						// topLeftX (float)
-			0.0f,						// topLeftY (float)
-			static_cast<float>(m_size.width()),	// width (float)
-			static_cast<float>(m_size.height()),	// height (float)
-			0.0f,						// minDepth (float)
-			1.0f						// maxDepth (float)
-		};
-		m_renderer->rsSetViewports(1, &viewport);
 
-    QSGGeometry::updateTexturedRectGeometry(&m_geometry,
-                                            QRectF(0, 0, m_size.width(), m_size.height()),
-                                            QRectF(0, 0, 1, 1));
+	const Renderer::Viewport viewport =
+	{
+		0.0f,						// topLeftX (float)
+		0.0f,						// topLeftY (float)
+		static_cast<float>(m_size.width()),	// width (float)
+		static_cast<float>(m_size.height()),	// height (float)
+		0.0f,						// minDepth (float)
+		1.0f						// maxDepth (float)
+	};
+	m_renderer->rsSetViewports(1, &viewport);
+
+	QSGGeometry::updateTexturedRectGeometry(&m_geometry,
+											QRectF(0, 0, m_size.width(), m_size.height()),
+											QRectF(0, 0, 1, 1));
 
 	delete m_texture;
-    m_texture = m_quickWindow->createTextureFromId(static_cast<OpenGLRenderer::Texture2D*>(texture2D)->getOpenGLTexture(), m_size);
+	m_texture = m_quickWindow->createTextureFromId(static_cast<OpenGLRenderer::Texture2D*>(texture2D)->getOpenGLTexture(), m_size);
 
-    m_material.setTexture(m_texture);
-    m_materialO.setTexture(m_texture);
-	
-		
+	m_material.setTexture(m_texture);
+	m_materialO.setTexture(m_texture);
+
 	m_renderer->omSetRenderTarget(renderTarget);
 }
 
 void UnrimpNode::setSize(const QSize &size)
 {
-    if (size == m_size)
-        return;
+	if (size == m_size)
+		return;
 
-    m_size = size;
-    m_dirtyFBO = true;
-    markDirty(DirtyGeometry);
+	m_size = size;
+	m_dirtyFBO = true;
+	markDirty(DirtyGeometry);
 }
 
 void UnrimpNode::setAAEnabled(bool enable)
 {
-    if (m_AAEnabled == enable)
-        return;
+	if (m_AAEnabled == enable)
+		return;
 
-    m_AAEnabled = enable;
-    m_dirtyFBO = true;
-    markDirty(DirtyMaterial);
+	m_AAEnabled = enable;
+	m_dirtyFBO = true;
+	markDirty(DirtyMaterial);
 }
 
 void UnrimpNode::init()
 {
-    const QOpenGLContext *ctx = QOpenGLContext::currentContext();
-    QSurfaceFormat format = ctx->format();
-    m_samples = format.samples();
+	const QOpenGLContext *ctx = QOpenGLContext::currentContext();
+	QSurfaceFormat format = ctx->format();
+	m_samples = format.samples();
 	
 	extern Renderer::IRenderer *createOpenGLRendererInstance2(Renderer::handle, bool);
 
@@ -206,6 +219,6 @@ void UnrimpNode::init()
 	m_renderer = createOpenGLRendererInstance2(0, true);
 	
 	m_example->Init(m_renderer);
-	
-    m_initialized = true;
+
+	m_initialized = true;
 }

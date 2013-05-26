@@ -71,7 +71,15 @@ set(SRC_FILES
 	UnrimpExamples/VertexBuffer/VertexBuffer.cpp
 	UnrimpExamples/FirstTexture/FirstTexture.cpp
 	UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.cpp
+	UnrimpExamples/InstancedCubes/InstancedCubes.cpp
+	UnrimpExamples/InstancedCubes/ICubeRenderer.cpp
+	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/BatchDrawInstanced.cpp
+	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/CubeRendererDrawInstanced.cpp
+	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/BatchInstancedArrays.cpp
+	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/CubeRendererInstancedArrays.cpp
 	UnrimpExamples/Color4.cpp
+	UnrimpExamples/Stopwatch.cpp
+	UnrimpExamples/EulerAngles.cpp
 	UnrimpExamples/ExampleBase.cpp
 )
   
@@ -89,7 +97,7 @@ endif()
 link_directories(${UNRIMP_LIB_DIR})
 
 add_executable(qmlunrimp  main.cpp unrimpitem.cpp unrimpnode.cpp ${SRC_FILES})
-target_link_libraries(qmlunrimp OpenGLRendererStatic)
+target_link_libraries(qmlunrimp OpenGLRendererStatic RendererToolkitStatic freetype)
 if(UNIX)
 	target_link_libraries(qmlunrimp X11)
 endif()
