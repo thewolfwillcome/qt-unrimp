@@ -10,6 +10,7 @@
 #include <QtQuick/QQuickWindow>
 
 class ExampleBase;
+class ExampleBaseFabricator;
 
 class UnrimpNode : public QSGGeometryNode
 {
@@ -53,7 +54,7 @@ private:
     bool m_AAEnabled;
     QSize m_size;
 	QString m_newExampleName;
-	QVector<QString> m_availableExamples;
+	QMap<QString, QSharedPointer<ExampleBaseFabricator>> m_availableExamples;
 
     Renderer::IRendererPtr m_renderer;
 	Renderer::ITexture2DPtr m_renderTexture;

@@ -25,7 +25,12 @@ UnrimpNode::UnrimpNode()
 	, m_samples(0)
 	, m_AAEnabled(false)
 	, m_newExampleName("FirstTriangle")
-	, m_availableExamples({"FirstTriangle", "VertexBuffer", "FirstTexture", "FirstRenderToTexture"})
+	, m_availableExamples({
+							{"FirstTriangle", ExampleFabricatorPtr(new ExampleFabricator<FirstTriangle>) },
+						    {"VertexBuffer", ExampleFabricatorPtr(new ExampleFabricator<VertexBuffer>) },
+							{"FirstTexture", ExampleFabricatorPtr(new ExampleFabricator<FirstTexture>) },
+							{"FirstRenderToTexture", ExampleFabricatorPtr(new ExampleFabricator<FirstRenderToTexture>) }
+						  })
 	, m_example(new FirstTriangle)
 	, m_initialized(false)
 	, m_dirtyFBO(false)
@@ -121,15 +126,8 @@ void UnrimpNode::update()
     if (m_exampleChanged)
 	{
 		m_example->Deinit();
-		
-		if (m_newExampleName == "FirstTriangle")
-			m_example = QSharedPointer<ExampleBase>(new FirstTriangle);
-		else if (m_newExampleName == "VertexBuffer")
-			m_example = QSharedPointer<ExampleBase>(new VertexBuffer);
-		else if (m_newExampleName == "FirstTexture")
-			m_example = QSharedPointer<ExampleBase>(new FirstTexture);
-		else if (m_newExampleName == "FirstRenderToTexture")
-			m_example = QSharedPointer<ExampleBase>(new FirstRenderToTexture);
+		ExampleFabricatorPtr fabricator(m_availableExamples[m_newExampleName]); 
+		m_example = QSharedPointer<ExampleBase>((*fabricator)());
 		
 		m_example->Init(m_renderer);
 		m_exampleChanged = false;

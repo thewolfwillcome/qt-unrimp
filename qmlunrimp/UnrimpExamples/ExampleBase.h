@@ -22,4 +22,17 @@ public:
 	virtual QString name() = 0;
 };
 
+class ExampleBaseFabricator {
+public:
+    virtual ~ExampleBaseFabricator(){}
+    virtual ExampleBase* operator()()  = 0;
+};
+
+template<typename T>
+class ExampleFabricator : public ExampleBaseFabricator {
+    virtual T* operator()() override {return new T;}
+};
+
+typedef QSharedPointer<ExampleBaseFabricator> ExampleFabricatorPtr;
+
 #endif // EXAMPLEBASE_H
