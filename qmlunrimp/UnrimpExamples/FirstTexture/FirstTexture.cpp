@@ -7,6 +7,8 @@
 
 void FirstTexture::Init(Renderer::IRendererPtr renderer)
 {
+	ExampleBase::Init(renderer);
+
 	Renderer::IShaderLanguagePtr shaderLanguage(renderer->getShaderLanguage());
 	if (nullptr != renderer)
 	{
@@ -119,8 +121,10 @@ void FirstTexture::Deinit()
 	mTexture2D = nullptr;
 }
 
-void FirstTexture::Render(Renderer::IRendererPtr renderer)
+void FirstTexture::Render()
 {
+	Renderer::IRendererPtr renderer(getRenderer());
+
 	if (nullptr != renderer && nullptr != mProgram)
 	{
 		// Begin debug event

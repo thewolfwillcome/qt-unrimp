@@ -41,6 +41,9 @@ public:
 	bool setExample(QString exampleName);
 
 private:
+	void ResetUnrimpStates();
+	
+private:
     QSGTextureMaterial m_material;
     QSGOpaqueTextureMaterial m_materialO;
     QSGGeometry m_geometry;

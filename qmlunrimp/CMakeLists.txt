@@ -71,6 +71,7 @@ set(SRC_FILES
 	UnrimpExamples/VertexBuffer/VertexBuffer.cpp
 	UnrimpExamples/FirstTexture/FirstTexture.cpp
 	UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.cpp
+	UnrimpExamples/FirstPostProcessing/FirstPostProcessing.cpp
 	UnrimpExamples/InstancedCubes/InstancedCubes.cpp
 	UnrimpExamples/InstancedCubes/ICubeRenderer.cpp
 	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/BatchDrawInstanced.cpp

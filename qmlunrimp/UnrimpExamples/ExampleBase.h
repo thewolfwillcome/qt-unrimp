@@ -16,10 +16,22 @@ public:
     ExampleBase();
     virtual ~ExampleBase();
 	
-	virtual void Init(Renderer::IRendererPtr renderer) = 0;
+	virtual void Init(Renderer::IRendererPtr renderer) { m_Renderer = renderer; }
 	virtual void Deinit() = 0;
-	virtual void Render(Renderer::IRendererPtr renderer) = 0;
+	virtual void Render() = 0;
 	virtual QString name() = 0;
+	
+	void setSize(int width, int height);
+
+protected:
+	virtual void onSizeChanged(){}
+	Renderer::IRendererPtr getRenderer() { return m_Renderer; }
+
+protected:
+	int mWidth, mHeigth;
+	
+private:
+	Renderer::IRendererPtr m_Renderer;
 };
 
 

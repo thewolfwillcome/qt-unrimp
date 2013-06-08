@@ -7,6 +7,8 @@
 
 void FirstTriangle::Init(Renderer::IRendererPtr renderer)
 {
+	ExampleBase::Init(renderer);
+	
 	Renderer::IShaderLanguagePtr shaderLanguage(renderer->getShaderLanguage());
 	if (nullptr != shaderLanguage)
 	{
@@ -31,27 +33,14 @@ void FirstTriangle::Init(Renderer::IRendererPtr renderer)
 		{
 			// Create the vertex buffer object (VBO)
 			// -> Clip space vertex positions, left/bottom is (-1,-1) and right/top is (1,1)
-// 				static const float VERTEX_POSITION[] =
-// 				{					// Vertex ID	Triangle on screen
-// 					 0.0f, 1.0f,	// 0				0
-// 					 1.0f, 0.0f,	// 1			   .   .
-// 					 -0.5f, 0.0f	// 2			  2.......1
-// 				};
-			
 			static const float VERTEX_POSITION[] =
 			{					// Vertex ID	Triangle on screen
-					0.0f, 1.0f,	// 0				0
-					1.0f, 0.0f,	// 1			   .   .
-					-0.5f, 0.0f	// 2			  2.......1
+				0.0f, 1.0f,		// 0				0
+				1.0f, 0.0f,		// 1			   .   .
+				-0.5f, 0.0f		// 2			  2.......1
 			};
 			
-			static const  float points[] = {
-				0.0f,  0.5f,
-				0.5f, -0.5f, 
-				-0.5f, -0.5f,
-			};
-			
-			Renderer::IVertexBufferPtr vertexBuffer(renderer->createVertexBuffer(sizeof(points), points, Renderer::BufferUsage::STATIC_DRAW));
+			Renderer::IVertexBufferPtr vertexBuffer(renderer->createVertexBuffer(sizeof(VERTEX_POSITION), VERTEX_POSITION, Renderer::BufferUsage::STATIC_DRAW));
 			
 			// Create vertex array object (VAO)
 			// -> The vertex array object (VAO) keeps a reference to the used vertex buffer object (VBO)
@@ -87,8 +76,10 @@ void FirstTriangle::Deinit()
 	m_Program = nullptr;
 }
 
-void FirstTriangle::Render(Renderer::IRendererPtr renderer)
+void FirstTriangle::Render()
 {
+	Renderer::IRendererPtr renderer(getRenderer());
+
 	// Clear the color buffer of the current render target with green
 	float color_green[4] = {1.0f, 1.0f, 0.0f, 1.0f};
 	renderer->clear(Renderer::ClearFlag::COLOR, color_green, 1.0f, 0);

@@ -7,6 +7,8 @@
 
 void VertexBuffer::Init(Renderer::IRendererPtr renderer)
 {
+	ExampleBase::Init(renderer);
+
 	Renderer::IShaderLanguagePtr shaderLanguage(renderer->getShaderLanguage());
 	if (nullptr != shaderLanguage)
 	{
@@ -146,8 +148,10 @@ void VertexBuffer::Deinit()
 	m_Program = nullptr;
 }
 
-void VertexBuffer::Render(Renderer::IRendererPtr renderer)
+void VertexBuffer::Render()
 {
+	Renderer::IRendererPtr renderer(getRenderer());
+
 	if (nullptr != renderer && nullptr != m_Program)
 	{
 		// Begin debug event

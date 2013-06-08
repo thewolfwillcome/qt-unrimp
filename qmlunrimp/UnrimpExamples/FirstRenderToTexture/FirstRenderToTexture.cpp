@@ -7,6 +7,8 @@
 
 void FirstRenderToTexture::Init(Renderer::IRendererPtr renderer)
 {
+	ExampleBase::Init(renderer);
+
 	if (nullptr != renderer)
 	{
 		// Begin debug event
@@ -102,8 +104,10 @@ void FirstRenderToTexture::Deinit()
 	mTexture2D = nullptr;
 }
 
-void FirstRenderToTexture::Render(Renderer::IRendererPtr renderer)
+void FirstRenderToTexture::Render()
 {
+	Renderer::IRendererPtr renderer(getRenderer());
+
 	if (nullptr != renderer && nullptr != mProgram)
 	{
 		// Begin debug event

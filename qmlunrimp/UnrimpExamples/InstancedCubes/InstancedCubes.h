@@ -17,7 +17,7 @@ public:
     InstancedCubes();
 	virtual void Init(Renderer::IRendererPtr renderer) override;
 	virtual void Deinit() override;
-	virtual void Render(Renderer::IRendererPtr renderer) override;
+	virtual void Render() override;
     virtual QString name() { return "InstancedCubes"; } override;
 	
 //[-------------------------------------------------------]

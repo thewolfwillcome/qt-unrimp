@@ -38,6 +38,8 @@ InstancedCubes::InstancedCubes()
 
 void InstancedCubes::Init(Renderer::IRendererPtr renderer)
 {
+	ExampleBase::Init(renderer);
+
 	rendererToolkit = createRendererToolkit(*renderer);
 	
 	if (nullptr != renderer)
@@ -99,8 +101,10 @@ void InstancedCubes::Deinit()
 	RENDERER_END_DEBUG_EVENT(getRenderer())
 }
 
-void InstancedCubes::Render(Renderer::IRendererPtr renderer)
+void InstancedCubes::Render()
 {
+	Renderer::IRendererPtr renderer(getRenderer());
+
 	/// Update Timer
 	{
 		mStopwatch.stop();
