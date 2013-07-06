@@ -77,8 +77,6 @@ bool UnrimpNode::setExample(QString exampleName)
 	// (e.g. the unrimp opengl context is active and we are in the correct thread context )
 	m_newExampleName = exampleName;
 	m_exampleChanged = true;
-	
-	markDirty(DirtyMaterial);
 	return true;
 }
 
@@ -132,31 +130,37 @@ void UnrimpNode::setQuickWindow(QQuickWindow *window)
 
 void UnrimpNode::update()
 {
-	restoreUnrimpState();
-
-	if (!m_initialized)
-		init();
-
-	if (m_dirtyFBO) {
-		updateFBO();
-		m_dirtyFBO = false;
-	}
-    
-    if (m_exampleChanged)
+	if (!m_initialized || m_dirtyFBO || m_exampleChanged)
 	{
-		m_example->Deinit();
-		
-		ResetUnrimpStates();
-		
-		FabricatorMethod fabricator(m_availableExamples[m_newExampleName]); 
-		m_example = QSharedPointer<ExampleBase>(fabricator());
-		
-		m_example->setSize(m_size.width(), m_size.height());
-		m_example->Init(m_renderer);
-		m_exampleChanged = false;
-	}
+		restoreUnrimpState();
 
-	saveUnrimpState();
+		if (!m_initialized)
+			init();
+
+		if (m_dirtyFBO) {
+			updateFBO();
+			m_dirtyFBO = false;
+		}
+		
+		if (m_exampleChanged)
+		{
+			m_example->Deinit();
+			
+			ResetUnrimpStates();
+			
+			FabricatorMethod fabricator(m_availableExamples[m_newExampleName]); 
+			m_example = QSharedPointer<ExampleBase>(fabricator());
+			
+			m_example->setSize(m_size.width(), m_size.height());
+			m_example->Init(m_renderer);
+			m_exampleChanged = false;
+			markDirty(DirtyMaterial);
+		}
+
+		saveUnrimpState();
+	}
+	// for simplicity always mark the material as dirty to force a redraw of the node
+	markDirty(DirtyMaterial);
 }
 
 void UnrimpNode::updateFBO()

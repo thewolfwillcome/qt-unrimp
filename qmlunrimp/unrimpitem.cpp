@@ -25,10 +25,9 @@ QString UnrimpItem::example()
 void UnrimpItem::setExample(QString exampleName)
 {
 	if (m_node) {
-		if (m_node->setExample(exampleName)) {
-			//emit exampleChanged(exampleName);
-			emit exampleChanged();
-		}
+ 		if (m_node->setExample(exampleName)) {
+ 			emit exampleChanged();
+ 		}
 	}
 }
 
@@ -56,5 +55,5 @@ QSGNode *UnrimpItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 
 void UnrimpItem::timerEvent(QTimerEvent *)
 {
-    update();
+	update();
 }
