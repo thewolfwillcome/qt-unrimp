@@ -81,10 +81,30 @@ Rectangle {
 		section.property: "type"
 		section.criteria: ViewSection.FullString
 		section.delegate: sectionHeading
+		// slide in from left animation
 		populate: Transition {
-			NumberAnimation { properties: "x,y"; duration: 500 }
+			id: dispTrans
+			SequentialAnimation {
+				// First position items outside on the left of the Listview
+				ParallelAnimation {
+					NumberAnimation {
+						property: "x"; to: dispTrans.ViewTransition.destination.x - dispTrans.ViewTransition.item.width
+						duration:0
+					}
+					NumberAnimation {
+						property: "y"; to: dispTrans.ViewTransition.destination.y
+						duration:0
+					}
+				}
+				// Wait some time to have a stair like enter animation (an item starts entering the view after the previous item has started moving)
+				PauseAnimation {
+					duration: (dispTrans.ViewTransition.index -
+							dispTrans.ViewTransition.targetIndexes[0]) * 100
+				}
+				// The move animation
+				NumberAnimation { properties: "x"; duration: 750; easing.type: Easing.InOutQuad }
+			}
 		}
-		
 		clip:true;
 		
 	}
