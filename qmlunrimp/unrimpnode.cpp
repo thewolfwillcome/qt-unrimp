@@ -39,7 +39,7 @@ UnrimpNode::UnrimpNode()
 							// Advanced
 							{"InstancedCubes", 			&ExampleFabricator<InstancedCubes> }
 						  })
-	, m_example(new FirstTriangle)
+	, m_example(nullptr)
 	, m_initialized(false)
 	, m_dirtyFBO(false)
 	, m_exampleChanged(false)
@@ -52,7 +52,8 @@ UnrimpNode::UnrimpNode()
 
 UnrimpNode::~UnrimpNode()
 {
-	m_example->Deinit();
+	if (m_example)
+		m_example->Deinit();
 
 	m_frameBuffer = nullptr;
 	m_renderTexture = nullptr;
@@ -142,11 +143,13 @@ void UnrimpNode::update()
 			m_dirtyFBO = false;
 		}
 		
-		if (m_exampleChanged)
+		if (m_exampleChanged || !m_example)
 		{
-			m_example->Deinit();
+			if(m_example) {
+				m_example->Deinit();
 			
-			ResetUnrimpStates();
+				ResetUnrimpStates();
+			}
 			
 			FabricatorMethod fabricator(m_availableExamples[m_newExampleName]); 
 			m_example = QSharedPointer<ExampleBase>(fabricator());
@@ -200,7 +203,8 @@ void UnrimpNode::updateFBO()
 	m_material.setTexture(m_texture);
 	m_materialO.setTexture(m_texture);
 	
-	m_example->setSize(m_size.width(), m_size.height());
+	if (m_example)
+		m_example->setSize(m_size.width(), m_size.height());
 
 	m_renderer->omSetRenderTarget(renderTarget);
 }
@@ -235,9 +239,6 @@ void UnrimpNode::init()
 
 	// Create the renderer instance
 	m_renderer = createOpenGLRendererInstance2(0, true);
-	
-	m_example->Init(m_renderer);
-	
 
 	m_initialized = true;
 }
@@ -245,7 +246,6 @@ void UnrimpNode::init()
 void UnrimpNode::ResetUnrimpStates()
 {
 	Renderer::IRenderTargetPtr renderTarget(m_renderer->omGetRenderTarget());
-		
 	m_renderer->rsSetState(nullptr);
 	m_renderer->vsSetTexture(0, nullptr);
 

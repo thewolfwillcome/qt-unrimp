@@ -264,7 +264,6 @@ void FirstPostProcessing::sceneRendering(Renderer::IRendererPtr renderer)
 			// -> Not required for Direct3D 10, Direct3D 11, OpenGL and OpenGL ES 2
 			renderer->endScene();
 		}
-	renderer->clear(Renderer::ClearFlag::COLOR, Color4::GRAY, 1.0f, 0);
 	
 		// Restore the previously set render target
 		renderer->omSetRenderTarget(renderTarget);
