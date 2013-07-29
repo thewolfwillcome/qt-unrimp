@@ -19,6 +19,7 @@
 #include "UnrimpExamples/FirstMultipleRenderTargets/FirstMultipleRenderTargets.h"
 #include "UnrimpExamples/FirstGeometryShader/FirstGeometryShader.h"
 #include "UnrimpExamples/FirstTessellation/FirstTessellation.h"
+#include "UnrimpExamples/Fxaa/Fxaa.h"
 #include "UnrimpExamples/InstancedCubes/InstancedCubes.h"
 #include "UnrimpExamples/FirstPostProcessing/FirstPostProcessing.h"
 #include "UnrimpExamples/IcosahedronTessellation/IcosahedronTessellation.h"
@@ -46,6 +47,7 @@ UnrimpNode::UnrimpNode()
 							{"FirstGeometryShader", 		&ExampleFabricator<FirstGeometryShader> },
 							{"FirstTessellation", 			&ExampleFabricator<FirstTessellation> },
 							// Advanced
+							{"Fxaa", 						&ExampleFabricator<Fxaa> },
 							{"InstancedCubes", 				&ExampleFabricator<InstancedCubes> },
 							{"IcosahedronTessellation", 	&ExampleFabricator<IcosahedronTessellation> },
 						  })

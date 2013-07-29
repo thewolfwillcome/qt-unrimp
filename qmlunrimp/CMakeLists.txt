@@ -76,6 +76,7 @@ set(SRC_FILES
 	UnrimpExamples/FirstGeometryShader/FirstGeometryShader.cpp
 	UnrimpExamples/FirstTessellation/FirstTessellation.cpp
 	UnrimpExamples/FirstInstancing/FirstInstancing.cpp
+	UnrimpExamples/Fxaa/Fxaa.cpp
 	UnrimpExamples/InstancedCubes/InstancedCubes.cpp
 	UnrimpExamples/InstancedCubes/ICubeRenderer.cpp
 	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/BatchDrawInstanced.cpp
