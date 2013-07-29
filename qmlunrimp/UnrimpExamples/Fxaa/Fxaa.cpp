@@ -4,6 +4,7 @@
 
 #include "Fxaa.h"
 #include <cstring>
+#include "CLocaleChanger.h"
 
 void Fxaa::Init(Renderer::IRendererPtr renderer)
 {
@@ -239,7 +240,9 @@ void Fxaa::recreatePostProcessingProgram()
 			// Get the window size
 			int width  = this->mWidth;
 			int height = this->mHeigth;
-
+			
+			// activate the 'C' locale to have '.' as decimal points instead of eg ',' in a german locale
+			CLocaleChanger cLocale;
 			// The FXAA shader comments state: "RCPFRAME SHOULD PIXEL SHADER CONSTANTS"
 			char dynamicDefinition[256];
 			dynamicDefinition[0] = '\0';

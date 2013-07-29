@@ -34,7 +34,7 @@ UnrimpNode::UnrimpNode()
 	, m_qtContext(0)
 	, m_samples(0)
 	, m_AAEnabled(false)
-	, m_newExampleName("FirstTriangle")
+	, m_newExampleName("Fxaa")
 	, m_availableExamples({
 							// Basic
 							{"FirstTriangle", 				&ExampleFabricator<FirstTriangle> },
