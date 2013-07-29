@@ -206,10 +206,10 @@ Rectangle {
 			name: "Fxaa"
 			type: "Advanced"
 		}
-		ListElement {
+		/*ListElement { // not possbile here because it doesn't render anything to screen
 			name: "FirstGpgpu"
 			type: "Advanced"
-		}
+		}*/
 		ListElement {
 			name: "InstancedCubes"
 			type: "Advanced"

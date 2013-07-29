@@ -82,6 +82,7 @@ set(SRC_FILES
 	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/CubeRendererDrawInstanced.cpp
 	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/BatchInstancedArrays.cpp
 	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/CubeRendererInstancedArrays.cpp
+	UnrimpExamples/IcosahedronTessellation/IcosahedronTessellation.cpp
 	UnrimpExamples/Color4.cpp
 	UnrimpExamples/Stopwatch.cpp
 	UnrimpExamples/EulerAngles.cpp

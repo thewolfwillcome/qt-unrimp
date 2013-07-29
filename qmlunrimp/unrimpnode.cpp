@@ -21,6 +21,7 @@
 #include "UnrimpExamples/FirstTessellation/FirstTessellation.h"
 #include "UnrimpExamples/InstancedCubes/InstancedCubes.h"
 #include "UnrimpExamples/FirstPostProcessing/FirstPostProcessing.h"
+#include "UnrimpExamples/IcosahedronTessellation/IcosahedronTessellation.h"
 
 
 UnrimpNode::UnrimpNode()
@@ -45,7 +46,8 @@ UnrimpNode::UnrimpNode()
 							{"FirstGeometryShader", 		&ExampleFabricator<FirstGeometryShader> },
 							{"FirstTessellation", 			&ExampleFabricator<FirstTessellation> },
 							// Advanced
-							{"InstancedCubes", 				&ExampleFabricator<InstancedCubes> }
+							{"InstancedCubes", 				&ExampleFabricator<InstancedCubes> },
+							{"IcosahedronTessellation", 	&ExampleFabricator<IcosahedronTessellation> },
 						  })
 	, m_example(nullptr)
 	, m_initialized(false)
