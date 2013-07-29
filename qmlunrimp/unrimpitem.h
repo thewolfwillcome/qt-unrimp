@@ -9,26 +9,29 @@ class UnrimpNode;
 
 class UnrimpItem : public QQuickItem
 {
-    Q_OBJECT
-    
-    Q_PROPERTY(QString exampleName READ example WRITE setExample NOTIFY exampleChanged)
+	Q_OBJECT
+
+	Q_PROPERTY(QString exampleName READ example WRITE setExample NOTIFY exampleChanged)
 
 public:
-    UnrimpItem(QQuickItem *parent = 0);
+	UnrimpItem(QQuickItem *parent = 0);
 	QString example();
 	void setExample(QString exampleName);
-	
-Q_SIGNALS:	
-    //void exampleChanged(QString);
+
+Q_SIGNALS:
 	void exampleChanged();
 
 protected:
-    virtual QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
+	virtual QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
 
-    void timerEvent(QTimerEvent *);
+	virtual void timerEvent(QTimerEvent *);
 
 private:
-    int m_timerID;
+	void startCyclicTimer();
+	void stopCyclicTimer();
+
+private:
+	int m_timerID;
 	UnrimpNode *m_node;
 };
 

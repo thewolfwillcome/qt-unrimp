@@ -22,6 +22,7 @@ public:
 	virtual QString name() = 0;
 	
 	void setSize(int width, int height);
+	virtual bool wantsCyclicUpdate() {return false;}
 
 protected:
 	virtual void onSizeChanged(){}

@@ -19,6 +19,7 @@ public:
 	virtual void Deinit() override;
 	virtual void Render() override;
     virtual QString name() { return "InstancedCubes"; } override;
+	virtual bool wantsCyclicUpdate() {return true;} override;
 	
 //[-------------------------------------------------------]
 //[ Private static data                                   ]
