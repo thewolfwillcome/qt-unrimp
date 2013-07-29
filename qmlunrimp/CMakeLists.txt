@@ -72,6 +72,10 @@ set(SRC_FILES
 	UnrimpExamples/FirstTexture/FirstTexture.cpp
 	UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.cpp
 	UnrimpExamples/FirstPostProcessing/FirstPostProcessing.cpp
+	UnrimpExamples/FirstMultipleRenderTargets/FirstMultipleRenderTargets.cpp
+	UnrimpExamples/FirstGeometryShader/FirstGeometryShader.cpp
+	UnrimpExamples/FirstTessellation/FirstTessellation.cpp
+	UnrimpExamples/FirstInstancing/FirstInstancing.cpp
 	UnrimpExamples/InstancedCubes/InstancedCubes.cpp
 	UnrimpExamples/InstancedCubes/ICubeRenderer.cpp
 	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/BatchDrawInstanced.cpp

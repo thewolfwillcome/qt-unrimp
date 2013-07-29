@@ -15,6 +15,10 @@
 #include "UnrimpExamples/VertexBuffer/VertexBuffer.h"
 #include "UnrimpExamples/FirstTexture/FirstTexture.h"
 #include "UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.h"
+#include "UnrimpExamples/FirstInstancing/FirstInstancing.h"
+#include "UnrimpExamples/FirstMultipleRenderTargets/FirstMultipleRenderTargets.h"
+#include "UnrimpExamples/FirstGeometryShader/FirstGeometryShader.h"
+#include "UnrimpExamples/FirstTessellation/FirstTessellation.h"
 #include "UnrimpExamples/InstancedCubes/InstancedCubes.h"
 #include "UnrimpExamples/FirstPostProcessing/FirstPostProcessing.h"
 
@@ -31,13 +35,17 @@ UnrimpNode::UnrimpNode()
 	, m_newExampleName("FirstTriangle")
 	, m_availableExamples({
 							// Basic
-							{"FirstTriangle", 			&ExampleFabricator<FirstTriangle> },
-						    {"VertexBuffer", 			&ExampleFabricator<VertexBuffer> },
-							{"FirstTexture", 			&ExampleFabricator<FirstTexture> },
-							{"FirstRenderToTexture", 	&ExampleFabricator<FirstRenderToTexture> },
-							{"FirstPostProcessing", 	&ExampleFabricator<FirstPostProcessing> },
+							{"FirstTriangle", 				&ExampleFabricator<FirstTriangle> },
+						    {"VertexBuffer", 				&ExampleFabricator<VertexBuffer> },
+							{"FirstTexture", 				&ExampleFabricator<FirstTexture> },
+							{"FirstRenderToTexture", 		&ExampleFabricator<FirstRenderToTexture> },
+							{"FirstPostProcessing", 		&ExampleFabricator<FirstPostProcessing> },
+							{"FirstInstancing", 			&ExampleFabricator<FirstInstancing> },
+							{"FirstMultipleRenderTargets", 	&ExampleFabricator<FirstMultipleRenderTargets> },
+							{"FirstGeometryShader", 		&ExampleFabricator<FirstGeometryShader> },
+							{"FirstTessellation", 			&ExampleFabricator<FirstTessellation> },
 							// Advanced
-							{"InstancedCubes", 			&ExampleFabricator<InstancedCubes> }
+							{"InstancedCubes", 				&ExampleFabricator<InstancedCubes> }
 						  })
 	, m_example(nullptr)
 	, m_initialized(false)
