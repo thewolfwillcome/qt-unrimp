@@ -81,18 +81,26 @@ bool UnrimpNode::setExample(QString exampleName)
 	return true;
 }
 
+bool UnrimpNode::exampleNeedsCyclicUpdate()
+{
+	if (!m_example)
+		return false;
+	return m_example->wantsCyclicUpdate();
+}
 
 void UnrimpNode::saveUnrimpState()
 {
 	QOpenGLContext *ctx = QOpenGLContext::currentContext();
 
-    ctx->doneCurrent();
-    m_qtContext->makeCurrent(m_quickWindow);
+	ctx->doneCurrent();
+	m_qtContext->makeCurrent(m_quickWindow);
+
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
 }
 
 void UnrimpNode::restoreUnrimpState()
 {
-	
+	glPopAttrib();
 	m_qtContext = QOpenGLContext::currentContext();
 	m_qtContext->functions()->glUseProgram(0);
 	m_qtContext->doneCurrent();
@@ -106,15 +114,15 @@ void UnrimpNode::preprocess()
 
 	// Backup the currently used render target
 	Renderer::IRenderTargetPtr renderTarget(m_renderer->omGetRenderTarget());
-	
+
 	m_renderer->omSetRenderTarget(m_frameBuffer);
-	
+
 	// Do the drawing :)
 	m_example->Render();
 
 	// Restore the previously set render target
 	m_renderer->omSetRenderTarget(renderTarget);
-	
+
 	saveUnrimpState();
 }
 

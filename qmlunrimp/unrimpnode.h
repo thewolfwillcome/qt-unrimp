@@ -39,6 +39,7 @@ public:
 	
 	QString example();
 	bool setExample(QString exampleName);
+	bool exampleNeedsCyclicUpdate();
 
 private:
 	void ResetUnrimpStates();
