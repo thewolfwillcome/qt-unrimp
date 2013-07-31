@@ -217,6 +217,10 @@ Rectangle {
 		ListElement {
 			name: "IcosahedronTessellation"
 			type: "Advanced"
+		}		
+		ListElement {
+			name: "FirstFont"
+			type: "Advanced"
 		}
 	}
 	

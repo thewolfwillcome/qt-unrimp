@@ -41,6 +41,7 @@
 #include "UnrimpExamples/InstancedCubes/InstancedCubes.h"
 #include "UnrimpExamples/FirstPostProcessing/FirstPostProcessing.h"
 #include "UnrimpExamples/IcosahedronTessellation/IcosahedronTessellation.h"
+#include "UnrimpExamples/FirstFont/FirstFont.h"
 
 
 UnrimpNode::UnrimpNode()
@@ -68,6 +69,7 @@ UnrimpNode::UnrimpNode()
 							{"Fxaa", 						&ExampleFabricator<Fxaa> },
 							{"InstancedCubes", 				&ExampleFabricator<InstancedCubes> },
 							{"IcosahedronTessellation", 	&ExampleFabricator<IcosahedronTessellation> },
+							{"FirstFont", 					&ExampleFabricator<FirstFont> },
 						  })
 	, m_example(nullptr)
 	, m_initialized(false)

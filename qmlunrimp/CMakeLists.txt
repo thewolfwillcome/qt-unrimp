@@ -84,10 +84,12 @@ set(SRC_FILES
 	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/BatchInstancedArrays.cpp
 	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/CubeRendererInstancedArrays.cpp
 	UnrimpExamples/IcosahedronTessellation/IcosahedronTessellation.cpp
+	UnrimpExamples/FirstFont/FirstFont.cpp
 	UnrimpExamples/Color4.cpp
 	UnrimpExamples/Stopwatch.cpp
 	UnrimpExamples/EulerAngles.cpp
 	UnrimpExamples/ExampleBase.cpp
+	UnrimpExamples/ExampleRenderToolkit.cpp
 )
   
 include_directories("${UNRIMPBASE_PATH}/include")
@@ -106,6 +108,7 @@ link_directories(${UNRIMP_LIB_DIR})
 add_executable(qmlunrimp  main.cpp unrimpitem.cpp unrimpnode.cpp ${SRC_FILES})
 target_link_libraries(qmlunrimp OpenGLRendererStatic RendererToolkitStatic freetype)
 if(UNIX)
+	# needed from the static opengl renderer
 	target_link_libraries(qmlunrimp X11)
 endif()
 

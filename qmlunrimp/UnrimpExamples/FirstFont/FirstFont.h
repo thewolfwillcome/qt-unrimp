@@ -18,24 +18,22 @@
 \*********************************************************/
 
 
-#include "unrimpitem.h"
+#ifndef FIRSTFONT_H
+#define FIRSTFONT_H
 
-#include <QtGui/QGuiApplication>
-#include <QtQuick/QQuickView>
-#include <QtQml/QQmlContext>
+#include "UnrimpExamples/ExampleRenderToolkit.h"
 
-int main(int argc, char **argv)
+class FirstFont : public ExampleRenderToolkit
 {
-    QGuiApplication app(argc, argv);
+public:
+	virtual void Init(Renderer::IRendererPtr renderer) override;
+	virtual void Deinit() override;
+	virtual void Render() override;
+    virtual QString name() { return "FirstFont"; } override;
 
-    qmlRegisterType<UnrimpItem>("Unrimp", 1, 0, "UnrimpItem");
+private:
+	RendererToolkit::IFontPtr mFont;	///< Font, can be a null pointer
 
-    QQuickView view;
-    view.setResizeMode(QQuickView::SizeRootObjectToView);
-    view.setSource(QUrl::fromLocalFile("resources/example.qml"));
-    view.rootContext()->setContextProperty("Window", &view);
-    view.show();
-    view.raise();
+};
 
-    return app.exec();
-}
+#endif // FIRSTFONT_H

@@ -5,13 +5,12 @@
 #ifndef INSTANCEDCUBES_H
 #define INSTANCEDCUBES_H
 
-#include "UnrimpExamples/ExampleBase.h"
-#include <Renderer/RendererToolkit.h>
+#include "UnrimpExamples/ExampleRenderToolkit.h"
 #include "UnrimpExamples/Stopwatch.h"
 
 class ICubeRenderer;
 
-class InstancedCubes : public ExampleBase
+class InstancedCubes : public ExampleRenderToolkit
 {
 public:
     InstancedCubes();
@@ -30,7 +29,6 @@ private:
 	static const unsigned int SCENE_RADIUS			  = 10;		///< Scene radius
 
 private:
-	RendererToolkit::IRendererToolkitPtr rendererToolkit;
 	RendererToolkit::IFontPtr  mFont;					///< Font, can be a null pointer
 	ICubeRenderer			  *mCubeRenderer;			///< Cube renderer instance, can be a null pointer
 	unsigned int			   mNumberOfCubeInstances;	///< Number of cube instances

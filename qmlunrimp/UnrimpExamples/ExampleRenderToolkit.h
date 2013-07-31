@@ -18,24 +18,25 @@
 \*********************************************************/
 
 
-#include "unrimpitem.h"
+#ifndef EXAMPLERENDERTOOLKIT_H
+#define EXAMPLERENDERTOOLKIT_H
 
-#include <QtGui/QGuiApplication>
-#include <QtQuick/QQuickView>
-#include <QtQml/QQmlContext>
+#include "ExampleBase.h"
+#include <Renderer/RendererToolkit.h>
 
-int main(int argc, char **argv)
+class ExampleRenderToolkit : public ExampleBase
 {
-    QGuiApplication app(argc, argv);
+public:
+	virtual void Init(Renderer::IRendererPtr renderer) override;
+	virtual void Deinit() override;
 
-    qmlRegisterType<UnrimpItem>("Unrimp", 1, 0, "UnrimpItem");
+protected:
+	RendererToolkit::IRendererToolkitPtr  getRendererToolkit() { return m_RendererToolkit; }
 
-    QQuickView view;
-    view.setResizeMode(QQuickView::SizeRootObjectToView);
-    view.setSource(QUrl::fromLocalFile("resources/example.qml"));
-    view.rootContext()->setContextProperty("Window", &view);
-    view.show();
-    view.raise();
+private:
+	
+	RendererToolkit::IRendererToolkitPtr m_RendererToolkit;
 
-    return app.exec();
-}
+};
+
+#endif // EXAMPLERENDERTOOLKIT_H

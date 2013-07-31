@@ -11,15 +11,6 @@
 
 #include <cstring>
 
-RendererToolkit::IRendererToolkit* createRendererToolkit(Renderer::IRenderer& renderer)
-{
-	extern RendererToolkit::IRendererToolkit *createRendererToolkitInstance(Renderer::IRenderer &renderer);
-
-	// Create the renderer toolkit instance
-	return createRendererToolkitInstance(renderer);
-}
-
-
 
 InstancedCubes::InstancedCubes()
 	:
@@ -38,16 +29,16 @@ InstancedCubes::InstancedCubes()
 
 void InstancedCubes::Init(Renderer::IRendererPtr renderer)
 {
-	ExampleBase::Init(renderer);
-
-	rendererToolkit = createRendererToolkit(*renderer);
+	ExampleRenderToolkit::Init(renderer);
 	
 	if (nullptr != renderer)
 	{
 		// Begin debug event
 		RENDERER_BEGIN_DEBUG_EVENT_FUNCTION(renderer)
 
-		{ // Create the font instance
+		{
+			RendererToolkit::IRendererToolkitPtr rendererToolkit(getRendererToolkit());
+			// Create the font instance
 			// Get and check the renderer toolkit instance
 			if (nullptr != rendererToolkit)
 			{
@@ -99,6 +90,8 @@ void InstancedCubes::Deinit()
 
 	// End debug event
 	RENDERER_END_DEBUG_EVENT(getRenderer())
+	
+	ExampleRenderToolkit::Deinit();
 }
 
 void InstancedCubes::Render()
