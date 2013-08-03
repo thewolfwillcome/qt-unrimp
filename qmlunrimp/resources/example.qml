@@ -194,9 +194,9 @@ Window {
 		property bool fullscreen: false
 		onClicked: {
 			if (fullscreen)
-				Window.showNormal();
+				unrimp.showNormal();
 			else
-				Window.showFullScreen();
+				unrimp.showFullScreen();
 			fullscreen = !fullscreen;
 		}
 	}
