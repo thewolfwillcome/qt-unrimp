@@ -3,7 +3,7 @@ import QtQuick 2.0
 Rectangle {
 	id: move_handle
 	
-	property Rectangle window: null
+	property variant window: null
 	
 	width: 25
 	height: 25

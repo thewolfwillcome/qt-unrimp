@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.8)
 
 project(qmlunrimp)
 
-find_package(Qt5Quick REQUIRED)
+find_package(Qt5Quick 5.1 REQUIRED)
 
 ##################################################
 ## Platform

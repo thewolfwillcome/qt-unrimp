@@ -1,7 +1,9 @@
-import QtQuick 2.0
+import QtQuick 2.1
 import Unrimp 1.0
+import QtQuick.Window 2.0
 
-Rectangle {
+Window {
+	visible:true
 	id: unrimp
 	width: 1024
 	height: 768
@@ -144,20 +146,59 @@ Rectangle {
 		
 		onClicked: { unrimpitem.state = unrimpitem.state == '' ? 'State1' : '' }
 	}
+	
+	ExamplesList {
+		id: example_list_container
+		anchors.left: moveItem_exampleList.left
+		anchors.leftMargin: -5
+		anchors.top: moveItem_exampleList.bottom
+		anchors.topMargin: 6
+		width:200
+		height: 200
+		model: myModel
+		
+		onCurrentExampleChanged: {
+			unrimpitem.exampleName = name;
+		}
+	}
 
-	Item {
-		id: camerawrapper
-		property real yaw: 0
-		property real pitch: 0
-		property real zoom: 1
+	MoveItem {
+		id: moveItem_exampleList
+		x: 30
+		y: 200
+		window: unrimp
+	}
 
-		onYawChanged: unrimpitem.camera.yaw = yaw
-		onPitchChanged: unrimpitem.camera.pitch = pitch
-		onZoomChanged: unrimpitem.camera.zoom = zoom
+	ShowHideButton {
+		id: showHide_exampleList
+		
+		anchors.left: moveItem_exampleList.right
+		anchors.leftMargin: 6
+		anchors.top: moveItem_exampleList.top
+		onClicked: example_list_container.opacity = example_list_container.opacity == 1 ? 0 : 1
+	}
+	TitleBarText {
+		text: "Examples"
+		anchors.left: showHide_exampleList.right
+		anchors.right: maximize_window.left
+		anchors.top: moveItem_exampleList.top
+		anchors.bottom: moveItem_exampleList.bottom
+	}
 
-		Behavior on yaw { NumberAnimation{ } }
-		Behavior on pitch { NumberAnimation{ } }
-		Behavior on zoom { NumberAnimation{ } }
+	MaximizeButton {
+		id: maximize_window
+		anchors.top: moveItem_exampleList.top
+		anchors.right: example_list_container.right
+		anchors.rightMargin: 5
+		
+		property bool fullscreen: false
+		onClicked: {
+			if (fullscreen)
+				Window.showNormal();
+			else
+				Window.showFullScreen();
+			fullscreen = !fullscreen;
+		}
 	}
 	
 	ListModel {
@@ -217,63 +258,10 @@ Rectangle {
 		ListElement {
 			name: "IcosahedronTessellation"
 			type: "Advanced"
-		}		
+		}
 		ListElement {
 			name: "FirstFont"
 			type: "Advanced"
-		}
-	}
-	
-	ExamplesList {
-		id: example_list_container
-		model: myModel
-		anchors.left: moveItem_exampleList.left
-		anchors.leftMargin: -5
-		anchors.top: moveItem_exampleList.bottom
-		anchors.topMargin: 6
-		width:200
-		
-		onCurrentExampleChanged: {
-			unrimpitem.exampleName = name;
-		}
-	}
-
-	MoveItem {
-		id: moveItem_exampleList
-		x: 30
-		y: 200
-		window: unrimp
-	}
-
-	ShowHideButton {
-		id: showHide_exampleList
-		
-		anchors.left: moveItem_exampleList.right
-		anchors.leftMargin: 6
-		anchors.top: moveItem_exampleList.top
-		onClicked: example_list_container.opacity = example_list_container.opacity == 1 ? 0 : 1
-	}
-	TitleBarText {
-		text: "Examples"
-		anchors.left: showHide_exampleList.right
-		anchors.right: maximize_window.left
-		anchors.top: moveItem_exampleList.top
-		anchors.bottom: moveItem_exampleList.bottom
-	}
-
-	MaximizeButton {
-		id: maximize_window
-		anchors.top: moveItem_exampleList.top
-		anchors.right: example_list_container.right
-		anchors.rightMargin: 5
-		
-		property bool fullscreen: false
-		onClicked: {
-			if (fullscreen)
-				Window.showNormal();
-			else
-				Window.showFullScreen();
-			fullscreen = !fullscreen;
 		}
 	}
 }

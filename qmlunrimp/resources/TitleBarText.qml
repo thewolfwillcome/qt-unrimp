@@ -2,12 +2,8 @@ import QtQuick 2.0
 Rectangle {
 	id: title_exampleList
 	property alias text: textItem.text
-	anchors.left: showHide_exampleList.right
-	anchors.right: maximize_window.left
 	anchors.leftMargin: 6
 	anchors.rightMargin: 6
-	anchors.top: moveItem_exampleList.top
-	anchors.bottom: moveItem_exampleList.bottom
 	gradient: Gradient {
 		GradientStop {
 			position: 0

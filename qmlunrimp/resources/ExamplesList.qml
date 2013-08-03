@@ -1,6 +1,7 @@
 import QtQuick 2.0
 Rectangle {
 	id: container
+	property alias model: list.model
 	
 	radius: 15
 	gradient: Gradient {
@@ -23,10 +24,7 @@ Rectangle {
 	border.width: 4
 	border.color: "#1a1a1a"
 	
-	width: 139
-	height: 200
 	signal currentExampleChanged(string name)
-	property alias model: list.model
 	Component {
 		id: exampleDelegate
 		Item {
