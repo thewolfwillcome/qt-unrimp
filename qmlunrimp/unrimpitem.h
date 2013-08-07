@@ -23,19 +23,27 @@
 
 #include <QtQuick/QQuickItem>
 #include <QtCore/QPropertyAnimation>
+#include "ExampleModel.h"
 
 class UnrimpNode;
+
 
 class UnrimpItem : public QQuickItem
 {
 	Q_OBJECT
 
-	Q_PROPERTY(QString exampleName READ example WRITE setExample NOTIFY exampleChanged)
+	Q_PROPERTY(QString exampleName READ example NOTIFY exampleChanged)
+	Q_PROPERTY(int exampleIndex READ exampleIndex WRITE setExampleIndex)
+	Q_PROPERTY(ExampleModel* exampleModel READ exampleModel NOTIFY exampleChanged)
 
 public:
 	UnrimpItem(QQuickItem *parent = 0);
 	QString example();
-	void setExample(QString exampleName);
+	
+	ExampleModel* exampleModel();
+	
+	void setExampleIndex(int index);
+	int exampleIndex();
 
 Q_SIGNALS:
 	void exampleChanged();
@@ -52,6 +60,7 @@ private:
 private:
 	int m_timerID;
 	UnrimpNode *m_node;
+	ExampleModel m_exampleModel;
 };
 
 #endif // UNRIMPITEM_H

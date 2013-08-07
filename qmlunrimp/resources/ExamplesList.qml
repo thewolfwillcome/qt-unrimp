@@ -24,7 +24,7 @@ Rectangle {
 	border.width: 4
 	border.color: "#1a1a1a"
 	
-	signal currentExampleChanged(string name)
+	signal currentExampleChanged(string name, int index)
 	Component {
 		id: exampleDelegate
 		Item {
@@ -41,7 +41,7 @@ Rectangle {
 				anchors.fill: parent
 				onClicked:{
 					list.currentIndex = index;
-					container.currentExampleChanged(name);
+					container.currentExampleChanged(name, index);
 				}
 			}
 		}

@@ -22,26 +22,13 @@
 #include <OpenGLRenderer/OpenGLRenderer.h>
 #include <OpenGLRenderer/Framebuffer.h>
 #include "UnrimpExamples/Color4.h"
+#include "UnrimpExamples/ExampleBase.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
 #include <QSurfaceFormat>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
-
-#include "UnrimpExamples/FirstTriangle/FirstTriangle.h"
-#include "UnrimpExamples/VertexBuffer/VertexBuffer.h"
-#include "UnrimpExamples/FirstTexture/FirstTexture.h"
-#include "UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.h"
-#include "UnrimpExamples/FirstInstancing/FirstInstancing.h"
-#include "UnrimpExamples/FirstMultipleRenderTargets/FirstMultipleRenderTargets.h"
-#include "UnrimpExamples/FirstGeometryShader/FirstGeometryShader.h"
-#include "UnrimpExamples/FirstTessellation/FirstTessellation.h"
-#include "UnrimpExamples/Fxaa/Fxaa.h"
-#include "UnrimpExamples/InstancedCubes/InstancedCubes.h"
-#include "UnrimpExamples/FirstPostProcessing/FirstPostProcessing.h"
-#include "UnrimpExamples/IcosahedronTessellation/IcosahedronTessellation.h"
-#include "UnrimpExamples/FirstFont/FirstFont.h"
 
 
 UnrimpNode::UnrimpNode()
@@ -53,24 +40,6 @@ UnrimpNode::UnrimpNode()
 	, m_qtContext(0)
 	, m_samples(0)
 	, m_AAEnabled(false)
-	, m_newExampleName("FirstTriangle")
-	, m_availableExamples({
-							// Basic
-							{"FirstTriangle", 				&ExampleFabricator<FirstTriangle> },
-						    {"VertexBuffer", 				&ExampleFabricator<VertexBuffer> },
-							{"FirstTexture", 				&ExampleFabricator<FirstTexture> },
-							{"FirstRenderToTexture", 		&ExampleFabricator<FirstRenderToTexture> },
-							{"FirstPostProcessing", 		&ExampleFabricator<FirstPostProcessing> },
-							{"FirstInstancing", 			&ExampleFabricator<FirstInstancing> },
-							{"FirstMultipleRenderTargets", 	&ExampleFabricator<FirstMultipleRenderTargets> },
-							{"FirstGeometryShader", 		&ExampleFabricator<FirstGeometryShader> },
-							{"FirstTessellation", 			&ExampleFabricator<FirstTessellation> },
-							// Advanced
-							{"Fxaa", 						&ExampleFabricator<Fxaa> },
-							{"InstancedCubes", 				&ExampleFabricator<InstancedCubes> },
-							{"IcosahedronTessellation", 	&ExampleFabricator<IcosahedronTessellation> },
-							{"FirstFont", 					&ExampleFabricator<FirstFont> },
-						  })
 	, m_example(nullptr)
 	, m_initialized(false)
 	, m_dirtyFBO(false)
@@ -95,20 +64,12 @@ UnrimpNode::~UnrimpNode()
 
 QString UnrimpNode::example()
 {
-	return m_newExampleName;
+	return m_newExampleFac.name;
 }
 
-bool UnrimpNode::setExample(QString exampleName)
+bool UnrimpNode::setExample(ExampleItem exampleFac)
 {
-	// check if given example name is known
-	if (exampleName == example() || !m_availableExamples.contains(exampleName))
-		return false;
-	
-	// save example name and mark the material (texture) dirty
-	// this causes an update, in which the new example is created.
-	// This makes sure that the current active example is changed on the right time
-	// (e.g. the unrimp opengl context is active and we are in the correct thread context )
-	m_newExampleName = exampleName;
+	m_newExampleFac = exampleFac;
 	m_exampleChanged = true;
 	return true;
 }
@@ -191,8 +152,7 @@ void UnrimpNode::update()
 				ResetUnrimpStates();
 			}
 			
-			FabricatorMethod fabricator(m_availableExamples[m_newExampleName]); 
-			m_example = QSharedPointer<ExampleBase>(fabricator());
+			m_example = QSharedPointer<ExampleBase>(m_newExampleFac());
 			
 			m_example->setSize(m_size.width(), m_size.height());
 			m_example->Init(m_renderer);

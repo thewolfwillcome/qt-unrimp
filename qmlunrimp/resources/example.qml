@@ -24,8 +24,6 @@ Window {
 		anchors.top: move_handle1.bottom
 		anchors.topMargin: 6
 
-		exampleName: "FirstTriangle"
-
 		Behavior on opacity { NumberAnimation { } }
 		Behavior on width { NumberAnimation { } }
 		Behavior on height { NumberAnimation { } }
@@ -155,10 +153,10 @@ Window {
 		anchors.topMargin: 6
 		width:200
 		height: 200
-		model: myModel
+		model: unrimpitem.exampleModel
 		
 		onCurrentExampleChanged: {
-			unrimpitem.exampleName = name;
+			unrimpitem.exampleIndex = index
 		}
 	}
 
@@ -198,70 +196,6 @@ Window {
 			else
 				unrimp.showFullScreen();
 			fullscreen = !fullscreen;
-		}
-	}
-	
-	ListModel {
-		id: myModel
-		ListElement {
-			name: "FirstTriangle"
-			type: "Basic"
-		}
-		ListElement {
-			name: "VertexBuffer"
-			type: "Basic"
-		}
-		ListElement {
-			name: "FirstTexture"
-			type: "Basic"
-		}
-		ListElement {
-			name: "FirstRenderToTexture"
-			type: "Basic"
-		}
-		ListElement {
-			name: "FirstMultipleRenderTargets"
-			type: "Basic"
-		}
-		/*ListElement { // not possbile here because a swap chain is a window not a framebuffer object
-			name: "FirstMultipleSwapChains"
-			type: "Basic"
-		}*/
-		ListElement {
-			name: "FirstInstancing"
-			type: "Basic"
-		}
-		ListElement {
-			name: "FirstGeometryShader"
-			type: "Basic"
-		}
-		ListElement {
-			name: "FirstTessellation"
-			type: "Basic"
-		}
-		ListElement {
-			name: "FirstPostProcessing"
-			type: "Advanced"
-		}
-		ListElement {
-			name: "Fxaa"
-			type: "Advanced"
-		}
-		/*ListElement { // not possbile here because it doesn't render anything to screen
-			name: "FirstGpgpu"
-			type: "Advanced"
-		}*/
-		ListElement {
-			name: "InstancedCubes"
-			type: "Advanced"
-		}
-		ListElement {
-			name: "IcosahedronTessellation"
-			type: "Advanced"
-		}
-		ListElement {
-			name: "FirstFont"
-			type: "Advanced"
 		}
 	}
 }

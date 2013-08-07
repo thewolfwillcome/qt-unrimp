@@ -39,16 +39,28 @@ QString UnrimpItem::example()
 	return m_node->example();
 }
 
-void UnrimpItem::setExample(QString exampleName)
-{
+ExampleModel* UnrimpItem::exampleModel() {
+	return &m_exampleModel;
+}
+
+void UnrimpItem::setExampleIndex(int index) {
+	const QList<ExampleItem>& examples = m_exampleModel.examples();
+	if (index < 0 || examples.count() <= index)
+		return;
+	
+	ExampleItem item  = examples[index];
+	
 	if (m_node) {
- 		if (m_node->setExample(exampleName)) {
+ 		if (m_node->setExample(item)) {
  			emit exampleChanged();
 			update();
  		}
 	}
 }
 
+int UnrimpItem::exampleIndex() {
+	return 0;
+}
 
 QSGNode *UnrimpItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 {
@@ -62,6 +74,7 @@ QSGNode *UnrimpItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 	{
 		m_node = node = new UnrimpNode();
 		node->setQuickWindow(window());
+		node->setExample(m_exampleModel.examples()[0]);
 	}
 
 	node->setSize(QSize(width(), height()));

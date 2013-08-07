@@ -20,11 +20,11 @@ Window {
 			anchors.fill: parent
 			ExampleList2 {
 				
-				model:myModel
+				model:unrimpitem.exampleModel;
 				Layout.fillWidth: true
 				Layout.fillHeight: true
 				onCurrentExampleChanged: {
-					unrimpitem.exampleName = name;
+					unrimpitem.exampleIndex = index
 				}
 			}
 		}
@@ -42,71 +42,5 @@ Window {
 	UnrimpItem {
 		id: unrimpitem
 		anchors.fill: parent
-
-		exampleName: "FirstTriangle"
-	}
-
-	ListModel {
-		id: myModel
-		ListElement {
-			name: "FirstTriangle"
-			type: "Basic"
-		}
-		ListElement {
-			name: "VertexBuffer"
-			type: "Basic"
-		}
-		ListElement {
-			name: "FirstTexture"
-			type: "Basic"
-		}
-		ListElement {
-			name: "FirstRenderToTexture"
-			type: "Basic"
-		}
-		ListElement {
-			name: "FirstMultipleRenderTargets"
-			type: "Basic"
-		}
-		/*ListElement { // not possbile here because a swap chain is a window not a framebuffer object
-			name: "FirstMultipleSwapChains"
-			type: "Basic"
-		}*/
-		ListElement {
-			name: "FirstInstancing"
-			type: "Basic"
-		}
-		ListElement {
-			name: "FirstGeometryShader"
-			type: "Basic"
-		}
-		ListElement {
-			name: "FirstTessellation"
-			type: "Basic"
-		}
-		ListElement {
-			name: "FirstPostProcessing"
-			type: "Advanced"
-		}
-		ListElement {
-			name: "Fxaa"
-			type: "Advanced"
-		}
-		/*ListElement { // not possbile here because it doesn't render anything to screen
-			name: "FirstGpgpu"
-			type: "Advanced"
-		}*/
-		ListElement {
-			name: "InstancedCubes"
-			type: "Advanced"
-		}
-		ListElement {
-			name: "IcosahedronTessellation"
-			type: "Advanced"
-		}
-		ListElement {
-			name: "FirstFont"
-			type: "Advanced"
-		}
 	}
 }

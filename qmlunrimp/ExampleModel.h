@@ -18,18 +18,50 @@
 \*********************************************************/
 
 
-#include "unrimpitem.h"
+#ifndef EXAMPLEMODEL_H
+#define EXAMPLEMODEL_H
 
-#include <QtGui/QGuiApplication>
-#include <QQmlApplicationEngine>
+#include <QAbstractListModel>
 
-int main(int argc, char **argv)
+class UnrimpNode;
+class ExampleBase;
+typedef ExampleBase* (*FabricatorMethod)();
+
+struct ExampleItem {
+	QString name;
+	QString type;
+	FabricatorMethod f;
+
+	ExampleBase* operator()() const
+	{
+		if (!f)
+			return nullptr;
+		return f();
+	}
+};
+
+class ExampleModel : public QAbstractListModel
 {
-	QGuiApplication app(argc, argv);
-	qmlRegisterType<UnrimpItem>("Unrimp", 1, 0, "UnrimpItem");
-	qmlRegisterUncreatableType<ExampleModel>("Unrimp", 1, 0, "ExampleModel", "Not createable");
-	QQmlApplicationEngine engine(QUrl::fromLocalFile("resources/test.qml"));
-	//QQmlApplicationEngine engine(QUrl::fromLocalFile("resources/example.qml"));
+	Q_OBJECT
+public:
+	enum AnimalRoles {
+		NameRole = Qt::UserRole + 1,
+		TypeRole
+	};
 
-	return app.exec();
-}
+	ExampleModel(QObject *parent = 0);
+
+	int rowCount(const QModelIndex & parent = QModelIndex()) const;
+
+	QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+
+	const QList<ExampleItem>& examples();
+
+protected:
+	virtual QHash<int, QByteArray> roleNames() const;
+
+private:
+	QList<ExampleItem> m_examples;
+};
+
+#endif // EXAMPLEMODEL_H

@@ -66,7 +66,10 @@ set(CMAKE_AUTOMOC ON)
 # to always look for includes there:
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(SRC_FILES
+set(SRC_FILES main.cpp
+	unrimpitem.cpp
+	unrimpnode.cpp
+	ExampleModel.cpp
 	UnrimpExamples/FirstTriangle/FirstTriangle.cpp
 	UnrimpExamples/VertexBuffer/VertexBuffer.cpp
 	UnrimpExamples/FirstTexture/FirstTexture.cpp
@@ -105,7 +108,7 @@ endif()
 
 link_directories(${UNRIMP_LIB_DIR})
 
-add_executable(qmlunrimp  main.cpp unrimpitem.cpp unrimpnode.cpp ${SRC_FILES})
+add_executable(qmlunrimp ${SRC_FILES})
 target_link_libraries(qmlunrimp OpenGLRendererStatic RendererToolkitStatic freetype)
 if(UNIX)
 	# needed from the static opengl renderer

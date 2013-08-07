@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.0
 Rectangle {
 	id: container
 	property alias model: list.model
-	signal currentExampleChanged(string name)
+	signal currentExampleChanged(string name, int index)
 
 	gradient: Gradient {
 		GradientStop {
@@ -69,7 +69,7 @@ Rectangle {
 				anchors.fill: parent
 				onClicked:{
 					list.currentIndex = index;
-					container.currentExampleChanged(name);
+					container.currentExampleChanged(name, index);
 				}
 			}
 
