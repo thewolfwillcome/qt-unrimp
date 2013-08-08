@@ -1,10 +1,28 @@
-/*
+/*********************************************************\
+ * Copyright (c) 2013-2013 Christian Ofenberg, Stephan Wezel
  *
- */
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+\*********************************************************/
+
 
 #include "Fxaa.h"
 #include <cstring>
-#include "CLocaleChanger.h"
+#include <string>
+#include <locale>
+#include <sstream>
 
 void Fxaa::Init(Renderer::IRendererPtr renderer)
 {
@@ -240,53 +258,50 @@ void Fxaa::recreatePostProcessingProgram()
 			// Get the window size
 			int width  = this->mWidth;
 			int height = this->mHeigth;
+
+			// Due using ostringstream to format the numbers as string no need to change the global locale via setlocale
+			// the default locale used by c++ streams is equivalent to the "C" locale. (when not changed via std::locale::global())
+			// If the global c++ locale is also changed we can use basic_ios<T>::imbue(std::locale::classic()) to change the used locale by this stream instance only
+			std::ostringstream dynamicDefinition;
+			std::string shaderName(shaderLanguage->getShaderLanguageName());
+			std::string rendererName(renderer->getName());
 			
-			// activate the 'C' locale to have '.' as decimal points instead of eg ',' in a german locale
-			CLocaleChanger cLocale;
 			// The FXAA shader comments state: "RCPFRAME SHOULD PIXEL SHADER CONSTANTS"
-			char dynamicDefinition[256];
-			dynamicDefinition[0] = '\0';
-			if (0 == strcmp(shaderLanguage->getShaderLanguageName(), "Cg") || 0 == strcmp(renderer->getName(), "Direct3D9") || 0 == strcmp(renderer->getName(), "Direct3D10") || 0 == strcmp(renderer->getName(), "Direct3D11"))
+			if (shaderName == "Cg" || rendererName == "Direct3D9" || rendererName == "Direct3D10" || rendererName == "Direct3D11")
 			{
-				sprintf(dynamicDefinition, "#define RCPFRAME float2(%ff, %ff)\n", 1.0f / width, 1.0f / height);
+				dynamicDefinition << "#define RCPFRAME float2("<<1.0f / width<<"f, "<<1.0f / height<<"f)\n";
 			}
-			else if (0 == strcmp(renderer->getName(), "OpenGL") || 0 == strcmp(renderer->getName(), "OpenGLES2"))
+			else if (rendererName == "OpenGL" || rendererName == "OpenGLES2")
 			{
-				sprintf(dynamicDefinition, "#define RCPFRAME vec2(%f, %f)\n", 1.0f / width, 1.0f / height);
+				dynamicDefinition << "#define RCPFRAME vec2("<<1.0f / width<<", "<<1.0f / height<<")\n";
 			}
 
 			// Compose the fragment shader source code
+			std::string dynamicDefinitionString(dynamicDefinition.str());
 			const size_t definitionsLength		  = strlen(fragmentShaderSourceCode_Definitions);
-			const size_t dynamicDefinitionLength  = strlen(dynamicDefinition);
+			const size_t dynamicDefinitionLength  = dynamicDefinitionString.length();
 			const size_t postProcessingLength	  = strlen(fragmentShaderSourceCode);
 			const size_t part1Length			  = strlen(fxaa_FS_Part1);
 			const size_t part2Length			  = strlen(fxaa_FS_Part2);
 			const size_t length					  = definitionsLength + dynamicDefinitionLength + part1Length + part2Length + postProcessingLength + 1;	// +1 for the terminating zero
-			char *sourceCode = new char[length];
-			char *sourceCodeCurrent = sourceCode;
+
+			std::string sourceCode;
+			// reserve some space to avoid reallocation (we know the size of the complete sourcecode)
+			sourceCode.reserve(length);
 			// Definitions
-			strncpy(sourceCodeCurrent, fragmentShaderSourceCode_Definitions, definitionsLength);
-			sourceCodeCurrent += definitionsLength;
+			sourceCode += fragmentShaderSourceCode_Definitions;
 			// Dynamic definitions
-			strncpy(sourceCodeCurrent, dynamicDefinition, dynamicDefinitionLength);
-			sourceCodeCurrent += dynamicDefinitionLength;
+			sourceCode += dynamicDefinitionString;
 			// FXAA fragment shader
-			strncpy(sourceCodeCurrent, fxaa_FS_Part1, part1Length);
-			sourceCodeCurrent += part1Length;
-			strncpy(sourceCodeCurrent, fxaa_FS_Part2, part2Length);
-			sourceCodeCurrent += part2Length;
+			sourceCode += fxaa_FS_Part1;
+			sourceCode += fxaa_FS_Part2;
 			// Fragment shader shell
-			strncpy(sourceCodeCurrent, fragmentShaderSourceCode, postProcessingLength);
-			sourceCodeCurrent += postProcessingLength;
-			*sourceCodeCurrent = '\0';
+			sourceCode += fragmentShaderSourceCode;
 
 			// Due to the usage of smart pointers there's no need to explicitly free the previous resources, this is done automatically
 
 			// Create the program for the FXAA post processing
-			mProgramPostProcessing = shaderLanguage->createProgram(shaderLanguage->createVertexShader(vertexShaderSourceCode), shaderLanguage->createFragmentShader(sourceCode));
-
-			// Free the memory
-			delete [] sourceCode;
+			mProgramPostProcessing = shaderLanguage->createProgram(shaderLanguage->createVertexShader(vertexShaderSourceCode), shaderLanguage->createFragmentShader(sourceCode.c_str()));
 		}
 
 		// End debug event
