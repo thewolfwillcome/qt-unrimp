@@ -27,6 +27,7 @@ UnrimpItem::UnrimpItem(QQuickItem *parent)
 	: QQuickItem(parent)
 	, m_timerID(0)
 	, m_node(nullptr)
+	, m_currentExampleIndex(0)
 {
     setFlag(ItemHasContents);
     setSmooth(false);
@@ -45,9 +46,9 @@ ExampleModel* UnrimpItem::exampleModel() {
 
 void UnrimpItem::setExampleIndex(int index) {
 	const QList<ExampleItem>& examples = m_exampleModel.examples();
-	if (index < 0 || examples.count() <= index)
+	if (index < 0 || examples.count() <= index || m_currentExampleIndex == index)
 		return;
-	
+	m_currentExampleIndex = index;
 	ExampleItem item  = examples[index];
 	
 	if (m_node) {
@@ -59,7 +60,7 @@ void UnrimpItem::setExampleIndex(int index) {
 }
 
 int UnrimpItem::exampleIndex() {
-	return 0;
+	return m_currentExampleIndex;
 }
 
 QSGNode *UnrimpItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)

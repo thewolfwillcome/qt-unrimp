@@ -61,6 +61,7 @@ private:
 	int m_timerID;
 	UnrimpNode *m_node;
 	ExampleModel m_exampleModel;
+	int m_currentExampleIndex;
 };
 
 #endif // UNRIMPITEM_H

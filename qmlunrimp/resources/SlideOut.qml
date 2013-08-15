@@ -4,11 +4,11 @@ Item {
 	id:item
 	width:200
 	height:150
+	z: 100
 
 	default property alias children: childContainer.children
 	property string position: "left"
 	property int handle_height: -1
-	property bool center: true
 	property alias expandable: handle_click.enabled
 
 	property alias handle_text: handle_text.text
@@ -16,30 +16,34 @@ Item {
 	function getXPosition() {
 		if(position == "left")
 			return width*-1
-		if (position == "top" || position == "bottom") {
-			if (item.center)
-				return (item.parent.width-item.width)/2;
-			return item.x
-		}
+		if (position == "top" || position == "bottom") 
+			return (item.parent.width-item.width)/2;
 		if (position == "right")
 			return item.parent.width
 	}
 
 	function getYPosition() {
-		if(position == "left" || position == "right") {
-			if (item.center)
-				return (item.parent.height-item.height)/2;
-			return item.y
-		}
+		if(position == "left" || position == "right")
+			return (item.parent.height-item.height)/2;
 		if (position == "top")
 			return height*-1
 		if (position == "bottom")
 			return item.parent.height
 	}
-
+	
+	x: getXPosition()
+	y: getYPosition()
+	
 	Component.onCompleted: {
-		item.x = getXPosition();
-		item.y = getYPosition();
+		// fix invalid values for position
+		if (position != "top" && position != "bottom" && position != "left" && position != "right")
+			position = "left";
+		
+		// fix position depending of position
+		if (position == "top" || position == "bottom")
+			item.y = getYPosition();
+		else
+			item.x = getXPosition();
 	}
 
 	Rectangle {
@@ -180,8 +184,26 @@ Item {
 		Item {
 			id:childContainer
 			anchors.fill: parent
-			anchors.leftMargin: container.radius
 			anchors.margins: container.border.width
+			anchors.leftMargin: {
+				if(position == "left")
+					return container.radius
+			}
+
+			anchors.rightMargin: {
+				if(position == "right")
+					return container.radius
+			}
+
+			anchors.topMargin: {
+				if(position == "top")
+					return container.radius
+			}
+
+			anchors.bottomMargin: {
+				if(position == "bottom")
+					return container.radius
+			}
 			clip: true
 		}
 	}
