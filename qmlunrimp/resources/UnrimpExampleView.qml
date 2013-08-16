@@ -5,26 +5,30 @@ import QtQuick.Controls 1.0
 
 Item {
 	id: unrimp
-	width: 800
-	height: 600
+	width: 640
+	height: 480
 	clip: true
 	
+	ExampleModel {
+		id:exampleModel
+	}
+
 	SlideOut {
 		handle_text: "Examples"
 		height: 310
 		ColumnLayout {
 			anchors.fill: parent
 			ExampleList2 {
-				model:unrimpitem.exampleModel;
+				model:exampleModel;
 				Layout.fillWidth: true
 				Layout.fillHeight: true
 				onCurrentExampleChanged: {
-					unrimpitem.exampleIndex = index
+					unrimpitem.exampleItem = model.get(index);
 				}
 			}
 		}
 	}
-	
+
 	SlideOut {
 		expandable: false
 		width: 300
@@ -34,6 +38,7 @@ Item {
 	
 	UnrimpItem {
 		id: unrimpitem
+		exampleItem: exampleModel.get(0)
 		anchors.fill: parent
 	}
 }

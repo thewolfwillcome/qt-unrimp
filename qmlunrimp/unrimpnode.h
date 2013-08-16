@@ -28,6 +28,8 @@
 #include <QtQuick/QQuickWindow>
 #include "ExampleModel.h"
 
+#include <memory> // for std::unique_ptr
+
 class ExampleBase;
 
 class UnrimpNode : public QSGGeometryNode
@@ -53,9 +55,7 @@ public:
 
 	void preprocess();
 
-
-	QString example();
-	bool setExample(ExampleItem exampleFac);
+	bool setExample(ExampleFabricatorMethod exampleFac);
 	bool exampleNeedsCyclicUpdate();
 
 private:
@@ -75,12 +75,12 @@ private:
 	int m_samples;
 	bool m_AAEnabled;
 	QSize m_size;
-	ExampleItem m_newExampleFac;
+	ExampleFabricatorMethod m_newExampleFac;
 
 	Renderer::IRendererPtr m_renderer;
 	Renderer::ITexture2DPtr m_renderTexture;
 	Renderer::IFramebufferPtr m_frameBuffer;
-	QSharedPointer<ExampleBase> m_example;
+	std::unique_ptr<ExampleBase> m_example; // We don't share the ressources but cannot use a plain object instance due inheritance
 
 	bool m_initialized;
 	bool m_dirtyFBO;

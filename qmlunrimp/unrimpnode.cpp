@@ -30,6 +30,20 @@
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 
+class EmptyExample : public ExampleBase
+{
+public:
+	virtual void Render() override
+	{
+		Renderer::IRendererPtr renderer(getRenderer());
+		float color_green[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+		renderer->clear(Renderer::ClearFlag::COLOR, color_green, 1.0f, 0);
+	}
+	
+	virtual void Deinit() override {}
+    virtual QString name() { return QString(); } override;
+
+};
 
 UnrimpNode::UnrimpNode()
 	: QSGGeometryNode()
@@ -40,7 +54,8 @@ UnrimpNode::UnrimpNode()
 	, m_qtContext(0)
 	, m_samples(0)
 	, m_AAEnabled(false)
-	, m_example(nullptr)
+	, m_newExampleFac(nullptr)
+	, m_example(new EmptyExample)
 	, m_initialized(false)
 	, m_dirtyFBO(false)
 	, m_exampleChanged(false)
@@ -62,12 +77,7 @@ UnrimpNode::~UnrimpNode()
 	delete m_unrimpContext;
 }
 
-QString UnrimpNode::example()
-{
-	return m_newExampleFac.name;
-}
-
-bool UnrimpNode::setExample(ExampleItem exampleFac)
+bool UnrimpNode::setExample(ExampleFabricatorMethod exampleFac)
 {
 	m_newExampleFac = exampleFac;
 	m_exampleChanged = true;
@@ -136,8 +146,11 @@ void UnrimpNode::update()
 	{
 		restoreUnrimpState();
 
-		if (!m_initialized)
+		if (!m_initialized) {
 			init();
+			if (m_example)
+				m_example->Init(m_renderer);
+		}
 
 		if (m_dirtyFBO) {
 			updateFBO();
@@ -148,11 +161,13 @@ void UnrimpNode::update()
 		{
 			if(m_example) {
 				m_example->Deinit();
-			
 				ResetUnrimpStates();
 			}
-			
-			m_example = QSharedPointer<ExampleBase>(m_newExampleFac());
+
+			if (m_newExampleFac)
+				m_example.reset(m_newExampleFac());
+			else
+				m_example.reset(new EmptyExample);
 			
 			m_example->setSize(m_size.width(), m_size.height());
 			m_example->Init(m_renderer);

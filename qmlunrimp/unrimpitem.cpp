@@ -27,7 +27,7 @@ UnrimpItem::UnrimpItem(QQuickItem *parent)
 	: QQuickItem(parent)
 	, m_timerID(0)
 	, m_node(nullptr)
-	, m_currentExampleIndex(0)
+	, m_currentExample(nullptr)
 {
     setFlag(ItemHasContents);
     setSmooth(false);
@@ -35,32 +35,27 @@ UnrimpItem::UnrimpItem(QQuickItem *parent)
 
 QString UnrimpItem::example()
 {
-	if (!m_node)
-		return "FirstTriangle";
-	return m_node->example();
+	if (!m_currentExample)
+		return QString();
+	return m_currentExample->name();
 }
 
-ExampleModel* UnrimpItem::exampleModel() {
-	return &m_exampleModel;
-}
-
-void UnrimpItem::setExampleIndex(int index) {
-	const QList<ExampleItem>& examples = m_exampleModel.examples();
-	if (index < 0 || examples.count() <= index || m_currentExampleIndex == index)
+void UnrimpItem::setExampleItem(ExampleItem* item){
+	if (item == nullptr || m_currentExample == item)
 		return;
-	m_currentExampleIndex = index;
-	ExampleItem item  = examples[index];
-	
+
+	m_currentExample = item;
 	if (m_node) {
- 		if (m_node->setExample(item)) {
+		if (m_node->setExample(item->fabricator())) {
  			emit exampleChanged();
 			update();
  		}
 	}
 }
 
-int UnrimpItem::exampleIndex() {
-	return m_currentExampleIndex;
+ExampleItem* UnrimpItem::exampleItem()
+{
+	return m_currentExample;
 }
 
 QSGNode *UnrimpItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
@@ -75,7 +70,8 @@ QSGNode *UnrimpItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 	{
 		m_node = node = new UnrimpNode();
 		node->setQuickWindow(window());
-		node->setExample(m_exampleModel.examples()[0]);
+		if (m_currentExample)
+			node->setExample(m_currentExample->fabricator());
 	}
 
 	node->setSize(QSize(width(), height()));

@@ -36,20 +36,20 @@
 ExampleModel::ExampleModel(QObject *parent)
 	: m_examples({
 					// Basic
-					{"FirstTriangle",				"Basic",	&ExampleFabricator<FirstTriangle> },
-					{"VertexBuffer",				"Basic",	&ExampleFabricator<VertexBuffer> },
-					{"FirstTexture",				"Basic",	&ExampleFabricator<FirstTexture> },
-					{"FirstRenderToTexture",		"Basic",	&ExampleFabricator<FirstRenderToTexture> },
-					{"FirstPostProcessing",			"Basic",	&ExampleFabricator<FirstPostProcessing> },
-					{"FirstInstancing",				"Basic",	&ExampleFabricator<FirstInstancing> },
-					{"FirstMultipleRenderTargets",	"Basic",	&ExampleFabricator<FirstMultipleRenderTargets> },
-					{"FirstGeometryShader",			"Basic",	&ExampleFabricator<FirstGeometryShader> },
-					{"FirstTessellation",			"Basic",	&ExampleFabricator<FirstTessellation> },
+					new ExampleItem("FirstTriangle",				"Basic",	&ExampleFabricator<FirstTriangle>, this ),
+					new ExampleItem("VertexBuffer",					"Basic",	&ExampleFabricator<VertexBuffer>, this ),
+					new ExampleItem("FirstTexture",					"Basic",	&ExampleFabricator<FirstTexture>, this ),
+					new ExampleItem("FirstRenderToTexture",			"Basic",	&ExampleFabricator<FirstRenderToTexture>, this ),
+					new ExampleItem("FirstPostProcessing",			"Basic",	&ExampleFabricator<FirstPostProcessing>, this ),
+					new ExampleItem("FirstInstancing",				"Basic",	&ExampleFabricator<FirstInstancing>, this ),
+					new ExampleItem("FirstMultipleRenderTargets",	"Basic",	&ExampleFabricator<FirstMultipleRenderTargets>, this ),
+					new ExampleItem("FirstGeometryShader",			"Basic",	&ExampleFabricator<FirstGeometryShader>, this ),
+					new ExampleItem("FirstTessellation",			"Basic",	&ExampleFabricator<FirstTessellation>, this ),
 					// Advanced
-					{"Fxaa",						"Advanced",	&ExampleFabricator<Fxaa> },
-					{"InstancedCubes",				"Advanced",	&ExampleFabricator<InstancedCubes> },
-					{"IcosahedronTessellation",		"Advanced",	&ExampleFabricator<IcosahedronTessellation> },
-					{"FirstFont",					"Advanced",	&ExampleFabricator<FirstFont> },
+					new ExampleItem("Fxaa",							"Advanced",	&ExampleFabricator<Fxaa>, this ),
+					new ExampleItem("InstancedCubes",				"Advanced",	&ExampleFabricator<InstancedCubes>, this ),
+					new ExampleItem("IcosahedronTessellation",		"Advanced",	&ExampleFabricator<IcosahedronTessellation>, this ),
+					new ExampleItem("FirstFont",					"Advanced",	&ExampleFabricator<FirstFont>, this ),
 					}), QAbstractListModel(parent)
 {
 	
@@ -65,17 +65,13 @@ QVariant ExampleModel::data(const QModelIndex & index, int role) const
 	if (index.row() < 0 || index.row() >= m_examples.count())
 		return QVariant();
 
-	const ExampleItem &animal = m_examples[index.row()];
+	const ExampleItem *animal = m_examples[index.row()];
 
 	if (role == TypeRole)
-		return animal.type;
+		return animal->type();
 	else if (role == NameRole)
-		return animal.name;
+		return animal->name();
 	return QVariant();
-}
-
-const QList<ExampleItem>& ExampleModel::examples() {
-	return m_examples;
 }
 
 QHash<int, QByteArray> ExampleModel::roleNames() const

@@ -27,7 +27,8 @@ int main(int argc, char **argv)
 {
 	QGuiApplication app(argc, argv);
 	qmlRegisterType<UnrimpItem>("Unrimp", 1, 0, "UnrimpItem");
-	qmlRegisterUncreatableType<ExampleModel>("Unrimp", 1, 0, "ExampleModel", "Not createable");
+	qmlRegisterType<ExampleModel>("Unrimp", 1, 0, "ExampleModel");
+	qmlRegisterUncreatableType<ExampleItem>("Unrimp", 1, 0, "ExampleItem", "not createable");
 	QQmlApplicationEngine engine(QUrl::fromLocalFile("resources/test.qml"));
 	//QQmlApplicationEngine engine(QUrl::fromLocalFile("resources/example.qml"));
 

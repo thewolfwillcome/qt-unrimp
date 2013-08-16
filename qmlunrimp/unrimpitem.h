@@ -33,8 +33,7 @@ class UnrimpItem : public QQuickItem
 	Q_OBJECT
 
 	Q_PROPERTY(QString exampleName READ example NOTIFY exampleChanged)
-	Q_PROPERTY(int exampleIndex READ exampleIndex WRITE setExampleIndex)
-	Q_PROPERTY(ExampleModel* exampleModel READ exampleModel NOTIFY exampleChanged)
+	Q_PROPERTY(ExampleItem* exampleItem READ exampleItem WRITE setExampleItem NOTIFY exampleChanged)
 
 public:
 	UnrimpItem(QQuickItem *parent = 0);
@@ -42,8 +41,8 @@ public:
 	
 	ExampleModel* exampleModel();
 	
-	void setExampleIndex(int index);
-	int exampleIndex();
+	void setExampleItem(ExampleItem* item);
+	ExampleItem* exampleItem();
 
 Q_SIGNALS:
 	void exampleChanged();
@@ -60,7 +59,7 @@ private:
 private:
 	int m_timerID;
 	UnrimpNode *m_node;
-	ExampleModel m_exampleModel;
+	ExampleItem *m_currentExample;
 	int m_currentExampleIndex;
 };
 

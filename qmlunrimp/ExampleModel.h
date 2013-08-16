@@ -25,26 +25,48 @@
 
 class UnrimpNode;
 class ExampleBase;
-typedef ExampleBase* (*FabricatorMethod)();
+typedef ExampleBase* (*ExampleFabricatorMethod)();
 
-struct ExampleItem {
-	QString name;
-	QString type;
-	FabricatorMethod f;
+class ExampleItem : public QObject {
+	Q_OBJECT
+	
+	Q_PROPERTY(QString name READ name CONSTANT)
+	Q_PROPERTY(QString type READ type CONSTANT)
 
-	ExampleBase* operator()() const
+public:
+    explicit ExampleItem(const QString name, const QString type, ExampleFabricatorMethod fab, QObject* parent = 0)
+		: m_name(name), m_type(type), f(fab), QObject(parent)
 	{
-		if (!f)
-			return nullptr;
-		return f();
+		
 	}
+	
+	QString name() const
+	{
+		return m_name;
+	}
+	
+	QString type () const
+	{
+		return m_type;
+	}
+	
+	ExampleFabricatorMethod fabricator() const
+	{
+		return f;
+	}
+	
+private:
+	QString m_name;
+	QString m_type;
+	ExampleFabricatorMethod f;
+
 };
 
 class ExampleModel : public QAbstractListModel
 {
 	Q_OBJECT
 public:
-	enum AnimalRoles {
+	enum ExampleRoles {
 		NameRole = Qt::UserRole + 1,
 		TypeRole
 	};
@@ -54,14 +76,17 @@ public:
 	int rowCount(const QModelIndex & parent = QModelIndex()) const;
 
 	QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
-
-	const QList<ExampleItem>& examples();
+	
+	Q_INVOKABLE ExampleItem* get(int index)
+	{
+		return m_examples.at(index);
+	}
 
 protected:
 	virtual QHash<int, QByteArray> roleNames() const;
 
 private:
-	QList<ExampleItem> m_examples;
+	QVector<ExampleItem*> m_examples;
 };
 
 #endif // EXAMPLEMODEL_H
