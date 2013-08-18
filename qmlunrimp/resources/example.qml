@@ -8,6 +8,10 @@ Window {
 	width: 1024
 	height: 768
 	color: "black"
+	
+	ExampleModel {
+		id:exampleModel
+	}
 
 	Image {
 		id: back
@@ -23,6 +27,8 @@ Window {
 		anchors.leftMargin: -5
 		anchors.top: move_handle1.bottom
 		anchors.topMargin: 6
+		
+		exampleItem: exampleModel.get(0);
 
 		Behavior on opacity { NumberAnimation { } }
 		Behavior on width { NumberAnimation { } }
@@ -153,10 +159,10 @@ Window {
 		anchors.topMargin: 6
 		width:200
 		height: 200
-		model: unrimpitem.exampleModel
+		model: exampleModel
 		
 		onCurrentExampleChanged: {
-			unrimpitem.exampleIndex = index
+			unrimpitem.exampleItem = model.get(index)
 		}
 	}
 
