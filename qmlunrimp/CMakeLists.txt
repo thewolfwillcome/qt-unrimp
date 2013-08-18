@@ -115,7 +115,7 @@ endif()
 link_directories(${UNRIMP_LIB_DIR})
 
 if (${ARCHITECTURE_X64})
-	message(STATUS "64Bit")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DX64_ARCHITECTURE")
 	link_directories("External/Linux_x64/Assimp")
 endif()
 

@@ -23,6 +23,7 @@
 
 #include "UnrimpExamples/ExampleBase.h"
 #include "UnrimpExamples/Stopwatch.h"
+#include "UnrimpExamples/PlatformTypes.h"
 
 
 //[-------------------------------------------------------]
@@ -48,8 +49,8 @@ private:
 	Renderer::ISamplerStateCollectionPtr  mSamplerStateCollection;	///< Sampler state collection, can be a null pointer
 	// Optimization: Cache data to not bother the renderer API to much
 	unsigned int mUniformBlockIndex;							///< Uniform block index
-	uint		 mObjectSpaceToClipSpaceMatrixUniformHandle;	///< Object space to clip space matrix uniform handle, can be NULL_HANDLE
-	uint		 mObjectSpaceToViewSpaceMatrixUniformHandle;	///< Object space to view space matrix uniform handle, can be NULL_HANDLE
+	handle		 mObjectSpaceToClipSpaceMatrixUniformHandle;	///< Object space to clip space matrix uniform handle, can be NULL_HANDLE
+	handle		 mObjectSpaceToViewSpaceMatrixUniformHandle;	///< Object space to view space matrix uniform handle, can be NULL_HANDLE
 	// For timing
 	Stopwatch mStopwatch;	///< Stopwatch instance
 	float	  mGlobalTimer;	///< Global timer
