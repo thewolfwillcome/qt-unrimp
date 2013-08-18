@@ -183,7 +183,6 @@ void UnrimpNode::update()
 
 void UnrimpNode::updateFBO()
 {
-	
 	Renderer::ITexture *texture2D = m_renderTexture = m_renderer->createTexture2D(m_size.width(), m_size.height(), Renderer::TextureFormat::R8G8B8A8, nullptr, Renderer::TextureFlag::RENDER_TARGET);
 	m_frameBuffer = m_renderer->createFramebuffer(1, &texture2D);
 	
