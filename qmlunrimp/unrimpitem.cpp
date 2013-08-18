@@ -47,9 +47,9 @@ void UnrimpItem::setExampleItem(ExampleItem* item){
 	m_currentExample = item;
 	if (m_node) {
 		if (m_node->setExample(item->fabricator())) {
- 			emit exampleChanged();
+			emit exampleChanged();
 			update();
- 		}
+		}
 	}
 }
 
@@ -73,16 +73,13 @@ QSGNode *UnrimpItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 		if (m_currentExample)
 			node->setExample(m_currentExample->fabricator());
 	}
-
 	node->setSize(QSize(width(), height()));
-	node->setAAEnabled(smooth());
 	node->update();
 	
 	if (node->exampleNeedsCyclicUpdate())
 		startCyclicTimer();
 	else
 		stopCyclicTimer();
-
 	return node;
 }
 

@@ -63,7 +63,6 @@ UnrimpNode::UnrimpNode()
 	setMaterial(&m_material);
 	setOpaqueMaterial(&m_materialO);
 	setGeometry(&m_geometry);
-	setFlag(UsePreprocess);
 }
 
 UnrimpNode::~UnrimpNode()
@@ -111,24 +110,6 @@ void UnrimpNode::restoreUnrimpState()
 	m_unrimpContext->makeCurrent(m_quickWindow);
 }
 
-void UnrimpNode::preprocess()
-{
-	restoreUnrimpState();
-
-	// Backup the currently used render target
-	Renderer::IRenderTargetPtr renderTarget(m_renderer->omGetRenderTarget());
-
-	m_renderer->omSetRenderTarget(m_frameBuffer);
-
-	// Do the drawing :)
-	m_example->Render();
-
-	// Restore the previously set render target
-	m_renderer->omSetRenderTarget(renderTarget);
-
-	saveUnrimpState();
-}
-
 void UnrimpNode::setQuickWindow(QQuickWindow *window)
 {
 	m_quickWindow = window;
@@ -142,10 +123,10 @@ void UnrimpNode::setQuickWindow(QQuickWindow *window)
 
 void UnrimpNode::update()
 {
+	restoreUnrimpState();
+
 	if (!m_initialized || m_dirtyFBO || m_exampleChanged)
 	{
-		restoreUnrimpState();
-
 		if (!m_initialized) {
 			init();
 			if (m_example)
@@ -164,21 +145,34 @@ void UnrimpNode::update()
 				ResetUnrimpStates();
 			}
 
-			if (m_newExampleFac)
+			if (m_newExampleFac) {
 				m_example.reset(m_newExampleFac());
-			else
+			}
+			else {
 				m_example.reset(new EmptyExample);
-			
+			}
+
 			m_example->setSize(m_size.width(), m_size.height());
 			m_example->Init(m_renderer);
 			m_exampleChanged = false;
 			markDirty(DirtyMaterial);
+			
+			// When the example changes we need an additional render call.
+			// Otherwise some example doesn't render correctly (e.g. FirstRenderToTexture, FirstPostProcessing)
+			// I don't know why this is needed..
+			Render();
 		}
-
-		saveUnrimpState();
+		
+	} else if (exampleNeedsCyclicUpdate()) {
+		// when an example needs cyclic update (e.g. to drive an animation) we mark the material dirty.
+		// Otherweise the QML engine doesn't use the new content
+		markDirty(DirtyMaterial);
 	}
-	// for simplicity always mark the material as dirty to force a redraw of the node
-	markDirty(DirtyMaterial);
+
+	// Render the example
+	Render();
+
+	saveUnrimpState();
 }
 
 void UnrimpNode::updateFBO()
@@ -280,3 +274,16 @@ void UnrimpNode::ResetUnrimpStates()
 	m_renderer->omSetRenderTarget(renderTarget);
 }
 
+void UnrimpNode::Render()
+{
+	// Backup the currently used render target
+	Renderer::IRenderTargetPtr renderTarget(m_renderer->omGetRenderTarget());
+
+	m_renderer->omSetRenderTarget(m_frameBuffer);
+
+	// Do the drawing :)
+	m_example->Render();
+
+	// Restore the previously set render target
+	m_renderer->omSetRenderTarget(renderTarget);
+}

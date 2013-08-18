@@ -53,13 +53,12 @@ public:
 	void saveUnrimpState();
 	void restoreUnrimpState();
 
-	void preprocess();
-
 	bool setExample(ExampleFabricatorMethod exampleFac);
 	bool exampleNeedsCyclicUpdate();
 
 private:
 	void ResetUnrimpStates();
+	void Render();
 
 private:
 	QSGTextureMaterial m_material;
