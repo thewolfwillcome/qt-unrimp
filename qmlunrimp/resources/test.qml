@@ -9,8 +9,18 @@ Window {
 	visible:true
 	width: 800
 	height: 600
-	
+//  	width: view1.x + view2.x + view2.width
+//  	height: view1.y + view2.y + view2.height
+
 	UnrimpExampleView {
-		anchors.fill:parent
+		id:view1
+		x:5
+		y:5
 	}
+	
+// 	UnrimpExampleView {
+// 		id: view2
+// 		x:650
+// 		y:5
+// 	}
 }

@@ -160,7 +160,7 @@ void UnrimpNode::update()
 			// When the example changes we need an additional render call.
 			// Otherwise some example doesn't render correctly (e.g. FirstRenderToTexture, FirstPostProcessing)
 			// I don't know why this is needed..
-			Render();
+			//Render();
 		}
 		
 	} else if (exampleNeedsCyclicUpdate()) {

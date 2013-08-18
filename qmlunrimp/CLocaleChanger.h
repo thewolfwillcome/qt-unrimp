@@ -51,17 +51,21 @@ public:
 	*  @brief
 	*    Constructor
 	* */
-	CLocaleChanger()
+	CLocaleChanger(int localeCategory = LC_NUMERIC)
+		: m_changedCategory(localeCategory)
 	{
+		if (localeCategory < LC_CTYPE || localeCategory > LC_IDENTIFICATION) {
+			return;
+		}
 		// Get the currently set locale, if it's a null pointer or already "C" just do nothing
-		const char *pszCurrentLocale = setlocale(LC_ALL, nullptr);
+		const char *pszCurrentLocale = setlocale(m_changedCategory, nullptr);
 		if (pszCurrentLocale && pszCurrentLocale[0] != 'C') {
 
 			// Duplicate the string
 			m_savedLocale = pszCurrentLocale;
 
 			// Set the locale back to the default
-			setlocale(LC_ALL, "C");
+			setlocale(m_changedCategory, "C");
 		}
 	}
 
@@ -73,7 +77,7 @@ public:
 	{
 		if (m_savedLocale.length() > 0) {
 			// Be polite and restore the previously set locale
-			setlocale(LC_ALL, m_savedLocale.c_str());
+			setlocale(m_changedCategory, m_savedLocale.c_str());
 		}
 	}
 
@@ -116,6 +120,7 @@ private:
 //[-------------------------------------------------------]
 private:
 	std::string m_savedLocale;
+	int m_changedCategory;
 };
 
 #endif // CLOCALECHANGER_H

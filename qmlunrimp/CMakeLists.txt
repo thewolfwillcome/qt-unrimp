@@ -90,7 +90,10 @@ set(SRC_FILES main.cpp
 	UnrimpExamples/FirstFont/FirstFont.cpp
 	UnrimpExamples/FirstAssimp/FirstAssimp.cpp
 	UnrimpExamples/FirstAssimp/PointsMesh.cpp
+	UnrimpExamples/AssimpMesh/AssimpMesh.cpp
+	UnrimpExamples/AssimpMesh/Mesh.cpp
 	UnrimpExamples/Color4.cpp
+	UnrimpExamples/TGALoader.cpp
 	UnrimpExamples/Stopwatch.cpp
 	UnrimpExamples/EulerAngles.cpp
 	UnrimpExamples/ExampleBase.cpp
