@@ -33,6 +33,7 @@
 #include "UnrimpExamples/FirstPostProcessing/FirstPostProcessing.h"
 #include "UnrimpExamples/IcosahedronTessellation/IcosahedronTessellation.h"
 #include "UnrimpExamples/FirstFont/FirstFont.h"
+#include "UnrimpExamples/FirstAssimp/FirstAssimp.h"
 
 ExampleModel::ExampleModel(QObject *parent)
 	: m_examples({
@@ -51,6 +52,7 @@ ExampleModel::ExampleModel(QObject *parent)
 					new ExampleItem("InstancedCubes",				"Advanced",	&ExampleFabricator<InstancedCubes>, this ),
 					new ExampleItem("IcosahedronTessellation",		"Advanced",	&ExampleFabricator<IcosahedronTessellation>, this ),
 					new ExampleItem("FirstFont",					"Advanced",	&ExampleFabricator<FirstFont>, this ),
+					new ExampleItem("FirstAssimp",					"Advanced",	&ExampleFabricator<FirstAssimp>, this ),
 					}), QAbstractListModel(parent)
 {
 	

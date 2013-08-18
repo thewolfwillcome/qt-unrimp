@@ -88,6 +88,8 @@ set(SRC_FILES main.cpp
 	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/CubeRendererInstancedArrays.cpp
 	UnrimpExamples/IcosahedronTessellation/IcosahedronTessellation.cpp
 	UnrimpExamples/FirstFont/FirstFont.cpp
+	UnrimpExamples/FirstAssimp/FirstAssimp.cpp
+	UnrimpExamples/FirstAssimp/PointsMesh.cpp
 	UnrimpExamples/Color4.cpp
 	UnrimpExamples/Stopwatch.cpp
 	UnrimpExamples/EulerAngles.cpp
@@ -96,6 +98,7 @@ set(SRC_FILES main.cpp
 )
   
 include_directories("${UNRIMPBASE_PATH}/include")
+include_directories("${CMAKE_SOURCE_DIR}/External/Assimp/include")
 # We need c++0x/c++11 support:
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	message(STATUS "enable c++11 support")
@@ -108,8 +111,18 @@ endif()
 
 link_directories(${UNRIMP_LIB_DIR})
 
+if (${ARCHITECTURE_X64})
+	message(STATUS "64Bit")
+	link_directories("External/Linux_x64/Assimp")
+endif()
+
+if (${ARCHITECTURE_X68})
+	message(STATUS "32Bit")
+	link_directories("External/Linux_x86/Assimp")
+endif()
+
 add_executable(qmlunrimp ${SRC_FILES})
-target_link_libraries(qmlunrimp OpenGLRendererStatic RendererToolkitStatic freetype)
+target_link_libraries(qmlunrimp OpenGLRendererStatic RendererToolkitStatic freetype assimp minizip)
 if(UNIX)
 	# needed from the static opengl renderer
 	target_link_libraries(qmlunrimp X11)
