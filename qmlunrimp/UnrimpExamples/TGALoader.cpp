@@ -16,16 +16,20 @@
 
 #include "UnrimpExamples/PlatformTypes.h"
 #ifdef WIN32
-	#include "Framework/WindowsHeader.h"				// Standard header
+	#include "windows.h"				// for MessageBox
 	#ifdef UNICODE
 		#define _T(x) L#x
 	#else
 		#define _T(x) #x
 	#endif
 #elif defined LINUX
-	//#include "Framework/LinuxHeader.h"					// Standard header
-	// TODO(sw)
-	#define MessageBox(x,x1,x2,x3)
+	#include <iostream>
+	#ifdef UNICODE
+		#define _T(x) L#x
+	#else
+		#define _T(x) #x
+	#endif
+	#define MessageBox(x,x1,x2,x3) std::cerr<<"[TGALoader] "<<x2<<": "<<x1<<"\n"; 
 	#define MB_OK
 #endif
 #include <stdio.h>										// Standard I/O header 
