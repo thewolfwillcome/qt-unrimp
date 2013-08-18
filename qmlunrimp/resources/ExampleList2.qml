@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.0
 Rectangle {
 	id: container
 	property alias model: list.model
+	property int currentIndex: 0
 	signal currentExampleChanged(string name, int index)
 
 	gradient: Gradient {
@@ -28,7 +29,6 @@ Rectangle {
 		ListView {
 			id:list
 			delegate: exampleDelegate
-			model: myModel
 			section.property: "type"
 			section.criteria: ViewSection.FullString
 			section.delegate: sectionHeading
@@ -70,6 +70,7 @@ Rectangle {
 				onClicked:{
 					list.currentIndex = index;
 					container.currentExampleChanged(name, index);
+					container.currentIndex = index;
 				}
 			}
 

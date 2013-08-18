@@ -19,7 +19,8 @@ Item {
 		ColumnLayout {
 			anchors.fill: parent
 			ExampleList2 {
-				model:exampleModel;
+				id:exampleList
+				model:exampleModel
 				Layout.fillWidth: true
 				Layout.fillHeight: true
 				onCurrentExampleChanged: {
@@ -38,7 +39,7 @@ Item {
 	
 	UnrimpItem {
 		id: unrimpitem
-		exampleItem: exampleModel.get(4)
+		exampleItem: exampleModel.get(exampleList.currentIndex)
 		anchors.fill: parent
 	}
 }
