@@ -20,7 +20,7 @@
 
 #include "AssimpMesh.h"
 #include "Mesh.h"
-#include "UnrimpExamples/TGALoader.h"
+#include "UnrimpExamples/TextureFromFileLoader.h"
 
 #include <glm/gtc/type_ptr.hpp> 
 #include <glm/gtc/matrix_transform.hpp>
@@ -117,10 +117,10 @@ void AssimpMesh::Init(Renderer::IRendererPtr renderer)
 				// -> The specular map could be put into the alpha channel of the diffuse map instead of storing it as an individual texture
 				Renderer::ITexture *textures[] =
 				{
-					loadTGATexture(*renderer, "../Data/Imrod/Imrod_Diffuse.tga"),
-					loadTGATexture(*renderer, "../Data/Imrod/Imrod_Illumination.tga"),
-					loadTGATexture(*renderer, "../Data/Imrod/Imrod_norm.tga"),
-					loadTGATexture(*renderer, "../Data/Imrod/Imrod_spec.tga")
+					loadTextureFromFile(*renderer, "../Data/Imrod/Imrod_Diffuse.tiff"),
+					loadTextureFromFile(*renderer, "../Data/Imrod/Imrod_Illumination.tiff"),
+					loadTextureFromFile(*renderer, "../Data/Imrod/Imrod_norm.tiff"),
+					loadTextureFromFile(*renderer, "../Data/Imrod/Imrod_spec.tiff")
 				};
 
 				// Create the texture collection

@@ -39,7 +39,7 @@ Item {
 	
 	UnrimpItem {
 		id: unrimpitem
-		exampleItem: exampleModel.get(exampleList.currentIndex)
+		exampleItem: exampleModel.get(14)
 		anchors.fill: parent
 	}
 }

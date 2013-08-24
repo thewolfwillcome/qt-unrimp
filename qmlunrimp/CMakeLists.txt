@@ -93,7 +93,7 @@ set(SRC_FILES main.cpp
 	UnrimpExamples/AssimpMesh/AssimpMesh.cpp
 	UnrimpExamples/AssimpMesh/Mesh.cpp
 	UnrimpExamples/Color4.cpp
-	UnrimpExamples/TGALoader.cpp
+	UnrimpExamples/TextureFromFileLoader.cpp
 	UnrimpExamples/Stopwatch.cpp
 	UnrimpExamples/EulerAngles.cpp
 	UnrimpExamples/ExampleBase.cpp

@@ -9,13 +9,14 @@ Window {
 	visible:true
 	width: 800
 	height: 600
-//  	width: view1.x + view2.x + view2.width
-//  	height: view1.y + view2.y + view2.height
+// 	width: view1.x + view2.x + view2.width
+// 	height: view1.y + view2.y + view2.height
 
 	UnrimpExampleView {
 		id:view1
 		x:5
 		y:5
+		anchors.fill:parent
 	}
 	
 // 	UnrimpExampleView {
