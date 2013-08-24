@@ -37,7 +37,7 @@
 #include "UnrimpExamples/AssimpMesh/AssimpMesh.h"
 
 ExampleModel::ExampleModel(QObject *parent)
-	: m_examples({
+	: QAbstractListModel(parent), m_examples({
 					// Basic
 					new ExampleItem("FirstTriangle",				"Basic",	&ExampleFabricator<FirstTriangle>, this ),
 					new ExampleItem("VertexBuffer",					"Basic",	&ExampleFabricator<VertexBuffer>, this ),
@@ -55,7 +55,7 @@ ExampleModel::ExampleModel(QObject *parent)
 					new ExampleItem("FirstFont",					"Advanced",	&ExampleFabricator<FirstFont>, this ),
 					new ExampleItem("FirstAssimp",					"Advanced",	&ExampleFabricator<FirstAssimp>, this ),
 					new ExampleItem("AssimpMesh",					"Advanced",	&ExampleFabricator<AssimpMesh>, this ),
-					}), QAbstractListModel(parent)
+					})
 {
 	
 }

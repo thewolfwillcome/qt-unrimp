@@ -48,7 +48,7 @@ static QImage convertImageDataToOpenGLFormat(const QImage& image)
 
 	// [TODO] (sw) BigEndian mode support
 	// loop through each scanline
-	for(unsigned int i = 0; i < height; ++i) {
+	for(int i = 0; i < height; ++i) {
 		const uint32_t *scanLineEnd = currentImagetData + width;
 		// convert each pixel in the scanline and save the result in resultImageData
 		while(currentImagetData < scanLineEnd)
@@ -76,7 +76,6 @@ Renderer::ITexture2D *loadTextureFromFile(Renderer::IRenderer &renderer, const c
 
 	if (ret) {
 		QImage oglimg = convertImageDataToOpenGLFormat(img);
-		int bytecount = oglimg.byteCount();
 		texture2D = renderer.createTexture2D(oglimg.width(), oglimg.height(), Renderer::TextureFormat::R8G8B8A8, oglimg.bits(), Renderer::TextureFlag::MIPMAPS);
 	}
 	

@@ -35,7 +35,7 @@ class ExampleItem : public QObject {
 
 public:
     explicit ExampleItem(const QString name, const QString type, ExampleFabricatorMethod fab, QObject* parent = 0)
-		: m_name(name), m_type(type), f(fab), QObject(parent)
+		: QObject(parent), m_name(name), m_type(type), f(fab)
 	{
 		
 	}
