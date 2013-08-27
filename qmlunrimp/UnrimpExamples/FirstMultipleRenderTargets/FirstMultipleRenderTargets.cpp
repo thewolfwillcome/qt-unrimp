@@ -182,7 +182,8 @@ void FirstMultipleRenderTargets::Render()
 			renderer->omSetRenderTarget(mFramebuffer);
 
 			// Clear the color buffer of the current render targets with black
-			renderer->clear(Renderer::ClearFlag::COLOR, Color4::BLACK, 1.0f, 0);
+			// [TODO](co,sw) with the opengl renderer a framebuffer has currently always a deph render buffer attached so we have to clear depth too
+			renderer->clear(Renderer::ClearFlag::COLOR_DEPTH, Color4::BLACK, 1.0f, 0);
 
 			// Set the viewport
 			const Renderer::Viewport viewport =

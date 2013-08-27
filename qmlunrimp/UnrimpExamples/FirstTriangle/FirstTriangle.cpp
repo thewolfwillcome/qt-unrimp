@@ -97,8 +97,7 @@ void FirstTriangle::Render()
 	Renderer::IRendererPtr renderer(getRenderer());
 
 	// Clear the color buffer of the current render target with green
-	float color_green[4] = {1.0f, 1.0f, 0.0f, 1.0f};
-	renderer->clear(Renderer::ClearFlag::COLOR, color_green, 1.0f, 0);
+	renderer->clear(Renderer::ClearFlag::COLOR_DEPTH, Color4::GRAY, 1.0f, 0);
 	
 	if (renderer->beginScene())
 	{
