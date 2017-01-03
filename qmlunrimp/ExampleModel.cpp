@@ -23,7 +23,7 @@
 #include "UnrimpExamples/FirstTriangle/FirstTriangle.h"
 // #include "UnrimpExamples/VertexBuffer/VertexBuffer.h"
 // #include "UnrimpExamples/FirstTexture/FirstTexture.h"
-// #include "UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.h"
+#include "UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.h"
 // #include "UnrimpExamples/FirstInstancing/FirstInstancing.h"
 // #include "UnrimpExamples/FirstMultipleRenderTargets/FirstMultipleRenderTargets.h"
 // #include "UnrimpExamples/FirstGeometryShader/FirstGeometryShader.h"
@@ -42,7 +42,7 @@ ExampleModel::ExampleModel(QObject *parent)
  					new ExampleItem("FirstTriangle",				"Basic",	&ExampleFabricator<FirstTriangle>, this ),
 // 					new ExampleItem("VertexBuffer",					"Basic",	&ExampleFabricator<VertexBuffer>, this ),
 // 					new ExampleItem("FirstTexture",					"Basic",	&ExampleFabricator<FirstTexture>, this ),
-// 					new ExampleItem("FirstRenderToTexture",			"Basic",	&ExampleFabricator<FirstRenderToTexture>, this ),
+					new ExampleItem("FirstRenderToTexture",			"Basic",	&ExampleFabricator<FirstRenderToTexture>, this ),
 // 					new ExampleItem("FirstPostProcessing",			"Basic",	&ExampleFabricator<FirstPostProcessing>, this ),
 // 					new ExampleItem("FirstInstancing",				"Basic",	&ExampleFabricator<FirstInstancing>, this ),
 // 					new ExampleItem("FirstMultipleRenderTargets",	"Basic",	&ExampleFabricator<FirstMultipleRenderTargets>, this ),

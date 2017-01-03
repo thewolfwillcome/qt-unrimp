@@ -80,7 +80,7 @@ set(SRC_FILES main.cpp
 
 # 	UnrimpExamples/VertexBuffer/VertexBuffer.cpp
 # 	UnrimpExamples/FirstTexture/FirstTexture.cpp
-#	UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.cpp
+	UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.cpp
 # 	UnrimpExamples/FirstPostProcessing/FirstPostProcessing.cpp
 # 	UnrimpExamples/FirstMultipleRenderTargets/FirstMultipleRenderTargets.cpp
 # 	UnrimpExamples/FirstGeometryShader/FirstGeometryShader.cpp

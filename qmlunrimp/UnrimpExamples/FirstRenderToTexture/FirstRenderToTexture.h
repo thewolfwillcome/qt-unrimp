@@ -25,17 +25,32 @@
 class FirstRenderToTexture : public ExampleBase
 {
 public:
-	virtual void Init(Renderer::IRendererPtr renderer) override;
-	virtual void Deinit() override;
+	virtual void onInit(Renderer::IRendererPtr renderer) override;
+	virtual void onDeinit() override;
 	virtual void Render() override;
-    virtual QString name() { return "FirstRenderToTexture"; } override;
+    virtual QString name() override { return "FirstRenderToTexture"; }
 
+
+//[-------------------------------------------------------]
+//[ Private methods                                       ]
+//[-------------------------------------------------------]
 private:
-	Renderer::ITexture2DPtr	   mTexture2D;		///< 2D texture, can be a null pointer
-	Renderer::IFramebufferPtr  mFramebuffer;	///< Framebuffer object (FBO), can be a null pointer
-	Renderer::ISamplerStatePtr mSamplerState;	///< Sampler state, can be a null pointer
-	Renderer::IProgramPtr	   mProgram;		///< Program, can be a null pointer
-	Renderer::IVertexArrayPtr  mVertexArray;	///< Vertex array object (VAO), can be a null pointer
+	void fillCommandBuffer();
+
+
+//[-------------------------------------------------------]
+//[ Private data                                          ]
+//[-------------------------------------------------------]
+private:
+	Renderer::IBufferManagerPtr  mBufferManager;	///< Buffer manager, can be a null pointer
+	Renderer::ITextureManagerPtr mTextureManager;	///< Texture manager, can be a null pointer
+	Renderer::ITexture2DPtr		 mTexture2D;		///< 2D texture, can be a null pointer
+	Renderer::IFramebufferPtr	 mFramebuffer;		///< Framebuffer object (FBO), can be a null pointer
+	Renderer::ISamplerStatePtr	 mSamplerState;		///< Sampler state, can be a null pointer
+	Renderer::IRootSignaturePtr	 mRootSignature;	///< Root signature, can be a null pointer
+	Renderer::IPipelineStatePtr  mPipelineState;	///< Pipeline state object (PSO), can be a null pointer
+	Renderer::IVertexArrayPtr	 mVertexArray;		///< Vertex array object (VAO), can be a null pointer
+	Renderer::CommandBuffer		 mCommandBuffer;	///< Command buffer
 
 };
 
