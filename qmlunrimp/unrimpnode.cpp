@@ -344,11 +344,11 @@ void UnrimpNode::Render()
 //    m_displayFbo->bind();
 //    m_renderer->omSetRenderTarget(m_frameBuffer);
 
-    // Submit command buffer to the renderer backend
-    mCommandBuffer.submit(*m_renderer);
+	// Submit command buffer to the renderer backend
+	mCommandBuffer.submit(*m_renderer);
 
 	// Do the drawing :)
-    m_example->Render();
+	m_example->Render();
 
 //    m_displayFbo->bindDefault();
 

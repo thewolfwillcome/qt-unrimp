@@ -1,5 +1,5 @@
 /*********************************************************\
- * Copyright (c) 2013-2013 Stephan Wezel
+ * Copyright (c) 2012-2016 Christian Ofenberg
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without
@@ -18,52 +18,14 @@
 \*********************************************************/
 
 
-#ifndef EXAMPLEBASE_H
-#define EXAMPLEBASE_H
-
-#include "UnrimpExamples/PlatformTypes.h"
-#include "UnrimpExamples/Color4.h"
-
-#include <Renderer/Renderer.h>
-#include <QString>
-
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-class ExampleBase
+#ifndef RENDERER_NO_NULL
+	if (0 == strcmp(renderer->getName(), "Null"))
+	{
+		vertexShaderSourceCode = fragmentShaderSourceCode = "42";
+	}
+	else
+#endif
 {
-public:
-	virtual ~ExampleBase();
-
-	virtual void Init(Renderer::IRendererPtr renderer) { m_Renderer = renderer; }
-	virtual void Deinit() = 0;
-	virtual void Render() = 0;
-	virtual QString name() = 0;
-
-	void setSize(int width, int height);
-	virtual bool wantsCyclicUpdate() {return false;}
-
-protected:
-	ExampleBase();
-	virtual void onSizeChanged(){}
-	Renderer::IRendererPtr getRenderer() { return m_Renderer; }
-
-protected:
-	int mWidth, mHeigth;
-	
-private:
-	Renderer::IRendererPtr m_Renderer;
-};
-
-
-
-template <class ExampleClass>
-ExampleBase* ExampleFabricator()
-{
-	return new ExampleClass();
+	// Error! (unsupported renderer)
+	OUTPUT_DEBUG_STRING("Error: Unsupported renderer\n")
 }
-
-typedef ExampleBase* (*FabricatorMethod)();
-
-#endif // EXAMPLEBASE_H

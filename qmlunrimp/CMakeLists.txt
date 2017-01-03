@@ -71,13 +71,13 @@ set(SRC_FILES main.cpp
 	unrimpnode.cpp
 	qtquick2controlsapplicationviewer/qtquick2controlsapplicationviewer.cpp
 	ExampleModel.cpp
- 	UnrimpExamples/Color4.cpp
+	UnrimpExamples/Color4.cpp
 # 	UnrimpExamples/TextureFromFileLoader.cpp
- 	UnrimpExamples/Stopwatch.cpp
- 	UnrimpExamples/EulerAngles.cpp
- 	UnrimpExamples/ExampleBase.cpp
+	UnrimpExamples/Stopwatch.cpp
+	UnrimpExamples/EulerAngles.cpp
+	UnrimpExamples/ExampleBase.cpp
+	UnrimpExamples/FirstTriangle/FirstTriangle.cpp
 
-# 	UnrimpExamples/FirstTriangle/FirstTriangle.cpp
 # 	UnrimpExamples/VertexBuffer/VertexBuffer.cpp
 # 	UnrimpExamples/FirstTexture/FirstTexture.cpp
 # 	UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.cpp
@@ -130,7 +130,7 @@ add_executable(qmlunrimp ${SRC_FILES})
 target_link_libraries(qmlunrimp OpenGLRendererStatic)
 if(UNIX)
 	# needed from the static opengl renderer
-	target_link_libraries(qmlunrimp X11 dl GL)
+	target_link_libraries(qmlunrimp X11 dl)
 endif()
 
 qt5_use_modules(qmlunrimp Quick Qml Widgets)

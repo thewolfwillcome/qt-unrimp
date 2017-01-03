@@ -29,11 +29,25 @@ public:
 	virtual void Init(Renderer::IRendererPtr renderer) override;
 	virtual void Deinit() override;
 	virtual void Render() override;
-    virtual QString name() { return "FirstTriangle"; } override;
+    virtual QString name() override { return "FirstTriangle"; }
 
+
+//[-------------------------------------------------------]
+//[ Private methods                                       ]
+//[-------------------------------------------------------]
 private:
-	Renderer::IProgramPtr m_Program;
-	Renderer::IVertexArrayPtr m_VertexArray;
+	void fillCommandBuffer();
+
+
+//[-------------------------------------------------------]
+//[ Private data                                          ]
+//[-------------------------------------------------------]
+private:
+	Renderer::IBufferManagerPtr mBufferManager;	///< Buffer manager, can be a null pointer
+	Renderer::IRootSignaturePtr mRootSignature;	///< Root signature, can be a null pointer
+	Renderer::IPipelineStatePtr mPipelineState;	///< Pipeline state object (PSO), can be a null pointer
+	Renderer::IVertexArrayPtr   mVertexArray;	///< Vertex array object (VAO), can be a null pointer
+	Renderer::CommandBuffer		mCommandBuffer;	///< Command buffer
 
 };
 

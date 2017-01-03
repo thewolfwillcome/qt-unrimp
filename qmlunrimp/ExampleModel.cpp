@@ -20,7 +20,7 @@
 
 #include "ExampleModel.h"
 
-// #include "UnrimpExamples/FirstTriangle/FirstTriangle.h"
+#include "UnrimpExamples/FirstTriangle/FirstTriangle.h"
 // #include "UnrimpExamples/VertexBuffer/VertexBuffer.h"
 // #include "UnrimpExamples/FirstTexture/FirstTexture.h"
 // #include "UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.h"
@@ -39,7 +39,7 @@
 ExampleModel::ExampleModel(QObject *parent)
 	: QAbstractListModel(parent), m_examples({
 					// Basic
-// 					new ExampleItem("FirstTriangle",				"Basic",	&ExampleFabricator<FirstTriangle>, this ),
+ 					new ExampleItem("FirstTriangle",				"Basic",	&ExampleFabricator<FirstTriangle>, this ),
 // 					new ExampleItem("VertexBuffer",					"Basic",	&ExampleFabricator<VertexBuffer>, this ),
 // 					new ExampleItem("FirstTexture",					"Basic",	&ExampleFabricator<FirstTexture>, this ),
 // 					new ExampleItem("FirstRenderToTexture",			"Basic",	&ExampleFabricator<FirstRenderToTexture>, this ),

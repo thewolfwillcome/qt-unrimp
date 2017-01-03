@@ -1,5 +1,5 @@
 /*********************************************************\
- * Copyright (c) 2012-2013 Christian Ofenberg
+ * Copyright (c) 2012-2016 Christian Ofenberg
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without
@@ -37,10 +37,14 @@ if (0 == strcmp(renderer->getName(), "OpenGL"))
 //[-------------------------------------------------------]
 // One vertex shader invocation per vertex
 vertexShaderSourceCode =
-"#version 110\n"	// OpenGL 2.0
+"#version 410 core\n"	// OpenGL 4.1
 STRINGIFY(
 // Attribute input/output
-attribute vec2 Position;	// Clip space vertex position as input, left/bottom is (-1,-1) and right/top is (1,1)
+in  vec2 Position;	// Clip space vertex position as input, left/bottom is (-1,-1) and right/top is (1,1)
+out gl_PerVertex
+{
+	vec4 gl_Position;
+};
 
 // Programs
 void main()
@@ -56,7 +60,7 @@ void main()
 //[-------------------------------------------------------]
 // One fragment shader invocation per fragment
 fragmentShaderSourceCode =
-"#version 110\n"	// OpenGL 2.0
+"#version 410 core\n"	// OpenGL 4.1
 STRINGIFY(
 // Programs
 void main()
@@ -77,5 +81,5 @@ void main()
 //[ Shader end                                            ]
 //[-------------------------------------------------------]
 }
-
+else
 #endif
