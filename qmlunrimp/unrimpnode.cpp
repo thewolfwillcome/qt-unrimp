@@ -19,13 +19,6 @@
 
 
 #include "unrimpnode.h"
-#ifdef USEOPENGL
-#include <OpenGLRenderer/OpenGLRenderer.h>
-#elif USEGLES
-#include <OpenGLES2Renderer/OpenGLES2Renderer.h>
-#include <OpenGLES2Renderer/Framebuffer.h>
-#include <OpenGLES2Renderer/Texture2D.h>
-#endif
 #include "UnrimpExamples/PlatformTypes.h"
 #include "UnrimpExamples/Color4.h"
 #include "UnrimpExamples/ExampleBase.h"
@@ -44,9 +37,7 @@ class EmptyExample : public ExampleBase
 public:
 	virtual void Render() override
 	{
-// 		Renderer::IRendererPtr renderer(getRenderer());
-// 		float color_green[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-// 		renderer->clear(Renderer::ClearFlag::COLOR, color_green, 1.0f, 0);
+		// Nothing to do here
 	}
 	
 	virtual void Deinit() override {}
@@ -64,12 +55,16 @@ UnrimpNode::UnrimpNode()
 	, m_samples(0)
 	, m_AAEnabled(false)
 	, m_newExampleFac(nullptr)
-	, m_example(new EmptyExample)
     , m_renderer(nullptr)
+	, mBufferManager(nullptr)
+	, mTextureManager(nullptr)
+	, m_renderTexture(nullptr)
+	, m_frameBuffer(nullptr)
+	, m_example(new EmptyExample)
 	, m_initialized(false)
-    , m_exampleChanged(false)
 	, m_dirtyFBO(false)
-    , m_displayFbo(nullptr)
+	, m_dirtySize(false)
+    , m_exampleChanged(false)
 {
 	setMaterial(&m_material);
 	setOpaqueMaterial(&m_materialO);
@@ -83,8 +78,6 @@ UnrimpNode::~UnrimpNode()
 	
 	if (m_qtContext)
 		saveUnrimpState();
-
-	delete m_displayFbo;
 
 	m_frameBuffer = nullptr;
 	m_renderTexture = nullptr;
@@ -143,15 +136,13 @@ void UnrimpNode::setQuickWindow(QQuickWindow *window)
 	QSurfaceFormat qSurfaceFormat = m_quickWindow->requestedFormat();
 	
 	#ifdef USEOPENGL
-    // unrimp needs at least a OpenGL 4.1 context
-    qSurfaceFormat.setMajorVersion(4);
-    qSurfaceFormat.setMinorVersion(1);
-    //format.setProfile(QSurfaceFormat::CompatibilityProfile);
-    qSurfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
-    //qSurfaceFormat.setOption(QSurfaceFormat::DeprecatedFunctions);
-    //std::cout<<format.testOption(QSurfaceFormat::DeprecatedFunctions)<<"\n";
-    #endif
-    m_unrimpContext->setFormat(qSurfaceFormat);
+		// unrimp needs at least a OpenGL 4.1 context
+		qSurfaceFormat.setMajorVersion(4);
+		qSurfaceFormat.setMinorVersion(1);
+		//format.setProfile(QSurfaceFormat::CompatibilityProfile);
+		qSurfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
+	#endif
+	m_unrimpContext->setFormat(qSurfaceFormat);
 	m_unrimpContext->setShareContext(QOpenGLContext::currentContext());
 	m_unrimpContext->create();
 }
@@ -212,60 +203,30 @@ void UnrimpNode::update()
 
 void UnrimpNode::updateFBO()
 {
-	delete m_displayFbo;
-    QOpenGLFramebufferObjectFormat format;
-    format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
-//    m_displayFbo = new QOpenGLFramebufferObject(m_size, format);
+	QOpenGLFramebufferObjectFormat format;
+	format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
 
-    Renderer::ITexture *texture2D = m_renderTexture = mTextureManager->createTexture2D(m_size.width(), m_size.height(), Renderer::TextureFormat::R8G8B8A8, nullptr, Renderer::TextureFlag::RENDER_TARGET);
-    m_frameBuffer = m_renderer->createFramebuffer(1, &texture2D);
-	
-    // Backup the currently used render target
-//    Renderer::IRenderTargetPtr renderTarget(m_renderer->omGetRenderTarget());
+	Renderer::ITexture *texture2D = m_renderTexture = mTextureManager->createTexture2D(m_size.width(), m_size.height(), Renderer::TextureFormat::R8G8B8A8, nullptr, Renderer::TextureFlag::RENDER_TARGET);
+	m_frameBuffer = m_renderer->createFramebuffer(1, &texture2D);
 
-//	// Set the render target to render into
-//    m_renderer->omSetRenderTarget(m_frameBuffer);
+	fillCommandBuffer();
 
-//    m_displayFbo->bind();
-//    glViewport(0, 0, m_size.width(), m_size.height());
+	// specify texture coordinates which flips the y-axis of the texture
+	// a 1-to-1 map would be (0, 0, 1, 1) but the result of the rendered example isn't bottom up in the texture (as OpenGL expect it)
+	QRectF textureCoordinatesYAxisFlipped(0,1,1,-1);
+	QSGGeometry::updateTexturedRectGeometry(&m_geometry,
+											QRectF(0, 0, m_size.width(), m_size.height()),
+											textureCoordinatesYAxisFlipped);
 
-//    const Renderer::Viewport viewport =
-//    {
-//        0.0f,						// topLeftX (float)
-//        0.0f,						// topLeftY (float)
-//        static_cast<float>(m_size.width()),	// width (float)
-//        static_cast<float>(m_size.height()),	// height (float)
-//        0.0f,						// minDepth (float)
-//        1.0f						// maxDepth (float)
-//    };
-    //m_renderer->rsSetViewports(1, &viewport);
-
-    fillCommandBuffer();
-
-    // specify texture coordinates which flips the y-axis of the texture
-    // a 1-to-1 map would be (0, 0, 1, 1) but the result of the rendered example isn't bottom up in the texture (as OpenGL expect it)
-    QRectF textureCoordinatesYAxisFlipped(0,1,1,-1);
-    QSGGeometry::updateTexturedRectGeometry(&m_geometry,
-                                            QRectF(0, 0, m_size.width(), m_size.height()),
-                                            textureCoordinatesYAxisFlipped);
-
-    delete m_texture;
-//    m_texture = m_quickWindow->createTextureFromId(m_displayFbo->texture(), m_size);
-    #ifdef USEOPENGL
-    m_texture = m_quickWindow->createTextureFromId(static_cast<OpenGLRenderer::Texture2D*>(texture2D)->getOpenGLTexture(), m_size);
-    #elif USEGLES
-    m_texture = m_quickWindow->createTextureFromId(static_cast<OpenGLES2Renderer::Texture2D*>(texture2D)->getOpenGLES2Texture(), m_size);
-    #endif
-
+	delete m_texture;
+    
+	m_texture = m_quickWindow->createTextureFromId(static_cast<uint32_t>(reinterpret_cast<uintptr_t>(texture2D->getInternalResourceHandle())), m_size);
 
     m_material.setTexture(m_texture);
     m_materialO.setTexture(m_texture);
 	
-    if (m_example)
-        m_example->setSize(m_size.width(), m_size.height());
-
-//    m_displayFbo->bindDefault();
-    //m_renderer->omSetRenderTarget(renderTarget);
+	if (m_example)
+		m_example->setSize(m_size.width(), m_size.height());
 }
 
 void UnrimpNode::setSize(const QSize &size)
@@ -294,21 +255,21 @@ void UnrimpNode::init()
 	QSurfaceFormat format = ctx->format();
 	m_samples = format.samples();
 
-    QSurfaceFormat qSurfaceFormat = m_quickWindow->requestedFormat();
+	QSurfaceFormat qSurfaceFormat = m_quickWindow->requestedFormat();
 
 #if USEOPENGL
-    extern Renderer::IRenderer *createOpenGLRendererInstance2(Renderer::handle, bool);
+	extern Renderer::IRenderer *createOpenGLRendererInstance2(Renderer::handle, bool);
 
-    // Create the renderer instance
-    m_renderer = createOpenGLRendererInstance2(0, true);
+	// Create the renderer instance
+	m_renderer = createOpenGLRendererInstance2(0, true);
 #elif USEGLES
-    extern Renderer::IRenderer *createOpenGLES2RendererInstance2(Renderer::handle, bool);
+	extern Renderer::IRenderer *createOpenGLES2RendererInstance2(Renderer::handle, bool);
 
-    m_renderer = createOpenGLES2RendererInstance2(0, true);
+	m_renderer = createOpenGLES2RendererInstance2(0, true);
 #endif
 
-    mBufferManager = m_renderer->createBufferManager();
-    mTextureManager = m_renderer->createTextureManager();
+	mBufferManager = m_renderer->createBufferManager();
+	mTextureManager = m_renderer->createTextureManager();
 
 	m_initialized = true;
 }
@@ -338,22 +299,11 @@ void UnrimpNode::ResetUnrimpStates()
 
 void UnrimpNode::Render()
 {
-	// Backup the currently used render target
-//    Renderer::IRenderTargetPtr renderTarget(m_renderer->omGetRenderTarget());
-
-//    m_displayFbo->bind();
-//    m_renderer->omSetRenderTarget(m_frameBuffer);
-
 	// Submit command buffer to the renderer backend
 	mCommandBuffer.submit(*m_renderer);
 
 	// Do the drawing :)
 	m_example->Render();
-
-//    m_displayFbo->bindDefault();
-
-	// Restore the previously set render target
-//    m_renderer->omSetRenderTarget(renderTarget);
 }
 
 void UnrimpNode::fillCommandBuffer()

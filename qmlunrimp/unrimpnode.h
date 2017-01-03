@@ -85,7 +85,6 @@ private:
 	Renderer::CommandBuffer		 mCommandBuffer;	///< Command buffer
 
 	std::unique_ptr<ExampleBase> m_example; // We don't share the ressources but cannot use a plain object instance due inheritance
-	QOpenGLFramebufferObject *m_displayFbo;
 
 	bool m_initialized;
 	bool m_dirtyFBO;
