@@ -103,7 +103,7 @@ set(SRC_FILES main.cpp
 )
   
 include_directories("${UNRIMPBASE_PATH}/include")
-#include_directories("${CMAKE_SOURCE_DIR}/External/Assimp/include")
+
 # We need c++0x/c++11 support:
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	message(STATUS "enable c++11 support")
@@ -118,12 +118,10 @@ link_directories(${UNRIMP_LIB_DIR})
 
 if (${ARCHITECTURE_X64})
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DX64_ARCHITECTURE")
-	#link_directories("External/Linux_x64/Assimp")
 endif()
 
 if (${ARCHITECTURE_X68})
 	message(STATUS "32Bit")
-	#link_directories("External/Linux_x86/Assimp")
 endif()
 
 add_executable(qmlunrimp ${SRC_FILES})
