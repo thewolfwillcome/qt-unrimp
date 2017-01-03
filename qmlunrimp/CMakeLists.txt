@@ -127,7 +127,8 @@ if (${ARCHITECTURE_X68})
 endif()
 
 add_executable(qmlunrimp ${SRC_FILES})
-target_link_libraries(qmlunrimp OpenGLRendererStatic)
+target_link_libraries(qmlunrimp ${UNRIMP_OPENGLRENDERER_FOUND})
+
 if(UNIX)
 	# needed from the static opengl renderer
 	target_link_libraries(qmlunrimp X11 dl)
