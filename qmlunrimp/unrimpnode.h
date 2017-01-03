@@ -59,6 +59,7 @@ public:
 private:
 	void ResetUnrimpStates();
 	void Render();
+	void fillCommandBuffer();
 
 private:
 	QSGTextureMaterial m_material;
@@ -77,9 +78,14 @@ private:
 	ExampleFabricatorMethod m_newExampleFac;
 
 	Renderer::IRendererPtr m_renderer;
+	Renderer::IBufferManagerPtr  mBufferManager;	///< Buffer manager, can be a null pointer
+    Renderer::ITextureManagerPtr mTextureManager;	///< Texture manager, can be a null pointer
 	Renderer::ITexture2DPtr m_renderTexture;
 	Renderer::IFramebufferPtr m_frameBuffer;
+	Renderer::CommandBuffer		 mCommandBuffer;	///< Command buffer
+
 	std::unique_ptr<ExampleBase> m_example; // We don't share the ressources but cannot use a plain object instance due inheritance
+	QOpenGLFramebufferObject *m_displayFbo;
 
 	bool m_initialized;
 	bool m_dirtyFBO;

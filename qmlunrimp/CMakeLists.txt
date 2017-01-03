@@ -69,66 +69,68 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRC_FILES main.cpp
 	unrimpitem.cpp
 	unrimpnode.cpp
+	qtquick2controlsapplicationviewer/qtquick2controlsapplicationviewer.cpp
 	ExampleModel.cpp
-	UnrimpExamples/FirstTriangle/FirstTriangle.cpp
-	UnrimpExamples/VertexBuffer/VertexBuffer.cpp
-	UnrimpExamples/FirstTexture/FirstTexture.cpp
-	UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.cpp
-	UnrimpExamples/FirstPostProcessing/FirstPostProcessing.cpp
-	UnrimpExamples/FirstMultipleRenderTargets/FirstMultipleRenderTargets.cpp
-	UnrimpExamples/FirstGeometryShader/FirstGeometryShader.cpp
-	UnrimpExamples/FirstTessellation/FirstTessellation.cpp
-	UnrimpExamples/FirstInstancing/FirstInstancing.cpp
-	UnrimpExamples/Fxaa/Fxaa.cpp
-	UnrimpExamples/InstancedCubes/InstancedCubes.cpp
-	UnrimpExamples/InstancedCubes/ICubeRenderer.cpp
-	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/BatchDrawInstanced.cpp
-	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/CubeRendererDrawInstanced.cpp
-	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/BatchInstancedArrays.cpp
-	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/CubeRendererInstancedArrays.cpp
-	UnrimpExamples/IcosahedronTessellation/IcosahedronTessellation.cpp
-	UnrimpExamples/FirstFont/FirstFont.cpp
-	UnrimpExamples/FirstAssimp/FirstAssimp.cpp
-	UnrimpExamples/FirstAssimp/PointsMesh.cpp
-	UnrimpExamples/AssimpMesh/AssimpMesh.cpp
-	UnrimpExamples/AssimpMesh/Mesh.cpp
-	UnrimpExamples/Color4.cpp
-	UnrimpExamples/TextureFromFileLoader.cpp
-	UnrimpExamples/Stopwatch.cpp
-	UnrimpExamples/EulerAngles.cpp
-	UnrimpExamples/ExampleBase.cpp
-	UnrimpExamples/ExampleRenderToolkit.cpp
+ 	UnrimpExamples/Color4.cpp
+# 	UnrimpExamples/TextureFromFileLoader.cpp
+ 	UnrimpExamples/Stopwatch.cpp
+ 	UnrimpExamples/EulerAngles.cpp
+ 	UnrimpExamples/ExampleBase.cpp
+
+# 	UnrimpExamples/FirstTriangle/FirstTriangle.cpp
+# 	UnrimpExamples/VertexBuffer/VertexBuffer.cpp
+# 	UnrimpExamples/FirstTexture/FirstTexture.cpp
+# 	UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.cpp
+# 	UnrimpExamples/FirstPostProcessing/FirstPostProcessing.cpp
+# 	UnrimpExamples/FirstMultipleRenderTargets/FirstMultipleRenderTargets.cpp
+# 	UnrimpExamples/FirstGeometryShader/FirstGeometryShader.cpp
+# 	UnrimpExamples/FirstTessellation/FirstTessellation.cpp
+# 	UnrimpExamples/FirstInstancing/FirstInstancing.cpp
+# 	UnrimpExamples/Fxaa/Fxaa.cpp
+# 	UnrimpExamples/InstancedCubes/InstancedCubes.cpp
+# 	UnrimpExamples/InstancedCubes/ICubeRenderer.cpp
+# 	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/BatchDrawInstanced.cpp
+# 	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/CubeRendererDrawInstanced.cpp
+# 	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/BatchInstancedArrays.cpp
+# 	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/CubeRendererInstancedArrays.cpp
+# 	UnrimpExamples/IcosahedronTessellation/IcosahedronTessellation.cpp
+# 	UnrimpExamples/FirstFont/FirstFont.cpp
+# 	UnrimpExamples/FirstAssimp/FirstAssimp.cpp
+# 	UnrimpExamples/FirstAssimp/PointsMesh.cpp
+# 	UnrimpExamples/AssimpMesh/AssimpMesh.cpp
+# 	UnrimpExamples/AssimpMesh/Mesh.cpp
+# 	UnrimpExamples/ExampleRenderToolkit.cpp
 )
   
 include_directories("${UNRIMPBASE_PATH}/include")
-include_directories("${CMAKE_SOURCE_DIR}/External/Assimp/include")
+#include_directories("${CMAKE_SOURCE_DIR}/External/Assimp/include")
 # We need c++0x/c++11 support:
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	message(STATUS "enable c++11 support")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 # At first we treat UNIX = Linux
 if(UNIX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DLINUX -DRENDERER_NO_DEBUG")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DLINUX -DUSEOPENGL -DRENDERER_NO_DEBUG")
 endif()
 
 link_directories(${UNRIMP_LIB_DIR})
 
 if (${ARCHITECTURE_X64})
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DX64_ARCHITECTURE")
-	link_directories("External/Linux_x64/Assimp")
+	#link_directories("External/Linux_x64/Assimp")
 endif()
 
 if (${ARCHITECTURE_X68})
 	message(STATUS "32Bit")
-	link_directories("External/Linux_x86/Assimp")
+	#link_directories("External/Linux_x86/Assimp")
 endif()
 
 add_executable(qmlunrimp ${SRC_FILES})
-target_link_libraries(qmlunrimp OpenGLRendererStatic RendererToolkitStatic freetype assimp minizip)
+target_link_libraries(qmlunrimp OpenGLRendererStatic)
 if(UNIX)
 	# needed from the static opengl renderer
-	target_link_libraries(qmlunrimp X11)
+	target_link_libraries(qmlunrimp X11 dl GL)
 endif()
 
-qt5_use_modules(qmlunrimp Quick)
+qt5_use_modules(qmlunrimp Quick Qml Widgets)

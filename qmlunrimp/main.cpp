@@ -18,10 +18,11 @@
 \*********************************************************/
 
 
+#include "qtquick2controlsapplicationviewer/qtquick2controlsapplicationviewer.h"
+#include "ExampleModel.h"
 #include "unrimpitem.h"
 
-#include <QtGui/QGuiApplication>
-#include <QQmlApplicationEngine>
+#include <qqml.h>
 
 int main(int argc, char **argv)
 {
@@ -29,8 +30,15 @@ int main(int argc, char **argv)
 	qmlRegisterType<UnrimpItem>("Unrimp", 1, 0, "UnrimpItem");
 	qmlRegisterType<ExampleModel>("Unrimp", 1, 0, "ExampleModel");
 	qmlRegisterUncreatableType<ExampleItem>("Unrimp", 1, 0, "ExampleItem", "not createable");
-	QQmlApplicationEngine engine(QUrl::fromLocalFile("resources/test.qml"));
+	
+	QtQuick2ControlsApplicationViewer viewer;
+    viewer.setMainQmlFile(QStringLiteral("resources/main.qml"));
+    viewer.show();
+	
+// 	QUrl mainItemPath(QUrl::fromLocalFile("resources/main.qml"));
+// 	QQmlApplicationEngine engine(mainItemPath);
 	//QQmlApplicationEngine engine(QUrl::fromLocalFile("resources/example.qml"));
 
+	
 	return app.exec();
 }

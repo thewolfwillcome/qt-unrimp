@@ -33,6 +33,13 @@ UnrimpItem::UnrimpItem(QQuickItem *parent)
     setSmooth(false);
 }
 
+UnrimpItem::~UnrimpItem()
+{
+	// TODO(sw) Needed? In android version it was removed this line
+	//delete m_node;
+}
+
+
 QString UnrimpItem::example()
 {
 	if (!m_currentExample)
@@ -60,6 +67,9 @@ ExampleItem* UnrimpItem::exampleItem()
 
 QSGNode *UnrimpItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 {
+	// When this method returns the ownership of the node item goes to the caller
+	// We can manage the livetime of the node item ourself, when setting the flag QSGNode::OwnedByParent on the created node
+	// Only the given old node item can be destroyed inside this method
 	if (width() <= 0 || height() <= 0) {
 		delete oldNode;
 		return 0;
@@ -80,6 +90,7 @@ QSGNode *UnrimpItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 		startCyclicTimer();
 	else
 		stopCyclicTimer();
+
 	return node;
 }
 

@@ -20,41 +20,41 @@
 
 #include "ExampleModel.h"
 
-#include "UnrimpExamples/FirstTriangle/FirstTriangle.h"
-#include "UnrimpExamples/VertexBuffer/VertexBuffer.h"
-#include "UnrimpExamples/FirstTexture/FirstTexture.h"
-#include "UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.h"
-#include "UnrimpExamples/FirstInstancing/FirstInstancing.h"
-#include "UnrimpExamples/FirstMultipleRenderTargets/FirstMultipleRenderTargets.h"
-#include "UnrimpExamples/FirstGeometryShader/FirstGeometryShader.h"
-#include "UnrimpExamples/FirstTessellation/FirstTessellation.h"
-#include "UnrimpExamples/Fxaa/Fxaa.h"
-#include "UnrimpExamples/InstancedCubes/InstancedCubes.h"
-#include "UnrimpExamples/FirstPostProcessing/FirstPostProcessing.h"
-#include "UnrimpExamples/IcosahedronTessellation/IcosahedronTessellation.h"
-#include "UnrimpExamples/FirstFont/FirstFont.h"
-#include "UnrimpExamples/FirstAssimp/FirstAssimp.h"
-#include "UnrimpExamples/AssimpMesh/AssimpMesh.h"
+// #include "UnrimpExamples/FirstTriangle/FirstTriangle.h"
+// #include "UnrimpExamples/VertexBuffer/VertexBuffer.h"
+// #include "UnrimpExamples/FirstTexture/FirstTexture.h"
+// #include "UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.h"
+// #include "UnrimpExamples/FirstInstancing/FirstInstancing.h"
+// #include "UnrimpExamples/FirstMultipleRenderTargets/FirstMultipleRenderTargets.h"
+// #include "UnrimpExamples/FirstGeometryShader/FirstGeometryShader.h"
+// #include "UnrimpExamples/FirstTessellation/FirstTessellation.h"
+// #include "UnrimpExamples/Fxaa/Fxaa.h"
+// #include "UnrimpExamples/InstancedCubes/InstancedCubes.h"
+// #include "UnrimpExamples/FirstPostProcessing/FirstPostProcessing.h"
+// #include "UnrimpExamples/IcosahedronTessellation/IcosahedronTessellation.h"
+// #include "UnrimpExamples/FirstFont/FirstFont.h"
+// #include "UnrimpExamples/FirstAssimp/FirstAssimp.h"
+// #include "UnrimpExamples/AssimpMesh/AssimpMesh.h"
 
 ExampleModel::ExampleModel(QObject *parent)
 	: QAbstractListModel(parent), m_examples({
 					// Basic
-					new ExampleItem("FirstTriangle",				"Basic",	&ExampleFabricator<FirstTriangle>, this ),
-					new ExampleItem("VertexBuffer",					"Basic",	&ExampleFabricator<VertexBuffer>, this ),
-					new ExampleItem("FirstTexture",					"Basic",	&ExampleFabricator<FirstTexture>, this ),
-					new ExampleItem("FirstRenderToTexture",			"Basic",	&ExampleFabricator<FirstRenderToTexture>, this ),
-					new ExampleItem("FirstPostProcessing",			"Basic",	&ExampleFabricator<FirstPostProcessing>, this ),
-					new ExampleItem("FirstInstancing",				"Basic",	&ExampleFabricator<FirstInstancing>, this ),
-					new ExampleItem("FirstMultipleRenderTargets",	"Basic",	&ExampleFabricator<FirstMultipleRenderTargets>, this ),
-					new ExampleItem("FirstGeometryShader",			"Basic",	&ExampleFabricator<FirstGeometryShader>, this ),
-					new ExampleItem("FirstTessellation",			"Basic",	&ExampleFabricator<FirstTessellation>, this ),
-					// Advanced
-					new ExampleItem("Fxaa",							"Advanced",	&ExampleFabricator<Fxaa>, this ),
-					new ExampleItem("InstancedCubes",				"Advanced",	&ExampleFabricator<InstancedCubes>, this ),
-					new ExampleItem("IcosahedronTessellation",		"Advanced",	&ExampleFabricator<IcosahedronTessellation>, this ),
-					new ExampleItem("FirstFont",					"Advanced",	&ExampleFabricator<FirstFont>, this ),
-					new ExampleItem("FirstAssimp",					"Advanced",	&ExampleFabricator<FirstAssimp>, this ),
-					new ExampleItem("AssimpMesh",					"Advanced",	&ExampleFabricator<AssimpMesh>, this ),
+// 					new ExampleItem("FirstTriangle",				"Basic",	&ExampleFabricator<FirstTriangle>, this ),
+// 					new ExampleItem("VertexBuffer",					"Basic",	&ExampleFabricator<VertexBuffer>, this ),
+// 					new ExampleItem("FirstTexture",					"Basic",	&ExampleFabricator<FirstTexture>, this ),
+// 					new ExampleItem("FirstRenderToTexture",			"Basic",	&ExampleFabricator<FirstRenderToTexture>, this ),
+// 					new ExampleItem("FirstPostProcessing",			"Basic",	&ExampleFabricator<FirstPostProcessing>, this ),
+// 					new ExampleItem("FirstInstancing",				"Basic",	&ExampleFabricator<FirstInstancing>, this ),
+// 					new ExampleItem("FirstMultipleRenderTargets",	"Basic",	&ExampleFabricator<FirstMultipleRenderTargets>, this ),
+// 					new ExampleItem("FirstGeometryShader",			"Basic",	&ExampleFabricator<FirstGeometryShader>, this ),
+// 					new ExampleItem("FirstTessellation",			"Basic",	&ExampleFabricator<FirstTessellation>, this ),
+// 					// Advanced
+// 					new ExampleItem("Fxaa",							"Advanced",	&ExampleFabricator<Fxaa>, this ),
+// 					new ExampleItem("InstancedCubes",				"Advanced",	&ExampleFabricator<InstancedCubes>, this ),
+// 					new ExampleItem("IcosahedronTessellation",		"Advanced",	&ExampleFabricator<IcosahedronTessellation>, this ),
+// 					new ExampleItem("FirstFont",					"Advanced",	&ExampleFabricator<FirstFont>, this ),
+// 					new ExampleItem("FirstAssimp",					"Advanced",	&ExampleFabricator<FirstAssimp>, this ),
+// 					new ExampleItem("AssimpMesh",					"Advanced",	&ExampleFabricator<AssimpMesh>, this ),
 					})
 {
 	

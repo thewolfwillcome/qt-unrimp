@@ -19,6 +19,17 @@ Window {
 		anchors.fill:parent
 	}
 	
+	
+	
+	Text {
+         id: helloText
+         text: "Hello world!"
+         y: 130
+         anchors.horizontalCenter: page.horizontalCenter
+         font.pointSize: 24; font.bold: true
+         color:"white"
+     }
+	
 // 	UnrimpExampleView {
 // 		id: view2
 // 		x:650

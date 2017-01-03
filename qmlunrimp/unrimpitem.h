@@ -37,6 +37,7 @@ class UnrimpItem : public QQuickItem
 
 public:
 	UnrimpItem(QQuickItem *parent = 0);
+    virtual ~UnrimpItem();
 	QString example();
 	
 	ExampleModel* exampleModel();
@@ -58,7 +59,7 @@ private:
 
 private:
 	int m_timerID;
-	UnrimpNode *m_node;
+	UnrimpNode *m_node;     // Don't destroy this item -> this is managed by the QScenegraph
 	ExampleItem *m_currentExample;
 	int m_currentExampleIndex;
 };

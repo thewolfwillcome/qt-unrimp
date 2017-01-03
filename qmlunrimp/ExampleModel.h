@@ -79,6 +79,8 @@ public:
 	
 	Q_INVOKABLE ExampleItem* get(int index)
 	{
+		// TODO(sw) return nullptr until a first example is ported
+		return nullptr;
 		return m_examples.at(index);
 	}
 

@@ -10,7 +10,7 @@ Item {
 	property string position: "left"
 	property int handle_height: -1
 	property alias expandable: handle_click.enabled
-
+    property int fullHeight: item.height
 	property alias handle_text: handle_text.text
 
 	function getXPosition() {
@@ -41,9 +41,15 @@ Item {
 		
 		// fix position depending of position
 		if (position == "top" || position == "bottom")
+        {
 			item.y = getYPosition();
+            item.fullHeight = item.height + handle.height;
+        }
 		else
+        {
 			item.x = getXPosition();
+            item.fullHeight = item.height;
+        }
 	}
 
 	Rectangle {

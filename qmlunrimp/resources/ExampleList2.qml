@@ -40,8 +40,8 @@ Rectangle {
 	Component {
 		id: sectionHeading
 		Rectangle {
-			width: parent.width
-			height: sectionText.height*1.5
+            width: parent.width
+            height: sectionText.height*1.5
 			color:"yellow"
 			Text {
 				id:sectionText
@@ -56,12 +56,13 @@ Rectangle {
 		id: exampleDelegate
 		Item {
 			id: wrapper
-			height:20
-			width: parent.width;
+            height: nameText.height*1.1
+            width: parent.width;
 			anchors.leftMargin:2
 			Column {
 				Text {
-					text: name
+                    id: nameText
+                    text: name
 					color: wrapper.ListView.isCurrentItem ? "black": "white"
 				}
 			}
