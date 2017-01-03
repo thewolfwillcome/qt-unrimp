@@ -25,9 +25,14 @@
 
 class FirstTriangle : public ExampleBase
 {
+
+
+//[-------------------------------------------------------]
+//[ Public virtual ExampleBase methods                    ]
+//[-------------------------------------------------------]
 public:
-	virtual void Init(Renderer::IRendererPtr renderer) override;
-	virtual void Deinit() override;
+	virtual void onInit(Renderer::IRendererPtr renderer) override;
+	virtual void onDeinit() override;
 	virtual void Render() override;
     virtual QString name() override { return "FirstTriangle"; }
 

@@ -39,8 +39,9 @@ public:
 	{
 		// Nothing to do here
 	}
-	
-	virtual void Deinit() override {}
+
+	virtual void onInit(Renderer::IRendererPtr) override {}
+	virtual void onDeinit() override {}
     virtual QString name() override { return QString(); }
 
 };
@@ -156,7 +157,7 @@ void UnrimpNode::update()
 		if (!m_initialized) {
 			init();
 			if (m_example)
-				m_example->Init(m_renderer);
+				m_example->Init(m_renderer, m_frameBuffer);
 		}
 
 		if (m_dirtyFBO) {
@@ -179,7 +180,7 @@ void UnrimpNode::update()
 			}
 
 			m_example->setSize(m_size.width(), m_size.height());
-			m_example->Init(m_renderer);
+			m_example->Init(m_renderer, m_frameBuffer);
 			m_exampleChanged = false;
 			markDirty(DirtyMaterial);
 			

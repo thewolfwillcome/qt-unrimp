@@ -24,10 +24,8 @@
 #include <cstring>
 #include <cassert>
 
-void FirstTriangle::Init(Renderer::IRendererPtr renderer)
+void FirstTriangle::onInit(Renderer::IRendererPtr renderer)
 {
-	ExampleBase::Init(renderer);
-	
 	// Get and check the renderer instance
 	if (nullptr != renderer)
 	{
@@ -132,7 +130,7 @@ void FirstTriangle::Init(Renderer::IRendererPtr renderer)
 }
  
 
-void FirstTriangle::Deinit()
+void FirstTriangle::onDeinit()
 {
 	// Release the used resources
 	mCommandBuffer.clear();

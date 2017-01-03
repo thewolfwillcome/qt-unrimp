@@ -33,27 +33,61 @@
 
 class ExampleBase
 {
+
+
+//[-------------------------------------------------------]
+//[ Public methods                                        ]
+//[-------------------------------------------------------]
 public:
 	virtual ~ExampleBase();
 
-	virtual void Init(Renderer::IRendererPtr renderer) { m_Renderer = renderer; }
-	virtual void Deinit() = 0;
-	virtual void Render() = 0;
-	virtual QString name() = 0;
+	void Init(Renderer::IRendererPtr renderer, Renderer::IRenderTarget* defaultRenderTarget);
+	void Deinit();
 
 	void setSize(int width, int height);
+
+
+//[-------------------------------------------------------]
+//[ Public virtual ExampleBase methods                    ]
+//[-------------------------------------------------------]
+public:
+	virtual void onInit(Renderer::IRendererPtr renderer) = 0;
+	virtual void onDeinit() = 0;
+
+	virtual void Render() = 0;
+	virtual QString name() = 0;
 	virtual bool wantsCyclicUpdate() {return false;}
 
+
+//[-------------------------------------------------------]
+//[ Protected ExampleBase methods                         ]
+//[-------------------------------------------------------]
 protected:
 	ExampleBase();
-	virtual void onSizeChanged(){}
-	Renderer::IRendererPtr getRenderer() { return m_Renderer; }
+	inline Renderer::IRendererPtr getRenderer() { return m_Renderer; }
+	inline Renderer::IRenderTarget* getDefaultRenderTarget() { return mDefaultRenderTarget; }
+	
 
+//[-------------------------------------------------------]
+//[ Protected virtual ExampleBase methods                 ]
+//[-------------------------------------------------------]
+protected:
+	virtual void onSizeChanged(){}
+	
+
+//[-------------------------------------------------------]
+//[ Protected data                                        ]
+//[-------------------------------------------------------]
 protected:
 	int mWidth, mHeigth;
 	
+
+//[-------------------------------------------------------]
+//[ Private data                                          ]
+//[-------------------------------------------------------]
 private:
 	Renderer::IRendererPtr m_Renderer;
+	Renderer::IRenderTarget* mDefaultRenderTarget;
 };
 
 

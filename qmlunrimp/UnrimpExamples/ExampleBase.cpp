@@ -20,15 +20,28 @@
 
 #include "ExampleBase.h"
 
-ExampleBase::ExampleBase()
-: mWidth(0), mHeigth(0)
+
+//[-------------------------------------------------------]
+//[ Public methods                                        ]
+//[-------------------------------------------------------]
+ExampleBase::~ExampleBase()
 {
 
 }
 
-ExampleBase::~ExampleBase()
+void ExampleBase::Init(Renderer::IRendererPtr renderer, Renderer::IRenderTarget* defaultRenderTarget)
 {
+	m_Renderer = renderer;
+	mDefaultRenderTarget = defaultRenderTarget;
+	
+	onInit(renderer);
+}
 
+void ExampleBase::Deinit()
+{
+	onDeinit();
+
+	mDefaultRenderTarget = nullptr;
 }
 
 void ExampleBase::setSize(int width, int height)
@@ -38,4 +51,14 @@ void ExampleBase::setSize(int width, int height)
 		mHeigth = height;
 		onSizeChanged();
 	}
+}
+
+
+//[-------------------------------------------------------]
+//[ Protected ExampleBase methods                         ]
+//[-------------------------------------------------------]
+ExampleBase::ExampleBase()
+: mWidth(0), mHeigth(0), mDefaultRenderTarget(nullptr)
+{
+
 }
