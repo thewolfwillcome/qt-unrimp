@@ -148,6 +148,26 @@ void UnrimpNode::setQuickWindow(QQuickWindow *window)
 	m_unrimpContext->create();
 }
 
+QString UnrimpNode::getOpenglVersionName() const
+{
+	if (nullptr != m_unrimpContext)
+	{
+		QOpenGLVersionProfile profile(m_unrimpContext->format());
+		auto profileValue = profile.profile();
+		auto versionValue = profile.version();
+
+		QString versionString;
+		
+		if (m_unrimpContext->isOpenGLES())
+			versionString = "OpenGLES %1.%2 %3";
+		else
+			versionString = "OpenGL %1.%2 %3";
+		
+		return QString(versionString).arg(versionValue.first).arg(versionValue.second).arg(profileValue == QSurfaceFormat::CoreProfile ? "core" : "");
+	}
+	return QString();
+}
+
 void UnrimpNode::update()
 {
 	restoreUnrimpState();

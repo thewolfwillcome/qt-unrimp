@@ -54,10 +54,19 @@ ApplicationWindow {
 
     SlideOut {
         id: topSlideOut
-            expandable: false
-            height:5
+            expandable: true
             width: 300
+            height: 25
             position: "top"
             handle_text: "Current Example: " + exampleList.model.get(exampleList.currentIndex).name
+            ColumnLayout {
+                anchors.fill: parent
+                Text {
+					id: opengl_version
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    text: unrimpitem.openglVersionName;
+                }
+            }
         }
 }

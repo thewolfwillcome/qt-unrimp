@@ -47,6 +47,11 @@ QString UnrimpItem::example()
 	return m_currentExample->name();
 }
 
+QString UnrimpItem::openglVersionName()
+{
+	return mOpenGLVersionName;
+}
+
 void UnrimpItem::setExampleItem(ExampleItem* item){
 	if (item == nullptr || m_currentExample == item)
 		return;
@@ -82,6 +87,9 @@ QSGNode *UnrimpItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 		node->setQuickWindow(window());
 		if (m_currentExample)
 			node->setExample(m_currentExample->fabricator());
+		
+		mOpenGLVersionName = node->getOpenglVersionName();
+		emit openglVersionNameChanged();
 	}
 	node->setSize(QSize(width(), height()));
 	node->update();

@@ -43,6 +43,8 @@ public:
 
 	void setQuickWindow(QQuickWindow *window);
 
+	QString getOpenglVersionName() const;
+
 	void setAAEnabled(bool enable);
 
 	void update();

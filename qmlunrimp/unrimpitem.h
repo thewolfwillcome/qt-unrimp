@@ -33,12 +33,14 @@ class UnrimpItem : public QQuickItem
 	Q_OBJECT
 
 	Q_PROPERTY(QString exampleName READ example NOTIFY exampleChanged)
+	Q_PROPERTY(QString openglVersionName READ openglVersionName NOTIFY openglVersionNameChanged)
 	Q_PROPERTY(ExampleItem* exampleItem READ exampleItem WRITE setExampleItem NOTIFY exampleChanged)
 
 public:
 	UnrimpItem(QQuickItem *parent = 0);
     virtual ~UnrimpItem();
 	QString example();
+	QString openglVersionName();
 	
 	ExampleModel* exampleModel();
 	
@@ -47,6 +49,7 @@ public:
 
 Q_SIGNALS:
 	void exampleChanged();
+	void openglVersionNameChanged();
 
 protected:
 	virtual QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
@@ -62,6 +65,10 @@ private:
 	UnrimpNode *m_node;     // Don't destroy this item -> this is managed by the QScenegraph
 	ExampleItem *m_currentExample;
 	int m_currentExampleIndex;
+
+	QString mOpenGLVersionName;
+
+
 };
 
 #endif // UNRIMPITEM_H
