@@ -18,22 +18,29 @@
 \*********************************************************/
 
 
-#include "qtquick2controlsapplicationviewer/qtquick2controlsapplicationviewer.h"
 #include "ExampleModel.h"
 #include "unrimpitem.h"
 
-#include <qqml.h>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
 
 int main(int argc, char **argv)
 {
-	QGuiApplication app(argc, argv);
+    //QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QGuiApplication app(argc, argv);
+
 	qmlRegisterType<UnrimpItem>("Unrimp", 1, 0, "UnrimpItem");
 	qmlRegisterType<ExampleModel>("Unrimp", 1, 0, "ExampleModel");
 	qmlRegisterUncreatableType<ExampleItem>("Unrimp", 1, 0, "ExampleItem", "not createable");
 
-	QtQuick2ControlsApplicationViewer viewer;
-    viewer.setMainQmlFile(QStringLiteral("qml/main.qml"));
-    viewer.show();
+
+
+    QQmlApplicationEngine engine;
+    #ifdef Q_OS_ANDROID
+    engine.load(QUrl("assets:/qml/main.qml"));
+    #else
+    engine.load(QUrl(QLatin1String("android/assets/qml/main.qml")));
+    #endif
 
 	return app.exec();
 }
