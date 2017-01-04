@@ -29,10 +29,10 @@ ExampleBase::~ExampleBase()
 
 }
 
-void ExampleBase::Init(Renderer::IRendererPtr renderer, Renderer::IRenderTarget* defaultRenderTarget)
+void ExampleBase::Init(Renderer::IRendererPtr renderer, Renderer::IRenderTarget* mainRenderTarget)
 {
 	m_Renderer = renderer;
-	mDefaultRenderTarget = defaultRenderTarget;
+	mMainRenderTarget = mainRenderTarget;
 	
 	onInit(renderer);
 }
@@ -41,7 +41,7 @@ void ExampleBase::Deinit()
 {
 	onDeinit();
 
-	mDefaultRenderTarget = nullptr;
+	mMainRenderTarget = nullptr;
 }
 
 void ExampleBase::setSize(int width, int height)
@@ -58,7 +58,7 @@ void ExampleBase::setSize(int width, int height)
 //[ Protected ExampleBase methods                         ]
 //[-------------------------------------------------------]
 ExampleBase::ExampleBase()
-: mWidth(0), mHeigth(0), mDefaultRenderTarget(nullptr)
+: mWidth(0), mHeigth(0), mMainRenderTarget(nullptr)
 {
 
 }

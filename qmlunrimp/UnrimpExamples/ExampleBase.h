@@ -41,7 +41,7 @@ class ExampleBase
 public:
 	virtual ~ExampleBase();
 
-	void Init(Renderer::IRendererPtr renderer, Renderer::IRenderTarget* defaultRenderTarget);
+	void Init(Renderer::IRendererPtr renderer, Renderer::IRenderTarget* mainRenderTarget);
 	void Deinit();
 
 	void setSize(int width, int height);
@@ -65,7 +65,7 @@ public:
 protected:
 	ExampleBase();
 	inline Renderer::IRendererPtr getRenderer() { return m_Renderer; }
-	inline Renderer::IRenderTarget* getDefaultRenderTarget() { return mDefaultRenderTarget; }
+	inline Renderer::IRenderTarget* getMainRenderTarget() { return mMainRenderTarget; }
 	
 
 //[-------------------------------------------------------]
@@ -87,7 +87,7 @@ protected:
 //[-------------------------------------------------------]
 private:
 	Renderer::IRendererPtr m_Renderer;
-	Renderer::IRenderTarget* mDefaultRenderTarget;
+	Renderer::IRenderTarget* mMainRenderTarget;
 };
 
 
