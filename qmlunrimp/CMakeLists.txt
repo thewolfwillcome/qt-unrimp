@@ -69,7 +69,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRC_FILES main.cpp
 	unrimpitem.cpp
 	unrimpnode.cpp
-	qtquick2controlsapplicationviewer/qtquick2controlsapplicationviewer.cpp
 	ExampleModel.cpp
 	UnrimpExamples/Color4.cpp
 # 	UnrimpExamples/TextureFromFileLoader.cpp
