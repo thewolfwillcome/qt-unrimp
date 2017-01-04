@@ -99,7 +99,7 @@ void FirstTriangle::onInit(Renderer::IRendererPtr renderer)
 				const char *vertexShaderSourceCode = nullptr;
 				const char *fragmentShaderSourceCode = nullptr;
 				#include "FirstTriangle_GLSL_410.h"
-// 				#include "FirstTriangle_GLSL_ES2.h"
+				#include "FirstTriangle_GLSL_ES2.h"
 // 				#include "FirstTriangle_HLSL_D3D9_D3D10_D3D11_D3D12.h"
  				#include "FirstTriangle_Null.h"
 
