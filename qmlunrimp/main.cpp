@@ -30,15 +30,10 @@ int main(int argc, char **argv)
 	qmlRegisterType<UnrimpItem>("Unrimp", 1, 0, "UnrimpItem");
 	qmlRegisterType<ExampleModel>("Unrimp", 1, 0, "ExampleModel");
 	qmlRegisterUncreatableType<ExampleItem>("Unrimp", 1, 0, "ExampleItem", "not createable");
-	
-	QtQuick2ControlsApplicationViewer viewer;
-    viewer.setMainQmlFile(QStringLiteral("resources/main.qml"));
-    viewer.show();
-	
-// 	QUrl mainItemPath(QUrl::fromLocalFile("resources/main.qml"));
-// 	QQmlApplicationEngine engine(mainItemPath);
-	//QQmlApplicationEngine engine(QUrl::fromLocalFile("resources/example.qml"));
 
-	
+	QtQuick2ControlsApplicationViewer viewer;
+    viewer.setMainQmlFile(QStringLiteral("qml/main.qml"));
+    viewer.show();
+
 	return app.exec();
 }
