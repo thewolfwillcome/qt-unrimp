@@ -145,9 +145,7 @@ void UnrimpNode::setQuickWindow(QQuickWindow *window)
 	#endif
 	m_unrimpContext->setFormat(qSurfaceFormat);
 	m_unrimpContext->setShareContext(QOpenGLContext::currentContext());
-    bool created = m_unrimpContext->create();
-
-    qDebug() << "Created opengl context: "<<created;
+    m_unrimpContext->create();
 }
 
 QString UnrimpNode::getOpenglVersionName() const
@@ -232,14 +230,9 @@ void UnrimpNode::updateFBO()
 	QOpenGLFramebufferObjectFormat format;
 	format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
 
-    qDebug() << "Try creating 2d texture";
-
 	Renderer::ITexture *texture2D = m_renderTexture = mTextureManager->createTexture2D(m_size.width(), m_size.height(), Renderer::TextureFormat::R8G8B8A8, nullptr, Renderer::TextureFlag::RENDER_TARGET);
-
-     qDebug() << "Try creating framebuffer";
 	m_frameBuffer = m_renderer->createFramebuffer(1, &texture2D);
 
-     qDebug() << "Try fill command buffer";
 	fillCommandBuffer();
 
 	// specify texture coordinates which flips the y-axis of the texture
@@ -296,9 +289,7 @@ void UnrimpNode::init()
 #elif USEGLES
 	extern Renderer::IRenderer *createOpenGLES2RendererInstance2(Renderer::handle, bool);
 
-    qDebug() << "Try creating opengles2 renderer instance";
     m_renderer = createOpenGLES2RendererInstance2(0, true);
-    qDebug() << "creating opengles2 renderer instance result: "<< (m_renderer != nullptr);
 #endif
 
     if (nullptr != m_renderer)
@@ -361,16 +352,10 @@ void UnrimpNode::fillCommandBuffer()
         uint32_t width  = static_cast<uint32_t>(m_size.width());
         uint32_t height = static_cast<uint32_t>(m_size.height());
 
-         qDebug() << "create viewport: "<<width<<", "<<height;
-
         // Set the viewport and scissor rectangle
         Renderer::Command::SetViewportAndScissorRectangle::create(mCommandBuffer, 0, 0, width, height);
     }
 
-    qDebug() << "create clear";
-    // Clear the color buffer of the current render target with green
-    float colors[4] {0.0f, 0.0f, 1.0f, 1.0f};
-    Renderer::Command::Clear::create(mCommandBuffer, Renderer::ClearFlag::COLOR, colors, 1.0f, 0);
-
-     qDebug() << "fill buffer finished";
+    // Clear the color buffer of the current render target with blue
+    Renderer::Command::Clear::create(mCommandBuffer, Renderer::ClearFlag::COLOR, Color4::BLUE, 1.0f, 0);
 }

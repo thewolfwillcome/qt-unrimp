@@ -31,7 +31,6 @@ UnrimpItem::UnrimpItem(QQuickItem *parent)
 {
     setFlag(ItemHasContents);
     setSmooth(false);
-    qDebug() << "Hello there";
 }
 
 UnrimpItem::~UnrimpItem()
