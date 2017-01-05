@@ -25,6 +25,7 @@
 #include "UnrimpExamples/PlatformTypes.h"
 #include "UnrimpExamples/Quaternion.h"
 #include "UnrimpExamples/EulerAngles.h"
+#include "UnrimpExamples/ExampleBase.h"
 
 #include <stdlib.h> // For rand()
 
@@ -35,7 +36,7 @@
 BatchInstancedArrays::BatchInstancedArrays() :
 	mNumberOfCubeInstances(0)
 {
-	// Nothing to do in here
+	// Nothing here
 }
 
 BatchInstancedArrays::~BatchInstancedArrays()
@@ -43,24 +44,20 @@ BatchInstancedArrays::~BatchInstancedArrays()
 	// The renderer resource pointers are released automatically
 }
 
-void BatchInstancedArrays::initialize(Renderer::IVertexBuffer &vertexBuffer, Renderer::IIndexBuffer &indexBuffer, Renderer::IProgram &program, unsigned int numberOfCubeInstances, bool alphaBlending, unsigned int numberOfTextures, unsigned int sceneRadius)
+void BatchInstancedArrays::initialize(Renderer::IBufferManager& bufferManager, Renderer::IRootSignature &rootSignature, const Renderer::VertexAttributes& vertexAttributes, Renderer::IVertexBuffer &vertexBuffer, Renderer::IIndexBuffer &indexBuffer, Renderer::IProgram &program, uint32_t numberOfCubeInstances, bool alphaBlending, uint32_t numberOfTextures, uint32_t sceneRadius)
 {
-	// Begin debug event
-	RENDERER_BEGIN_DEBUG_EVENT_FUNCTION(&program.getRenderer())
+	// Set owner renderer instance
+	mRenderer = &program.getRenderer();
 
 	// Release previous data if required
-	mBlendState = nullptr;
 	mVertexArray = nullptr;
-
-	// Set owner renderer instance
-	mRenderer = &vertexBuffer.getRenderer();
 
 	// Set the number of cube instance
 	mNumberOfCubeInstances = numberOfCubeInstances;
 
 	{ // Create the texture buffer instance
 		// Allocate the local per instance data
-		const unsigned int numberOfElements = mNumberOfCubeInstances * 2 * 4;
+		const uint32_t numberOfElements = mNumberOfCubeInstances * 2 * 4;
 		float *data = new float[numberOfElements];
 		float *dataCurrent = data;
 
@@ -71,7 +68,7 @@ void BatchInstancedArrays::initialize(Renderer::IVertexBuffer &vertexBuffer, Ren
 		//      -> We don't need to store the w component of the quaternion. It's normalized and storing
 		//         three components while recomputing the fourths component is be sufficient.
 		Quaternion quaternion;	// Identity rotation quaternion
-		for (unsigned int i = 0; i < mNumberOfCubeInstances; ++i)
+		for (uint32_t i = 0; i < mNumberOfCubeInstances; ++i)
 		{
 			{ // Position
 				// r=x
@@ -107,7 +104,7 @@ void BatchInstancedArrays::initialize(Renderer::IVertexBuffer &vertexBuffer, Ren
 		}
 
 		// Create the vertex buffer object (VBO) instance containing the per-instance-data
-		Renderer::IVertexBuffer *vertexBufferPerInstanceData = mRenderer->createVertexBuffer(sizeof(float) * numberOfElements, data, Renderer::BufferUsage::STATIC_DRAW);
+		Renderer::IVertexBuffer *vertexBufferPerInstanceData = bufferManager.createVertexBuffer(sizeof(float) * numberOfElements, data, Renderer::BufferUsage::STATIC_DRAW);
 
 		{ // Create vertex array object (VAO)
 			// -> The vertex array object (VAO) keeps a reference to the used vertex buffer object (VBO)
@@ -115,119 +112,52 @@ void BatchInstancedArrays::initialize(Renderer::IVertexBuffer &vertexBuffer, Ren
 			// -> When the vertex array object (VAO) is destroyed, it automatically decreases the
 			//    reference of the used vertex buffer objects (VBO). If the reference counter of a
 			//    vertex buffer object (VBO) reaches zero, it's automatically destroyed.
-			const Renderer::VertexArrayAttribute vertexArray[] =
+			const Renderer::VertexArrayVertexBuffer vertexArrayVertexBuffers[] =
 			{
-				// Mesh data
-				{ // Attribute 0
-					// Data destination
-					Renderer::VertexArrayFormat::FLOAT_3,	// vertexArrayFormat (Renderer::VertexArrayFormat::Enum)
-					"Position",								// name[64] (char)
-					"POSITION",								// semantic[64] (char)
-					0,										// semanticIndex (unsigned int)
-					// Data source
-					&vertexBuffer,							// vertexBuffer (Renderer::IVertexBuffer *)
-					0,										// offset (unsigned int)
-					sizeof(float) * (3 + 2 + 3),			// stride (unsigned int)
-					// Data source, instancing part
-					0										// instancesPerElement (unsigned int)
+				{ // Vertex buffer 0
+					&vertexBuffer,				// vertexBuffer (Renderer::IVertexBuffer *)
+					sizeof(float) * (3 + 2 + 3)	// strideInBytes (uint32_t)
 				},
-				{ // Attribute 1
-					// Data destination
-					Renderer::VertexArrayFormat::FLOAT_2,	// vertexArrayFormat (Renderer::VertexArrayFormat::Enum)
-					"TexCoord",								// name[64] (char)
-					"TEXCOORD",								// semantic[64] (char)
-					0,										// semanticIndex (unsigned int)
-					// Data source
-					&vertexBuffer,							// vertexBuffer (Renderer::IVertexBuffer *)
-					sizeof(float) * 3,						// offset (unsigned int)
-					sizeof(float) * (3 + 2 + 3),			// stride (unsigned int)
-					// Data source, instancing part
-					0										// instancesPerElement (unsigned int)
-				},
-				{ // Attribute 2
-					// Data destination
-					Renderer::VertexArrayFormat::FLOAT_3,	// vertexArrayFormat (Renderer::VertexArrayFormat::Enum)
-					"Normal",								// name[64] (char)
-					"NORMAL",								// semantic[64] (char)
-					0,										// semanticIndex (unsigned int)
-					// Data source
-					&vertexBuffer,							// vertexBuffer (Renderer::IVertexBuffer *)
-					sizeof(float) * (3 + 2),				// offset (unsigned int)
-					sizeof(float) * (3 + 2 + 3),			// stride (unsigned int)
-					// Data source, instancing part
-					0										// instancesPerElement (unsigned int)
-				},
-
-				// Per-instance data
-				{ // Attribute 3
-					// Data destination
-					Renderer::VertexArrayFormat::FLOAT_4,	// vertexArrayFormat (Renderer::VertexArrayFormat::Enum)
-					"PerInstancePositionTexture",			// name[64] (char)
-					"TEXCOORD",								// semantic[64] (char)
-					1,										// semanticIndex (unsigned int)
-					// Data source
-					vertexBufferPerInstanceData,			// vertexBuffer (Renderer::IVertexBuffer *)
-					0,										// offset (unsigned int)
-					sizeof(float) * 4 * 2,					// stride (unsigned int)
-					// Data source, instancing part
-					1										// instancesPerElement (unsigned int)
-				},
-				{ // Attribute 4
-					// Data destination
-					Renderer::VertexArrayFormat::FLOAT_4,	// vertexArrayFormat (Renderer::VertexArrayFormat::Enum)
-					"PerInstanceRotationScale",				// name[64] (char)
-					"TEXCOORD",								// semantic[64] (char)
-					2,										// semanticIndex (unsigned int)
-					// Data source
-					vertexBufferPerInstanceData,			// vertexBuffer (Renderer::IVertexBuffer *)
-					sizeof(float) * 4,						// offset (unsigned int)
-					sizeof(float) * 4 * 2,					// stride (unsigned int)
-					// Data source, instancing part
-					1										// instancesPerElement (unsigned int)
+				{ // Vertex buffer 1
+					vertexBufferPerInstanceData,	// vertexBuffer (Renderer::IVertexBuffer *)
+					sizeof(float) * 4 * 2			// strideInBytes (uint32_t)
 				}
 			};
-			mVertexArray = program.createVertexArray(sizeof(vertexArray) / sizeof(Renderer::VertexArrayAttribute), vertexArray, &indexBuffer);
+			mVertexArray = bufferManager.createVertexArray(vertexAttributes, glm::countof(vertexArrayVertexBuffers), vertexArrayVertexBuffers, &indexBuffer);
 		}
 
 		// Free local per instance data
 		delete [] data;
 	}
 
-	{ // Create blend state
-		Renderer::BlendState blendState = Renderer::IBlendState::getDefaultBlendState();
-		blendState.renderTarget[0].blendEnable = alphaBlending;
-		blendState.renderTarget[0].srcBlend    = Renderer::Blend::SRC_ALPHA;
-		blendState.renderTarget[0].destBlend   = Renderer::Blend::ONE;
-		mBlendState = mRenderer->createBlendState(blendState);
+	{ // Create the pipeline state object (PSO)
+		Renderer::PipelineState pipelineState = Renderer::PipelineStateBuilder(&rootSignature, &program, vertexAttributes);
+		pipelineState.blendState.renderTarget[0].blendEnable = alphaBlending;
+		pipelineState.blendState.renderTarget[0].srcBlend    = Renderer::Blend::SRC_ALPHA;
+		pipelineState.blendState.renderTarget[0].destBlend   = Renderer::Blend::ONE;
+		mPipelineState = mRenderer->createPipelineState(pipelineState);
 	}
-
-	// End debug event
-	RENDERER_END_DEBUG_EVENT(&program.getRenderer())
 }
 
-void BatchInstancedArrays::draw()
+void BatchInstancedArrays::fillCommandBuffer(Renderer::CommandBuffer& commandBuffer) const
 {
-	// Is there a valid renderer owner instance?
-	if (nullptr != mRenderer)
-	{
-		// Begin debug event
-		RENDERER_BEGIN_DEBUG_EVENT_FUNCTION(mRenderer)
+	// Begin debug event
+	COMMAND_BEGIN_DEBUG_EVENT_FUNCTION(commandBuffer)
 
-		{ // Setup input assembly (IA)
-			// Set the used vertex array
-			mRenderer->iaSetVertexArray(mVertexArray);
-		}
-
-		// Set the used blend state
-		mRenderer->omSetBlendState(mBlendState);
-
-		// Use instancing in order to draw multiple cubes with just a single draw call
-		// -> Draw calls are one of the most expensive rendering, avoid them if possible
-		mRenderer->drawIndexedInstanced(0, 36, 0, 0, 24, mNumberOfCubeInstances);
-
-		// End debug event
-		RENDERER_END_DEBUG_EVENT(mRenderer)
+	{ // Setup input assembly (IA)
+		// Set the used vertex array
+		Renderer::Command::SetVertexArray::create(commandBuffer, mVertexArray);
 	}
+
+	// Set the used pipeline state object (PSO)
+	Renderer::Command::SetPipelineState::create(commandBuffer, mPipelineState);
+
+	// Use instancing in order to draw multiple cubes with just a single draw call
+	// -> Draw calls are one of the most expensive rendering, avoid them if possible
+	Renderer::Command::DrawIndexed::create(commandBuffer, 36, mNumberOfCubeInstances);
+
+	// End debug event
+	COMMAND_END_DEBUG_EVENT(commandBuffer)
 }
 
 

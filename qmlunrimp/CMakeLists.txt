@@ -53,10 +53,22 @@ elseif(WIN32)
 	set(Unrimp_OpenGL_Renderer_lib_name "OpenGLRendererStatic.lib")
 endif()
 
+if (UNIX)
+	set(Unrimp_Renderer_Runtime_lib_name "libRendererRuntimeStatic.a")
+elseif(WIN32)
+	set(Unrimp_Renderer_Runtime_lib_name "RendererRuntimeStatic.lib")
+endif()
+
 unset (${UNRIMP_OPENGLRENDERER_FOUND} CACHE)
 find_file(UNRIMP_OPENGLRENDERER_FOUND "${Unrimp_OpenGL_Renderer_lib_name}" PATH ${UNRIMP_LIB_DIR})
 if("${UNRIMP_OPENGLRENDERER_FOUND}" STREQUAL "UNRIMP_OPENGLRENDERER_FOUND-NOTFOUND" )
 	message(SEND_ERROR "unrimp opengl renderer static lib not found" )
+endif()
+
+unset (${UNRIMP_RENDERER_RUNTIME_FOUND} CACHE)
+find_file(UNRIMP_RENDERER_RUNTIME_FOUND "${Unrimp_Renderer_Runtime_lib_name}" PATH ${UNRIMP_LIB_DIR})
+if("${UNRIMP_RENDERER_RUNTIME_FOUND}" STREQUAL "UNRIMP_RENDERER_RUNTIME_FOUND-NOTFOUND" )
+	message(SEND_ERROR "unrimp renderer runtime static lib not found" )
 endif()
 
 
@@ -76,6 +88,13 @@ set(SRC_FILES main.cpp
 	UnrimpExamples/EulerAngles.cpp
 	UnrimpExamples/ExampleBase.cpp
 	UnrimpExamples/FirstTriangle/FirstTriangle.cpp
+	UnrimpExamples/ExampleRenderRuntime.cpp
+	UnrimpExamples/InstancedCubes/InstancedCubes.cpp
+	UnrimpExamples/InstancedCubes/ICubeRenderer.cpp
+# 	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/BatchDrawInstanced.cpp
+# 	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/CubeRendererDrawInstanced.cpp
+	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/BatchInstancedArrays.cpp
+	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/CubeRendererInstancedArrays.cpp
 
 # 	UnrimpExamples/VertexBuffer/VertexBuffer.cpp
 # 	UnrimpExamples/FirstTexture/FirstTexture.cpp
@@ -84,24 +103,21 @@ set(SRC_FILES main.cpp
 # 	UnrimpExamples/FirstMultipleRenderTargets/FirstMultipleRenderTargets.cpp
 # 	UnrimpExamples/FirstGeometryShader/FirstGeometryShader.cpp
 # 	UnrimpExamples/FirstTessellation/FirstTessellation.cpp
-# 	UnrimpExamples/FirstInstancing/FirstInstancing.cpp
+	UnrimpExamples/FirstInstancing/FirstInstancing.cpp
 # 	UnrimpExamples/Fxaa/Fxaa.cpp
-# 	UnrimpExamples/InstancedCubes/InstancedCubes.cpp
-# 	UnrimpExamples/InstancedCubes/ICubeRenderer.cpp
-# 	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/BatchDrawInstanced.cpp
-# 	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/CubeRendererDrawInstanced.cpp
-# 	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/BatchInstancedArrays.cpp
-# 	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/CubeRendererInstancedArrays.cpp
 # 	UnrimpExamples/IcosahedronTessellation/IcosahedronTessellation.cpp
 # 	UnrimpExamples/FirstFont/FirstFont.cpp
 # 	UnrimpExamples/FirstAssimp/FirstAssimp.cpp
 # 	UnrimpExamples/FirstAssimp/PointsMesh.cpp
 # 	UnrimpExamples/AssimpMesh/AssimpMesh.cpp
 # 	UnrimpExamples/AssimpMesh/Mesh.cpp
-# 	UnrimpExamples/ExampleRenderToolkit.cpp
 )
   
 include_directories("${UNRIMPBASE_PATH}/include")
+
+# TODO(sw) Wy do we have to add an include path to the build directory of renderer runtime and renderer? For what are then the include files in UNRIMPBASE_PATH/include good for?
+include_directories("${UNRIMPBASE_PATH}/Renderer/RendererRuntime/include")
+include_directories("${UNRIMPBASE_PATH}/Renderer/Renderer/include")
 
 # We need c++0x/c++11 support:
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -124,11 +140,11 @@ if (${ARCHITECTURE_X68})
 endif()
 
 add_executable(qmlunrimp ${SRC_FILES})
-target_link_libraries(qmlunrimp ${UNRIMP_OPENGLRENDERER_FOUND})
+target_link_libraries(qmlunrimp ${UNRIMP_OPENGLRENDERER_FOUND} ${UNRIMP_RENDERER_RUNTIME_FOUND})
 
 if(UNIX)
-	# needed from the static opengl renderer
-	target_link_libraries(qmlunrimp X11 dl)
+	# needed from the static opengl renderer and renderer runtime
+	target_link_libraries(qmlunrimp X11 dl pthread)
 endif()
 
 qt5_use_modules(qmlunrimp Quick Qml Widgets)

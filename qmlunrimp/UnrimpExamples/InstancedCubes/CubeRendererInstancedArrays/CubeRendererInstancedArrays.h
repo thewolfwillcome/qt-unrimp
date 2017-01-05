@@ -70,7 +70,7 @@ public:
 	*  @param[in] sceneRadius
 	*    Scene radius
 	*/
-	CubeRendererInstancedArrays(Renderer::IRenderer &renderer, unsigned int numberOfTextures, unsigned int sceneRadius);
+	CubeRendererInstancedArrays(Renderer::IRenderer &renderer, uint32_t numberOfTextures, uint32_t sceneRadius);
 
 	/**
 	*  @brief
@@ -83,8 +83,15 @@ public:
 //[ Public virtual ICubeRenderer methods                  ]
 //[-------------------------------------------------------]
 public:
-	virtual void setNumberOfCubes(unsigned int numberOfCubes) override;
+	virtual void setNumberOfCubes(uint32_t numberOfCubes) override;
 	virtual void draw(float globalTimer, float globalScale, float lightPositionX, float lightPositionY, float lightPositionZ) override;
+
+
+//[-------------------------------------------------------]
+//[ Private methods                                       ]
+//[-------------------------------------------------------]
+private:
+	void fillCommandBuffer();
 
 
 //[-------------------------------------------------------]
@@ -92,19 +99,23 @@ public:
 //[-------------------------------------------------------]
 private:
 	Renderer::IRendererPtr		  mRenderer;							///< Renderer instance to use, always valid
-	unsigned int				  mNumberOfTextures;					///< Number of textures
-	unsigned int				  mSceneRadius;							///< Scene radius
-	unsigned int				  mMaximumNumberOfInstancesPerBatch;	///< Maximum number of instances per batch
+	Renderer::IBufferManagerPtr	  mBufferManager;						///< Buffer manager, can be a null pointer
+	Renderer::ITextureManagerPtr  mTextureManager;						///< Texture manager, can be a null pointer
+	uint32_t					  mNumberOfTextures;					///< Number of textures
+	uint32_t					  mSceneRadius;							///< Scene radius
+	uint32_t					  mMaximumNumberOfInstancesPerBatch;	///< Maximum number of instances per batch
 	Renderer::ITexture2DPtr		  mTexture2D;							///< 2D texture, can be a null pointer
 	Renderer::ISamplerStatePtr	  mSamplerState;						///< Sampler state, can be a null pointer
+	Renderer::IRootSignaturePtr	  mRootSignature;						///< Root signature, can be a null pointer
 	Renderer::IUniformBufferPtr	  mUniformBufferStaticVs;				///< Static vertex shader uniform buffer object (UBO), can be a null pointer
 	Renderer::IUniformBufferPtr	  mUniformBufferDynamicVs;				///< Dynamic vertex shader uniform buffer object (UBO), can be a null pointer
 	Renderer::IUniformBufferPtr	  mUniformBufferDynamicFs;				///< Dynamic fragment shader uniform buffer object (UBO), can be a null pointer
 	Renderer::IProgramPtr		  mProgram;								///< Program, can be a null pointer
 	Renderer::IVertexBufferPtr	  mVertexBuffer;						///< Vertex buffer object (VBO), can be a null pointer
 	Renderer::IIndexBufferPtr	  mIndexBuffer;							///< Index buffer object (IBO), can be a null pointer
-	unsigned int				  mNumberOfBatches;						///< Current number of batches
+	uint32_t					  mNumberOfBatches;						///< Current number of batches
 	BatchInstancedArrays		 *mBatches;								///< Batches, can be a null pointer
+	Renderer::CommandBuffer		  mCommandBuffer;						///< Command buffer
 
 
 };

@@ -63,6 +63,12 @@ public:
 	*  @brief
 	*    Initialize the batch
 	*
+	*  @param[in] bufferManager
+	*    Buffer manager to use
+	*  @param[in] rootSignature
+	*    Root signature
+	*  @param[in] vertexAttributes
+	*    Vertex attributes ("vertex declaration" in Direct3D 9 terminology, "input layout" in Direct3D 10 & 11 terminology)
 	*  @param[in] vertexBuffer
 	*    Vertex buffer object (VBO) containing the mesh data to use
 	*  @param[in] indexBuffer
@@ -78,13 +84,16 @@ public:
 	*  @param[in] sceneRadius
 	*    Scene radius
 	*/
-	void initialize(Renderer::IVertexBuffer &vertexBuffer, Renderer::IIndexBuffer &indexBuffer, Renderer::IProgram &program, unsigned int numberOfCubeInstances, bool alphaBlending, unsigned int numberOfTextures, unsigned int sceneRadius);
+	void initialize(Renderer::IBufferManager& bufferManager, Renderer::IRootSignature &rootSignature, const Renderer::VertexAttributes& vertexAttributes, Renderer::IVertexBuffer &vertexBuffer, Renderer::IIndexBuffer &indexBuffer, Renderer::IProgram &program, uint32_t numberOfCubeInstances, bool alphaBlending, uint32_t numberOfTextures, uint32_t sceneRadius);
 
 	/**
 	*  @brief
-	*    Draw the batch
+	*    Fill the batch into the given commando buffer
+	*
+	*  @param[out] commandBuffer
+	*    Command buffer to fill
 	*/
-	void draw();
+	void fillCommandBuffer(Renderer::CommandBuffer& commandBuffer) const;
 
 
 //[-------------------------------------------------------]
@@ -117,10 +126,10 @@ private:
 //[ Private data                                          ]
 //[-------------------------------------------------------]
 private:
-	Renderer::IRendererPtr	  mRenderer;				///< Owner renderer instance, can be a null pointer
-	unsigned int			  mNumberOfCubeInstances;	///< Number of cube instances
-	Renderer::IVertexArrayPtr mVertexArray;				///< Vertex array object (VAO), can be a null pointer
-	Renderer::IBlendStatePtr  mBlendState;				///< Blend state, can be a null pointer
+	Renderer::IRendererPtr		mRenderer;				///< Owner renderer instance, can be a null pointer
+	uint32_t					mNumberOfCubeInstances;	///< Number of cube instances
+	Renderer::IVertexArrayPtr	mVertexArray;			///< Vertex array object (VAO), can be a null pointer
+	Renderer::IPipelineStatePtr	mPipelineState;			///< Pipeline state object (PSO), can be a null pointer
 
 
 };

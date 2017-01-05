@@ -1,5 +1,5 @@
 /*********************************************************\
- * Copyright (c) 2012-2013 Christian Ofenberg
+ * Copyright (c) 2012-2016 Christian Ofenberg
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without
@@ -23,7 +23,7 @@
 //[-------------------------------------------------------]
 #ifndef RENDERER_NO_OPENGL
 // Uniform buffer version (Direct3D 10 and Direct3D 11 only support uniform buffers and no individual uniform access)
-if (0 == strcmp(mRenderer->getName(), "OpenGL") && mRenderer->getCapabilities().uniformBuffer)
+if (0 == strcmp(mRenderer->getName(), "OpenGL") && mRenderer->getCapabilities().maximumUniformBufferSize > 0)
 {
 
 
@@ -57,11 +57,11 @@ out vec2 TexCoordVs;
 out vec3 NormalVs;
 
 // Uniforms
-layout(std140) uniform UniformBlockStaticVs		// Usage of "layout(binding=0)" would be nice, but requires OpenGL 4.2
+layout(std140) uniform UniformBlockStaticVs		// Usage of "layout(binding = 0)" would be nice, but requires OpenGL 4.2 or the "GL_ARB_explicit_uniform_location"-extension
 {
 	mat4 MVP;
 };
-layout(std140) uniform UniformBlockDynamicVs	// Usage of "layout(binding=1)" would be nice, but requires OpenGL 4.2
+layout(std140) uniform UniformBlockDynamicVs	// Usage of "layout(binding = 1)" would be nice, but requires OpenGL 4.2 or the "GL_ARB_explicit_uniform_location"-extension
 {
 	vec2 TimerAndGlobalScale;	// x=Timer, y=Global scale
 };
@@ -179,8 +179,8 @@ in vec3 NormalVs;
 layout(location = 0, index = 0) out vec4 Color0;
 
 // Uniforms
-uniform sampler2D DiffuseMap;					// Usage of "layout(binding=1)" would be nice, but requires OpenGL 4.2
-layout(std140) uniform UniformBlockDynamicFs	// Usage of "layout(binding=0)" would be nice, but requires OpenGL 4.2
+uniform sampler2D DiffuseMap;					// Usage of "layout(binding = 1)" would be nice, but requires OpenGL 4.2 or the "GL_ARB_explicit_uniform_location"-extension
+layout(std140) uniform UniformBlockDynamicFs	// Usage of "layout(binding = 0)" would be nice, but requires OpenGL 4.2 or the "GL_ARB_explicit_uniform_location"-extension
 {
 	vec3 LightPosition;	// World space light position
 };

@@ -24,12 +24,14 @@
 // #include "UnrimpExamples/VertexBuffer/VertexBuffer.h"
 // #include "UnrimpExamples/FirstTexture/FirstTexture.h"
 #include "UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.h"
-// #include "UnrimpExamples/FirstInstancing/FirstInstancing.h"
+#include "UnrimpExamples/FirstInstancing/FirstInstancing.h"
 // #include "UnrimpExamples/FirstMultipleRenderTargets/FirstMultipleRenderTargets.h"
 // #include "UnrimpExamples/FirstGeometryShader/FirstGeometryShader.h"
 // #include "UnrimpExamples/FirstTessellation/FirstTessellation.h"
 // #include "UnrimpExamples/Fxaa/Fxaa.h"
-// #include "UnrimpExamples/InstancedCubes/InstancedCubes.h"
+#ifndef ANDROID // crn_decomp uses malloc_usable_size which doesn't exits on android
+#include "UnrimpExamples/InstancedCubes/InstancedCubes.h"
+#endif
 // #include "UnrimpExamples/FirstPostProcessing/FirstPostProcessing.h"
 // #include "UnrimpExamples/IcosahedronTessellation/IcosahedronTessellation.h"
 // #include "UnrimpExamples/FirstFont/FirstFont.h"
@@ -44,13 +46,15 @@ ExampleModel::ExampleModel(QObject *parent)
 // 					new ExampleItem("FirstTexture",					"Basic",	&ExampleFabricator<FirstTexture>, this ),
 					new ExampleItem("FirstRenderToTexture",			"Basic",	&ExampleFabricator<FirstRenderToTexture>, this ),
 // 					new ExampleItem("FirstPostProcessing",			"Basic",	&ExampleFabricator<FirstPostProcessing>, this ),
-// 					new ExampleItem("FirstInstancing",				"Basic",	&ExampleFabricator<FirstInstancing>, this ),
+					new ExampleItem("FirstInstancing",				"Basic",	&ExampleFabricator<FirstInstancing>, this ),
 // 					new ExampleItem("FirstMultipleRenderTargets",	"Basic",	&ExampleFabricator<FirstMultipleRenderTargets>, this ),
 // 					new ExampleItem("FirstGeometryShader",			"Basic",	&ExampleFabricator<FirstGeometryShader>, this ),
 // 					new ExampleItem("FirstTessellation",			"Basic",	&ExampleFabricator<FirstTessellation>, this ),
 // 					// Advanced
 // 					new ExampleItem("Fxaa",							"Advanced",	&ExampleFabricator<Fxaa>, this ),
-// 					new ExampleItem("InstancedCubes",				"Advanced",	&ExampleFabricator<InstancedCubes>, this ),
+#ifndef ANDROID // crn_decomp uses malloc_usable_size which doesn't exits on android
+					new ExampleItem("InstancedCubes",				"Advanced",	&ExampleFabricator<InstancedCubes>, this ),
+#endif
 // 					new ExampleItem("IcosahedronTessellation",		"Advanced",	&ExampleFabricator<IcosahedronTessellation>, this ),
 // 					new ExampleItem("FirstFont",					"Advanced",	&ExampleFabricator<FirstFont>, this ),
 // 					new ExampleItem("FirstAssimp",					"Advanced",	&ExampleFabricator<FirstAssimp>, this ),

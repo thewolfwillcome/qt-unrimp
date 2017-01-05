@@ -21,20 +21,20 @@
 #ifndef INSTANCEDCUBES_H
 #define INSTANCEDCUBES_H
 
-#include "UnrimpExamples/ExampleRenderToolkit.h"
+#include "UnrimpExamples/ExampleRenderRuntime.h"
 #include "UnrimpExamples/Stopwatch.h"
 
 class ICubeRenderer;
 
-class InstancedCubes : public ExampleRenderToolkit
+class InstancedCubes : public ExampleRenderRuntime
 {
 public:
     InstancedCubes();
-	virtual void Init(Renderer::IRendererPtr renderer) override;
-	virtual void Deinit() override;
+	virtual void onInit(Renderer::IRendererPtr renderer) override;
+	virtual void onDeinit() override;
 	virtual void Render() override;
-    virtual QString name() { return "InstancedCubes"; } override;
-	virtual bool wantsCyclicUpdate() {return true;} override;
+    virtual QString name() override { return "InstancedCubes"; }
+	virtual bool wantsCyclicUpdate() override {return true;}
 	
 //[-------------------------------------------------------]
 //[ Private static data                                   ]
@@ -45,9 +45,9 @@ private:
 	static const unsigned int SCENE_RADIUS			  = 10;		///< Scene radius
 
 private:
-	RendererToolkit::IFontPtr  mFont;					///< Font, can be a null pointer
-	ICubeRenderer			  *mCubeRenderer;			///< Cube renderer instance, can be a null pointer
-	unsigned int			   mNumberOfCubeInstances;	///< Number of cube instances
+	ICubeRenderer*			mCubeRenderer;			///< Cube renderer instance, can be a null pointer
+	uint32_t				mNumberOfCubeInstances;	///< Number of cube instances
+	Renderer::CommandBuffer mCommandBuffer;			///< Command buffer
 	// The rest is for timing and statistics
 	Stopwatch mStopwatch;			///< Stopwatch instance
 	float	  mGlobalTimer;			///< Global timer

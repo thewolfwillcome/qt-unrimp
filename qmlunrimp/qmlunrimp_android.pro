@@ -15,11 +15,20 @@ SOURCES += main.cpp \
     UnrimpExamples/Color4.inl \
     UnrimpExamples/Stopwatch.cpp \
     UnrimpExamples/Stopwatch.inl \
+    UnrimpExamples/EulerAngles.cpp \
     UnrimpExamples/FirstTriangle/FirstTriangle.cpp \
-    UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.cpp
+    UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.cpp \
+    UnrimpExamples/FirstInstancing/FirstInstancing.cpp
 
+#    UnrimpExamples/ExampleRenderRuntime.cpp \
+#    UnrimpExamples/InstancedCubes/InstancedCubes.cpp \
+#    UnrimpExamples/InstancedCubes/ICubeRenderer.cpp \
+#    UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/BatchInstancedArrays.cpp \
+#    UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/CubeRendererInstancedArrays.cpp
+# 	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/BatchDrawInstanced.cpp
+# 	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/CubeRendererDrawInstanced.cpp
 # UnrimpExamples/VertexBuffer/VertexBuffer.cpp
-#UnrimpExamples/FirstTexture/FirstTexture.cpp \
+#UnrimpExamples/FirstTexture/FirstTexture.cpp
 #UnrimpExamples/FirstPostProcessing/FirstPostProcessing.cpp
 #UnrimpExamples/FirstAssimp/FirstAssimp.cpp
 #UnrimpExamples/FirstAssimp/PointsMesh.cpp
@@ -28,9 +37,13 @@ SOURCES += main.cpp \
 #UnrimpExamples/AssimpMesh/Mesh.cpp
 
 # Set base path to unrimp, please don't commit this path
-UNRIMPBASE_PATH ="<PathToUnrimp>"
+UNRIMPBASE_PATH ="/home/stephan/data/projects/pixellight-src/unrimp_new.git"
 INCLUDEPATH += $$quote($$UNRIMPBASE_PATH/include)
 INCLUDEPATH += $$quote($$UNRIMPBASE_PATH/External/glm/include/)
+
+# TODO(sw) Wy do we have to add an include path to the build directory of renderer runtime and renderer? For what are then the include files in UNRIMPBASE_PATH/include good for?
+INCLUDEPATH += $$quote($$UNRIMPBASE_PATH/Renderer/RendererRuntime/include)
+INCLUDEPATH += $$quote($$UNRIMPBASE_PATH/Renderer/Renderer/include)
 
 android-g++ {
     # TODO(sw) Android ndk is switching to clang + llvm libc++ thus don't update gcc/gnustl. But Qt isn't yet released with an clang build so we need to use gcc 4.9 with gnustl which has some problems
@@ -41,7 +54,7 @@ android-g++ {
 
 linux-g++ {
     DEFINES += LINUX USEOPENGL RENDERER_NO_DEBUG
-    LIBS += -L$$quote($$UNRIMPBASE_PATH/lib/Linux_x64/) -lOpenGLRendererStatic -ldl -lX11
+    LIBS += -L$$quote($$UNRIMPBASE_PATH/lib/Linux_x64/) -lOpenGLRendererStatic -ldl -lX11 -lRendererRuntimeStatic -lpthread
 }
 
 linux-g++:QMAKE_TARGET.arch = $$QMAKE_HOST.arch
@@ -54,6 +67,7 @@ contains(QMAKE_TARGET.arch, x86_64):{
 }
 
 QMAKE_CXXFLAGS += -std=c++11
+# -Wcast-align
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

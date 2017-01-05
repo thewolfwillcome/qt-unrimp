@@ -18,25 +18,23 @@
 \*********************************************************/
 
 
-#ifndef EXAMPLERENDERTOOLKIT_H
-#define EXAMPLERENDERTOOLKIT_H
+#include "UnrimpExamples/ExampleRenderRuntime.h"
 
-#include "ExampleBase.h"
-#include <Renderer/RendererToolkit.h>
-
-class ExampleRenderToolkit : public ExampleBase
+RendererRuntime::IRendererRuntime* createRendererRuntime(Renderer::IRenderer& renderer)
 {
-public:
-	virtual void Init(Renderer::IRendererPtr renderer) override;
-	virtual void Deinit() override;
+	extern RendererRuntime::IRendererRuntime *createRendererRuntimeInstance(Renderer::IRenderer &renderer);
 
-protected:
-	RendererToolkit::IRendererToolkitPtr  getRendererToolkit() { return m_RendererToolkit; }
+	// Create the renderer runtime instance
+	return createRendererRuntimeInstance(renderer);
+}
 
-private:
-	
-	RendererToolkit::IRendererToolkitPtr m_RendererToolkit;
 
-};
+void ExampleRenderRuntime::onInit(Renderer::IRendererPtr renderer)
+{
+	m_RendererRuntime = createRendererRuntime(*renderer);
+}
 
-#endif // EXAMPLERENDERTOOLKIT_H
+void ExampleRenderRuntime::onDeinit()
+{
+	m_RendererRuntime = nullptr;
+}
