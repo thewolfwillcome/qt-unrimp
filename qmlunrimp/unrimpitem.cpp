@@ -21,6 +21,8 @@
 #include "unrimpitem.h"
 #include "unrimpnode.h"
 
+#include "UnrimpExamples/ExampleBase.h"
+
 #include <QtCore/QPropertyAnimation>
 
 UnrimpItem::UnrimpItem(QQuickItem *parent)
@@ -58,7 +60,14 @@ void UnrimpItem::setExampleItem(ExampleItem* item){
 
 	m_currentExample = item;
 	if (m_node) {
-		if (m_node->setExample(item->fabricator())) {
+		ExampleFabricatorMethod method = item->fabricator();
+		ExampleBase* newExample(nullptr != method ? method() : nullptr);
+		if (m_node->setExample(std::unique_ptr<ExampleBase>(newExample))) {
+            if (nullptr != newExample && newExample->wantsCyclicUpdate())
+                startCyclicTimer();
+            else
+                stopCyclicTimer();
+
 			emit exampleChanged();
 			update();
 		}
@@ -86,18 +95,17 @@ QSGNode *UnrimpItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 		m_node = node = new UnrimpNode();
 		node->setQuickWindow(window());
 		if (m_currentExample)
-			node->setExample(m_currentExample->fabricator());
+		{
+			ExampleFabricatorMethod method = m_currentExample->fabricator();
+			ExampleBase* newExample(nullptr != method ? method() : nullptr);
+			node->setExample(std::unique_ptr<ExampleBase>(newExample));
+		}
 		
 		mOpenGLVersionName = node->getOpenglVersionName();
 		emit openglVersionNameChanged();
 	}
 	node->setSize(QSize(width(), height()));
-	node->update();
-	
-	if (node->exampleNeedsCyclicUpdate())
-		startCyclicTimer();
-	else
-		stopCyclicTimer();
+    node->update();
 
 	return node;
 }

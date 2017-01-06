@@ -55,7 +55,7 @@ public:
 	void saveUnrimpState();
 	void restoreUnrimpState();
 
-	bool setExample(ExampleFabricatorMethod exampleFac);
+	bool setExample(std::unique_ptr<ExampleBase> newExample);
 	bool exampleNeedsCyclicUpdate();
 
 private:
@@ -77,7 +77,6 @@ private:
 	int m_samples;
 	bool m_AAEnabled;
 	QSize m_size;
-	ExampleFabricatorMethod m_newExampleFac;
 
 	Renderer::IRendererPtr m_renderer;
 	Renderer::IBufferManagerPtr  mBufferManager;	///< Buffer manager, can be a null pointer
@@ -86,7 +85,8 @@ private:
 	Renderer::IFramebufferPtr m_frameBuffer;
 	Renderer::CommandBuffer		 mCommandBuffer;	///< Command buffer
 
-	std::unique_ptr<ExampleBase> m_example; // We don't share the ressources but cannot use a plain object instance due inheritance
+	std::unique_ptr<ExampleBase> m_example; // Holds the instance to the current active example
+	std::unique_ptr<ExampleBase> m_newExampel; // Holds the instance to an new example to switch to
 
 	bool m_initialized;
 	bool m_dirtyFBO;

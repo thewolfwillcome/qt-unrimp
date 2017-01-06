@@ -55,13 +55,13 @@ UnrimpNode::UnrimpNode()
 	, m_qtContext(0)
 	, m_samples(0)
 	, m_AAEnabled(false)
-	, m_newExampleFac(nullptr)
     , m_renderer(nullptr)
 	, mBufferManager(nullptr)
 	, mTextureManager(nullptr)
 	, m_renderTexture(nullptr)
 	, m_frameBuffer(nullptr)
 	, m_example(new EmptyExample)
+	, m_newExampel(nullptr)
 	, m_initialized(false)
 	, m_dirtyFBO(false)
 	, m_dirtySize(false)
@@ -90,9 +90,9 @@ UnrimpNode::~UnrimpNode()
 	delete m_unrimpContext;
 }
 
-bool UnrimpNode::setExample(ExampleFabricatorMethod exampleFac)
+bool UnrimpNode::setExample(std::unique_ptr<ExampleBase> newExample)
 {
-	m_newExampleFac = exampleFac;
+	m_newExampel = std::move(newExample);
 	m_exampleChanged = true;
 	return true;
 }
@@ -192,8 +192,8 @@ void UnrimpNode::update()
 				ResetUnrimpStates();
 			}
 
-			if (m_newExampleFac) {
-				m_example.reset(m_newExampleFac());
+			if (m_newExampel) {
+				m_example.reset(m_newExampel.release());
 			}
 			else {
 				m_example.reset(new EmptyExample);
