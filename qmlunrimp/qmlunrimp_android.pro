@@ -18,13 +18,13 @@ SOURCES += main.cpp \
     UnrimpExamples/EulerAngles.cpp \
     UnrimpExamples/FirstTriangle/FirstTriangle.cpp \
     UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.cpp \
-    UnrimpExamples/FirstInstancing/FirstInstancing.cpp
+    UnrimpExamples/FirstInstancing/FirstInstancing.cpp \
+    UnrimpExamples/ExampleRenderRuntime.cpp \
+    UnrimpExamples/InstancedCubes/InstancedCubes.cpp \
+    UnrimpExamples/InstancedCubes/ICubeRenderer.cpp \
+    UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/BatchInstancedArrays.cpp \
+    UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/CubeRendererInstancedArrays.cpp
 
-#    UnrimpExamples/ExampleRenderRuntime.cpp \
-#    UnrimpExamples/InstancedCubes/InstancedCubes.cpp \
-#    UnrimpExamples/InstancedCubes/ICubeRenderer.cpp \
-#    UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/BatchInstancedArrays.cpp \
-#    UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/CubeRendererInstancedArrays.cpp
 # 	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/BatchDrawInstanced.cpp
 # 	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/CubeRendererDrawInstanced.cpp
 # UnrimpExamples/VertexBuffer/VertexBuffer.cpp
@@ -48,7 +48,7 @@ INCLUDEPATH += $$quote($$UNRIMPBASE_PATH/Renderer/Renderer/include)
 android-g++ {
     # TODO(sw) Android ndk is switching to clang + llvm libc++ thus don't update gcc/gnustl. But Qt isn't yet released with an clang build so we need to use gcc 4.9 with gnustl which has some problems
     # e.g. std::log2 and std::to_string are not part of the gnustl c++ runtime library and also L"" in macros don't work -> so Renderer debug disabled
-    LIBS += $$quote($$UNRIMPBASE_PATH/lib/Android_armeabi-v7a/libOpenGLES2RendererStatic.a) -ldl -landroid
+    LIBS += -L$$quote($$UNRIMPBASE_PATH/lib/Android_armeabi-v7a/) -lOpenGLES2RendererStatic -lRendererRuntimeStatic -ldl -landroid
     DEFINES += LINUX USEGLES RENDERER_NO_DEBUG
 }
 

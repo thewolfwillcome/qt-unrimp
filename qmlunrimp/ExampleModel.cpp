@@ -29,7 +29,7 @@
 // #include "UnrimpExamples/FirstGeometryShader/FirstGeometryShader.h"
 // #include "UnrimpExamples/FirstTessellation/FirstTessellation.h"
 // #include "UnrimpExamples/Fxaa/Fxaa.h"
-#ifndef ANDROID // crn_decomp uses malloc_usable_size which doesn't exits on android
+#ifndef ANDROID // Generates runtime errors such as "W/Adreno-GSL( 1320): <gsl_ldd_control:405>: ioctl fd 30 code 0x400c0907 (IOCTL_KGSL_DEVICE_WAITTIMESTAMP_CTXTID) failed: errno 35 Resource deadlock would occur" an my GLES 3 device with Adreno 330 GPU
 #include "UnrimpExamples/InstancedCubes/InstancedCubes.h"
 #endif
 // #include "UnrimpExamples/FirstPostProcessing/FirstPostProcessing.h"
@@ -52,7 +52,7 @@ ExampleModel::ExampleModel(QObject *parent)
 // 					new ExampleItem("FirstTessellation",			"Basic",	&ExampleFabricator<FirstTessellation>, this ),
 // 					// Advanced
 // 					new ExampleItem("Fxaa",							"Advanced",	&ExampleFabricator<Fxaa>, this ),
-#ifndef ANDROID // crn_decomp uses malloc_usable_size which doesn't exits on android
+#ifndef ANDROID // Generates runtime errors such as "W/Adreno-GSL( 1320): <gsl_ldd_control:405>: ioctl fd 30 code 0x400c0907 (IOCTL_KGSL_DEVICE_WAITTIMESTAMP_CTXTID) failed: errno 35 Resource deadlock would occur" an my GLES 3 device with Adreno 330 GPU
 					new ExampleItem("InstancedCubes",				"Advanced",	&ExampleFabricator<InstancedCubes>, this ),
 #endif
 // 					new ExampleItem("IcosahedronTessellation",		"Advanced",	&ExampleFabricator<IcosahedronTessellation>, this ),
@@ -64,7 +64,7 @@ ExampleModel::ExampleModel(QObject *parent)
 	
 }
 
-int ExampleModel::rowCount(const QModelIndex & parent) const
+int ExampleModel::rowCount(const QModelIndex& ) const
 {
 	return m_examples.count();
 }
