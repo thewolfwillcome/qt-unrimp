@@ -36,7 +36,7 @@ ApplicationWindow {
             handle_text: "Examples"
             /*anchors.top: parent.top - 20
             anchors.bottom: parent.bottom -20*/
-            height: parent.height - topSlideOut.fullHeight - 20
+            height: parent.height - topSlideOut.fullHeight
             width: 300
             ColumnLayout {
                 anchors.fill: parent
@@ -57,15 +57,14 @@ ApplicationWindow {
         id: topSlideOut
             expandable: true
             width: 300
-            height: 25
+            height: 100
             position: "top"
             handle_text: "Current Example: " + exampleList.model.get(exampleList.currentIndex).name
             ColumnLayout {
                 anchors.fill: parent
                 Text {
 					id: opengl_version
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
+                    anchors.fill: parent
                     text: unrimpitem.openglVersionName;
                 }
             }

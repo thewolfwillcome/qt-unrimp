@@ -30,7 +30,8 @@
 
 #include <memory> // for std::unique_ptr
 
-class ExampleBase;
+class UnrimpExample;
+class ExampleApplicationFrontend;
 
 class UnrimpNode : public QSGGeometryNode
 {
@@ -55,7 +56,7 @@ public:
 	void saveUnrimpState();
 	void restoreUnrimpState();
 
-	bool setExample(std::unique_ptr<ExampleBase> newExample);
+	bool setExample(std::unique_ptr<UnrimpExample> newExample);
 	bool exampleNeedsCyclicUpdate();
 
 private:
@@ -85,13 +86,15 @@ private:
 	Renderer::IFramebufferPtr m_frameBuffer;
 	Renderer::CommandBuffer		 mCommandBuffer;	///< Command buffer
 
-	std::unique_ptr<ExampleBase> m_example; // Holds the instance to the current active example
-	std::unique_ptr<ExampleBase> m_newExampel; // Holds the instance to an new example to switch to
+	std::unique_ptr<UnrimpExample> m_example; // Holds the instance to the current active example
+	std::unique_ptr<UnrimpExample> m_newExampel; // Holds the instance to an new example to switch to
 
 	bool m_initialized;
 	bool m_dirtyFBO;
 	bool m_dirtySize;
 	bool m_exampleChanged;
+	
+	std::unique_ptr<ExampleApplicationFrontend> mApplicationFrontend;
 };
 
 #endif // UNRIMPNODE_H

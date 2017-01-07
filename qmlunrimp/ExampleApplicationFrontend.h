@@ -18,41 +18,42 @@
 \*********************************************************/
 
 
-#ifndef FIRSTINSTANCING_H
-#define FIRSTINSTANCING_H
+#pragma once
 
-#include "UnrimpExamples/ExampleBase.h"
+#include <Framework/IApplicationFrontend.h>
 
-class FirstInstancing : public ExampleBase
+#include <Renderer/Renderer.h>
+#include <RendererRuntime/Public/RendererRuntime.h>
+
+
+class ExampleApplicationFrontend : public IApplicationFrontend
 {
+
+
+//[-------------------------------------------------------]
+//[ Public methods                                        ]
+//[-------------------------------------------------------]
 public:
-	virtual void onInit(Renderer::IRendererPtr renderer) override;
-	virtual void onDeinit() override;
-	virtual void Render() override;
-    virtual QString name() override { return "FirstInstancing"; }
+	ExampleApplicationFrontend(Renderer::IRendererPtr renderer);
+	void setMainRenderTarget(Renderer::IRenderTarget* mainRenderTarget);
+
+	void setupRendererRuntime();
+	void teardownRendererRuntime();
 
 
 //[-------------------------------------------------------]
-//[ Private methods                                       ]
+//[ Public virtual IApplicationFrontend methods           ]
 //[-------------------------------------------------------]
+public:
+	inline virtual Renderer::IRenderer *getRenderer() const override { return mRenderer;}
+	inline virtual Renderer::IRenderTarget *getMainRenderTarget() const override { return mMainRenderTarget;}
+	inline virtual RendererRuntime::IRendererRuntime *getRendererRuntime() const override { return mRendererRuntime;}
+	inline virtual RendererToolkit::IRendererToolkit *getRendererToolkit() override { return nullptr;}
+
 private:
-	void fillCommandBuffer();
-
-
-//[-------------------------------------------------------]
-//[ Private data                                          ]
-//[-------------------------------------------------------]
-private:
-	Renderer::IBufferManagerPtr mBufferManager;					///< Buffer manager, can be a null pointer
-	Renderer::IRootSignaturePtr mRootSignature;					///< Root signature, can be a null pointer
-	Renderer::CommandBuffer		mCommandBuffer;					///< Command buffer
-	// Left side (green): Instanced arrays (shader model 3 feature, vertex array element advancing per-instance instead of per-vertex)
-	Renderer::IPipelineStatePtr mPipelineStateInstancedArrays;	///< Pipeline state object (PSO), can be a null pointer
-	Renderer::IVertexArrayPtr   mVertexArrayInstancedArrays;	///< Vertex array object (VAO), can be a null pointer
-	// Right side (blue): Draw instanced (shader model 4 feature, build in shader variable holding the current instance ID)
-	Renderer::IPipelineStatePtr mPipelineStateDrawInstanced;	///< Pipeline state object (PSO), can be a null pointer
-	Renderer::IVertexArrayPtr   mVertexArrayDrawInstanced;		///< Vertex array object (VAO), can be a null pointer
+	Renderer::IRendererPtr mRenderer;
+	Renderer::IRenderTarget* mMainRenderTarget;
+	RendererRuntime::IRendererRuntimePtr mRendererRuntime;
+	
 
 };
-
-#endif // FIRSTINSTANCING_H

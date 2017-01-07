@@ -82,38 +82,38 @@ set(SRC_FILES main.cpp
 	unrimpitem.cpp
 	unrimpnode.cpp
 	ExampleModel.cpp
-	UnrimpExamples/Color4.cpp
-# 	UnrimpExamples/TextureFromFileLoader.cpp
-	UnrimpExamples/Stopwatch.cpp
-	UnrimpExamples/EulerAngles.cpp
+	ExampleApplicationFrontend.cpp
 	UnrimpExamples/ExampleBase.cpp
-	UnrimpExamples/FirstTriangle/FirstTriangle.cpp
-	UnrimpExamples/ExampleRenderRuntime.cpp
-	UnrimpExamples/InstancedCubes/InstancedCubes.cpp
-	UnrimpExamples/InstancedCubes/ICubeRenderer.cpp
-# 	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/BatchDrawInstanced.cpp
-# 	UnrimpExamples/InstancedCubes/CubeRendererDrawInstanced/CubeRendererDrawInstanced.cpp
-	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/BatchInstancedArrays.cpp
-	UnrimpExamples/InstancedCubes/CubeRendererInstancedArrays/CubeRendererInstancedArrays.cpp
+)
 
-# 	UnrimpExamples/VertexBuffer/VertexBuffer.cpp
-# 	UnrimpExamples/FirstTexture/FirstTexture.cpp
-	UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.cpp
-# 	UnrimpExamples/FirstPostProcessing/FirstPostProcessing.cpp
-# 	UnrimpExamples/FirstMultipleRenderTargets/FirstMultipleRenderTargets.cpp
-# 	UnrimpExamples/FirstGeometryShader/FirstGeometryShader.cpp
-# 	UnrimpExamples/FirstTessellation/FirstTessellation.cpp
-	UnrimpExamples/FirstInstancing/FirstInstancing.cpp
-# 	UnrimpExamples/Fxaa/Fxaa.cpp
-# 	UnrimpExamples/IcosahedronTessellation/IcosahedronTessellation.cpp
-# 	UnrimpExamples/FirstFont/FirstFont.cpp
-# 	UnrimpExamples/FirstAssimp/FirstAssimp.cpp
-# 	UnrimpExamples/FirstAssimp/PointsMesh.cpp
-# 	UnrimpExamples/AssimpMesh/AssimpMesh.cpp
-# 	UnrimpExamples/AssimpMesh/Mesh.cpp
+# unrimp example sources
+set(UNRIMP_EXAMPLES_PATH "${UNRIMPBASE_PATH}/Example/Examples/src")
+set(SRC_FILES ${SRC_FILES}
+	${UNRIMP_EXAMPLES_PATH}/Framework/Color4.cpp
+	${UNRIMP_EXAMPLES_PATH}/Framework/EulerAngles.cpp
+	${UNRIMP_EXAMPLES_PATH}/Framework/Stopwatch.cpp
+	${UNRIMP_EXAMPLES_PATH}/Framework/ExampleBase.cpp
+	# Basic
+	${UNRIMP_EXAMPLES_PATH}/Basics/FirstTriangle/FirstTriangle.cpp
+	${UNRIMP_EXAMPLES_PATH}/Basics/FirstIndirectBuffer/FirstIndirectBuffer.cpp
+	${UNRIMP_EXAMPLES_PATH}/Basics/FirstTexture/FirstTexture.cpp
+	${UNRIMP_EXAMPLES_PATH}/Basics/VertexBuffer/VertexBuffer.cpp
+	${UNRIMP_EXAMPLES_PATH}/Basics/FirstRenderToTexture/FirstRenderToTexture.cpp
+	${UNRIMP_EXAMPLES_PATH}/Basics/FirstMultipleRenderTargets/FirstMultipleRenderTargets.cpp
+	${UNRIMP_EXAMPLES_PATH}/Basics/FirstInstancing/FirstInstancing.cpp
+	${UNRIMP_EXAMPLES_PATH}/Basics/FirstTessellation/FirstTessellation.cpp
+	${UNRIMP_EXAMPLES_PATH}/Basics/FirstGeometryShader/FirstGeometryShader.cpp
+	# RendererRuntime
+	${UNRIMP_EXAMPLES_PATH}/Advanced/InstancedCubes/CubeRendererDrawInstanced/BatchDrawInstanced.cpp
+	${UNRIMP_EXAMPLES_PATH}/Advanced/InstancedCubes/CubeRendererDrawInstanced/CubeRendererDrawInstanced.cpp
+	${UNRIMP_EXAMPLES_PATH}/Advanced/InstancedCubes/CubeRendererInstancedArrays/BatchInstancedArrays.cpp
+	${UNRIMP_EXAMPLES_PATH}/Advanced/InstancedCubes/CubeRendererInstancedArrays/CubeRendererInstancedArrays.cpp
+	${UNRIMP_EXAMPLES_PATH}/Advanced/InstancedCubes/ICubeRenderer.cpp
+	${UNRIMP_EXAMPLES_PATH}/Advanced/InstancedCubes/InstancedCubes.cpp
 )
   
 include_directories("${UNRIMPBASE_PATH}/include")
+include_directories("${UNRIMPBASE_PATH}/Example/Examples/src")
 
 # TODO(sw) Wy do we have to add an include path to the build directory of renderer runtime and renderer? For what are then the include files in UNRIMPBASE_PATH/include good for?
 include_directories("${UNRIMPBASE_PATH}/Renderer/RendererRuntime/include")

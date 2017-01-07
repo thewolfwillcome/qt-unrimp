@@ -19,9 +19,12 @@
 
 
 #include "unrimpnode.h"
-#include "UnrimpExamples/PlatformTypes.h"
-#include "UnrimpExamples/Color4.h"
 #include "UnrimpExamples/ExampleBase.h"
+
+#include "ExampleApplicationFrontend.h"
+
+#include <Framework/ExampleBase.h>
+#include <Framework/Color4.h>
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
@@ -32,18 +35,11 @@
 
 #include <iostream>
 
-class EmptyExample : public ExampleBase
+class EmptyExample : public UnrimpExample
 {
 public:
-	virtual void Render() override
-	{
-		// Nothing to do here
-	}
-
-	virtual void onInit(Renderer::IRendererPtr) override {}
-	virtual void onDeinit() override {}
-    virtual QString name() override { return QString(); }
-
+	EmptyExample() : UnrimpExample(nullptr, {"", false})
+	{}
 };
 
 UnrimpNode::UnrimpNode()
@@ -90,7 +86,7 @@ UnrimpNode::~UnrimpNode()
 	delete m_unrimpContext;
 }
 
-bool UnrimpNode::setExample(std::unique_ptr<ExampleBase> newExample)
+bool UnrimpNode::setExample(std::unique_ptr<UnrimpExample> newExample)
 {
 	m_newExampel = std::move(newExample);
 	m_exampleChanged = true;
@@ -177,7 +173,7 @@ void UnrimpNode::update()
 		if (!m_initialized) {
 			init();
 			if (m_example)
-				m_example->Init(m_renderer, m_frameBuffer);
+				m_example->Init(mApplicationFrontend.get());
 		}
 
 		if (m_dirtyFBO) {
@@ -200,7 +196,7 @@ void UnrimpNode::update()
 			}
 
 			m_example->setSize(m_size.width(), m_size.height());
-			m_example->Init(m_renderer, m_frameBuffer);
+			m_example->Init(mApplicationFrontend.get());
 			m_exampleChanged = false;
 			markDirty(DirtyMaterial);
 			
@@ -232,6 +228,8 @@ void UnrimpNode::updateFBO()
 
 	Renderer::ITexture *texture2D = m_renderTexture = mTextureManager->createTexture2D(m_size.width(), m_size.height(), Renderer::TextureFormat::R8G8B8A8, nullptr, Renderer::TextureFlag::RENDER_TARGET);
 	m_frameBuffer = m_renderer->createFramebuffer(1, &texture2D);
+
+	mApplicationFrontend->setMainRenderTarget(m_frameBuffer);
 
 	fillCommandBuffer();
 
@@ -297,6 +295,8 @@ void UnrimpNode::init()
         mBufferManager = m_renderer->createBufferManager();
         mTextureManager = m_renderer->createTextureManager();
     }
+    
+    mApplicationFrontend = std::unique_ptr<ExampleApplicationFrontend>(new ExampleApplicationFrontend(m_renderer));
 
 	m_initialized = true;
 }

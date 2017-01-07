@@ -23,9 +23,12 @@
 
 #include <QAbstractListModel>
 
+#include "UnrimpExamples/ExampleBase.h"
+
+#include <functional> // For std::function
+
 class UnrimpNode;
-class ExampleBase;
-typedef ExampleBase* (*ExampleFabricatorMethod)();
+typedef std::function<UnrimpExample*()> ExampleFabricatorMethod;
 
 class ExampleItem : public QObject {
 	Q_OBJECT

@@ -19,32 +19,56 @@
 
 
 #include "ExampleBase.h"
+#include "ExampleApplicationFrontend.h"
 
 
 //[-------------------------------------------------------]
 //[ Public methods                                        ]
 //[-------------------------------------------------------]
-ExampleBase::~ExampleBase()
+UnrimpExample::UnrimpExample(std::unique_ptr<ExampleBase> example, UnrimpExampleMetaData metadata) :
+	mMetadata(metadata),
+	mExample(std::move(example)),
+	mFrontend(nullptr)
 {
-
+	// Nothing here
 }
 
-void ExampleBase::Init(Renderer::IRendererPtr renderer, Renderer::IRenderTarget* mainRenderTarget)
+UnrimpExample::~UnrimpExample()
 {
-	m_Renderer = renderer;
-	mMainRenderTarget = mainRenderTarget;
-	
-	onInit(renderer);
+	// Nothing here
 }
 
-void ExampleBase::Deinit()
+void UnrimpExample::Init(ExampleApplicationFrontend* applicationFrontend)
 {
-	onDeinit();
+	mFrontend = applicationFrontend;
+	if (mExample)
+	{
+		// TODO(sw) Right location to do this? Might be better done outside if this class (e.g. urimpnode) where it knows if the next example needs the runtime too
+		if (nullptr != mFrontend && needsRendererRuntime())
+		{
+			mFrontend->setupRendererRuntime();
+		}
 
-	mMainRenderTarget = nullptr;
+		mExample->setApplicationFrontend(applicationFrontend);
+		
+		mExample->initialize();
+	}
 }
 
-void ExampleBase::setSize(int width, int height)
+void UnrimpExample::Deinit()
+{
+	if (mExample)
+	{
+		mExample->deinitialize();
+	}
+
+	if (nullptr != mFrontend && needsRendererRuntime())
+	{
+		mFrontend->teardownRendererRuntime();
+	}
+}
+
+void UnrimpExample::setSize(int width, int height)
 {
 	if (mWidth != width || mHeigth != height) {
 		mWidth = width;
@@ -53,12 +77,13 @@ void ExampleBase::setSize(int width, int height)
 	}
 }
 
-
-//[-------------------------------------------------------]
-//[ Protected ExampleBase methods                         ]
-//[-------------------------------------------------------]
-ExampleBase::ExampleBase()
-: mWidth(0), mHeigth(0), mMainRenderTarget(nullptr)
+void UnrimpExample::Render()
 {
+	if (mExample)
+	{
+		if (wantsCyclicUpdate())
+			mExample->onUpdate();
 
+		mExample->onDraw();
+	}
 }

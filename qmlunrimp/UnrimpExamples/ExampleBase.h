@@ -21,8 +21,7 @@
 #ifndef EXAMPLEBASE_H
 #define EXAMPLEBASE_H
 
-#include "UnrimpExamples/PlatformTypes.h"
-#include "UnrimpExamples/Color4.h"
+#include <Framework/ExampleBase.h>
 
 #include <Renderer/Renderer.h>
 #include <QString>
@@ -32,8 +31,18 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <cassert>
+#include <memory> // For "std::unique_ptr"
 
-class ExampleBase
+class ExampleApplicationFrontend;
+
+struct UnrimpExampleMetaData
+{
+	QString name;
+	bool wantsCyclicUpdate;
+	bool needsRendererRuntime;
+};
+
+class UnrimpExample
 {
 
 
@@ -41,34 +50,20 @@ class ExampleBase
 //[ Public methods                                        ]
 //[-------------------------------------------------------]
 public:
-	virtual ~ExampleBase();
+	UnrimpExample(std::unique_ptr<ExampleBase> example, UnrimpExampleMetaData metadata);
+	~UnrimpExample();
 
-	void Init(Renderer::IRendererPtr renderer, Renderer::IRenderTarget* mainRenderTarget);
+	void Init(ExampleApplicationFrontend* applicationFrontend);
 	void Deinit();
 
 	void setSize(int width, int height);
 
+	void Render();
+	QString name() {return mMetadata.name;}
+	bool wantsCyclicUpdate() {return mMetadata.wantsCyclicUpdate;}
 
-//[-------------------------------------------------------]
-//[ Public virtual ExampleBase methods                    ]
-//[-------------------------------------------------------]
-public:
-	virtual void onInit(Renderer::IRendererPtr renderer) = 0;
-	virtual void onDeinit() = 0;
+	bool needsRendererRuntime() {return mMetadata.needsRendererRuntime;}
 
-	virtual void Render() = 0;
-	virtual QString name() = 0;
-	virtual bool wantsCyclicUpdate() {return false;}
-
-
-//[-------------------------------------------------------]
-//[ Protected ExampleBase methods                         ]
-//[-------------------------------------------------------]
-protected:
-	ExampleBase();
-	inline Renderer::IRendererPtr getRenderer() { return m_Renderer; }
-	inline Renderer::IRenderTarget* getMainRenderTarget() { return mMainRenderTarget; }
-	
 
 //[-------------------------------------------------------]
 //[ Protected virtual ExampleBase methods                 ]
@@ -88,18 +83,10 @@ protected:
 //[ Private data                                          ]
 //[-------------------------------------------------------]
 private:
-	Renderer::IRendererPtr m_Renderer;
-	Renderer::IRenderTarget* mMainRenderTarget;
+	UnrimpExampleMetaData mMetadata;
+	std::unique_ptr<ExampleBase> mExample;
+	ExampleApplicationFrontend* mFrontend;
 };
 
-
-
-template <class ExampleClass>
-ExampleBase* ExampleFabricator()
-{
-	return new ExampleClass();
-}
-
-typedef ExampleBase* (*FabricatorMethod)();
 
 #endif // EXAMPLEBASE_H

@@ -19,49 +19,53 @@
 
 
 #include "ExampleModel.h"
-
-#include "UnrimpExamples/FirstTriangle/FirstTriangle.h"
-// #include "UnrimpExamples/VertexBuffer/VertexBuffer.h"
-// #include "UnrimpExamples/FirstTexture/FirstTexture.h"
-#include "UnrimpExamples/FirstRenderToTexture/FirstRenderToTexture.h"
-#include "UnrimpExamples/FirstInstancing/FirstInstancing.h"
-// #include "UnrimpExamples/FirstMultipleRenderTargets/FirstMultipleRenderTargets.h"
-// #include "UnrimpExamples/FirstGeometryShader/FirstGeometryShader.h"
-// #include "UnrimpExamples/FirstTessellation/FirstTessellation.h"
-// #include "UnrimpExamples/Fxaa/Fxaa.h"
+#include <Basics/FirstTriangle/FirstTriangle.h>
+#include <Basics/FirstIndirectBuffer/FirstIndirectBuffer.h>
+#include <Basics/VertexBuffer/VertexBuffer.h>
+#include <Basics/FirstTexture/FirstTexture.h>
+#include <Basics/FirstRenderToTexture/FirstRenderToTexture.h>
+#include <Basics/FirstInstancing/FirstInstancing.h>
+#include <Basics/FirstMultipleRenderTargets/FirstMultipleRenderTargets.h>
+#include <Basics/FirstGeometryShader/FirstGeometryShader.h>
+#include <Basics/FirstTessellation/FirstTessellation.h>
 #ifndef ANDROID // Generates runtime errors such as "W/Adreno-GSL( 1320): <gsl_ldd_control:405>: ioctl fd 30 code 0x400c0907 (IOCTL_KGSL_DEVICE_WAITTIMESTAMP_CTXTID) failed: errno 35 Resource deadlock would occur" an my GLES 3 device with Adreno 330 GPU
-#include "UnrimpExamples/InstancedCubes/InstancedCubes.h"
+#include <Advanced/InstancedCubes/InstancedCubes.h>
 #endif
-// #include "UnrimpExamples/FirstPostProcessing/FirstPostProcessing.h"
-// #include "UnrimpExamples/IcosahedronTessellation/IcosahedronTessellation.h"
-// #include "UnrimpExamples/FirstFont/FirstFont.h"
-// #include "UnrimpExamples/FirstAssimp/FirstAssimp.h"
-// #include "UnrimpExamples/AssimpMesh/AssimpMesh.h"
+
+
+template <class ExampleClass>
+ExampleFabricatorMethod createFabricator(const char* name, bool cyclicUpdate = false, bool needsRendererRuntime = false)
+{
+	auto f =[name, cyclicUpdate, needsRendererRuntime]() {
+		return new UnrimpExample(std::unique_ptr<ExampleBase>(new ExampleClass()), {name, cyclicUpdate, needsRendererRuntime});
+	};
+	return f;
+}
 
 ExampleModel::ExampleModel(QObject *parent)
 	: QAbstractListModel(parent), m_examples({
 					// Basic
- 					new ExampleItem("FirstTriangle",				"Basic",	&ExampleFabricator<FirstTriangle>, this ),
-// 					new ExampleItem("VertexBuffer",					"Basic",	&ExampleFabricator<VertexBuffer>, this ),
-// 					new ExampleItem("FirstTexture",					"Basic",	&ExampleFabricator<FirstTexture>, this ),
-					new ExampleItem("FirstRenderToTexture",			"Basic",	&ExampleFabricator<FirstRenderToTexture>, this ),
-// 					new ExampleItem("FirstPostProcessing",			"Basic",	&ExampleFabricator<FirstPostProcessing>, this ),
-					new ExampleItem("FirstInstancing",				"Basic",	&ExampleFabricator<FirstInstancing>, this ),
-// 					new ExampleItem("FirstMultipleRenderTargets",	"Basic",	&ExampleFabricator<FirstMultipleRenderTargets>, this ),
-// 					new ExampleItem("FirstGeometryShader",			"Basic",	&ExampleFabricator<FirstGeometryShader>, this ),
-// 					new ExampleItem("FirstTessellation",			"Basic",	&ExampleFabricator<FirstTessellation>, this ),
-// 					// Advanced
-// 					new ExampleItem("Fxaa",							"Advanced",	&ExampleFabricator<Fxaa>, this ),
+  					new ExampleItem("FirstTriangle",				"Basic",	createFabricator<FirstTriangle>("FirstTriangle", false), this ),
+					new ExampleItem("FirstIndirectBuffer",			"Basic",	createFabricator<FirstIndirectBuffer>("FirstIndirectBuffer", false), this ),
+					new ExampleItem("VertexBuffer",					"Basic",	createFabricator<VertexBuffer>("VertexBuffer", false), this ),
+					new ExampleItem("FirstTexture",					"Basic",	createFabricator<FirstTexture>("FirstTexture", false), this ),
+					new ExampleItem("FirstRenderToTexture",			"Basic",	createFabricator<FirstRenderToTexture>("FirstRenderToTexture", false), this ),
+					new ExampleItem("FirstInstancing",				"Basic",	createFabricator<FirstInstancing>("FirstInstancing", false), this ),
+					new ExampleItem("FirstMultipleRenderTargets",	"Basic",	createFabricator<FirstMultipleRenderTargets>("FirstMultipleRenderTargets", false), this ),
+					new ExampleItem("FirstGeometryShader",			"Basic",	createFabricator<FirstGeometryShader>("FirstGeometryShader", false), this ),
+					new ExampleItem("FirstTessellation",			"Basic",	createFabricator<FirstTessellation>("FirstTessellation", false), this ),
+					// Advanced
 #ifndef ANDROID // Generates runtime errors such as "W/Adreno-GSL( 1320): <gsl_ldd_control:405>: ioctl fd 30 code 0x400c0907 (IOCTL_KGSL_DEVICE_WAITTIMESTAMP_CTXTID) failed: errno 35 Resource deadlock would occur" an my GLES 3 device with Adreno 330 GPU
-					new ExampleItem("InstancedCubes",				"Advanced",	&ExampleFabricator<InstancedCubes>, this ),
+					new ExampleItem("InstancedCubes",				"Advanced",	createFabricator<InstancedCubes>("InstancedCubes", true, true), this ),
 #endif
-// 					new ExampleItem("IcosahedronTessellation",		"Advanced",	&ExampleFabricator<IcosahedronTessellation>, this ),
-// 					new ExampleItem("FirstFont",					"Advanced",	&ExampleFabricator<FirstFont>, this ),
-// 					new ExampleItem("FirstAssimp",					"Advanced",	&ExampleFabricator<FirstAssimp>, this ),
-// 					new ExampleItem("AssimpMesh",					"Advanced",	&ExampleFabricator<AssimpMesh>, this ),
+// // 					new ExampleItem("IcosahedronTessellation",		"Advanced",	&ExampleFabricator<IcosahedronTessellation>, this ),
+// // 					new ExampleItem("FirstFont",					"Advanced",	&ExampleFabricator<FirstFont>, this ),
+// // 					new ExampleItem("FirstAssimp",					"Advanced",	&ExampleFabricator<FirstAssimp>, this ),
+// // 					new ExampleItem("AssimpMesh",					"Advanced",	&ExampleFabricator<AssimpMesh>, this ),
 					})
 {
 	
+	//ExampleFabricatorMethod f = createFabricator<FirstTriangle>("FirstTriangle", false);
 }
 
 int ExampleModel::rowCount(const QModelIndex& ) const

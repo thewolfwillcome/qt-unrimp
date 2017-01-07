@@ -61,8 +61,8 @@ void UnrimpItem::setExampleItem(ExampleItem* item){
 	m_currentExample = item;
 	if (m_node) {
 		ExampleFabricatorMethod method = item->fabricator();
-		ExampleBase* newExample(nullptr != method ? method() : nullptr);
-		if (m_node->setExample(std::unique_ptr<ExampleBase>(newExample))) {
+		UnrimpExample* newExample(nullptr != method ? method() : nullptr);
+		if (m_node->setExample(std::unique_ptr<UnrimpExample>(newExample))) {
             if (nullptr != newExample && newExample->wantsCyclicUpdate())
                 startCyclicTimer();
             else
@@ -97,8 +97,8 @@ QSGNode *UnrimpItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 		if (m_currentExample)
 		{
 			ExampleFabricatorMethod method = m_currentExample->fabricator();
-			ExampleBase* newExample(nullptr != method ? method() : nullptr);
-			node->setExample(std::unique_ptr<ExampleBase>(newExample));
+			UnrimpExample* newExample(nullptr != method ? method() : nullptr);
+			node->setExample(std::unique_ptr<UnrimpExample>(newExample));
 		}
 		
 		mOpenGLVersionName = node->getOpenglVersionName();

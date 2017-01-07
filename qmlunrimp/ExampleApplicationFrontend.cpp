@@ -1,5 +1,5 @@
 /*********************************************************\
- * Copyright (c) 2012-2013 Christian Ofenberg
+ * Copyright (c) 2013-2013 Stephan Wezel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without
@@ -18,56 +18,39 @@
 \*********************************************************/
 
 
-//[-------------------------------------------------------]
-//[ Public methods                                        ]
-//[-------------------------------------------------------]
-inline Color4::Color4() :
-	r(0.0f),
-	g(0.0f),
-	b(0.0f),
-	a(0.0f)
+#include "ExampleApplicationFrontend.h"
+
+RendererRuntime::IRendererRuntime* createRendererRuntime(Renderer::IRenderer& renderer)
 {
-	// Nothing to do in here
+	extern RendererRuntime::IRendererRuntime *createRendererRuntimeInstance(Renderer::IRenderer &renderer);
+
+	// Create the renderer runtime instance
+	return createRendererRuntimeInstance(renderer);
 }
 
-inline Color4::Color4(const Color4 &source) :
-	r(source.r),
-	g(source.g),
-	b(source.b),
-	a(source.a)
+ExampleApplicationFrontend::ExampleApplicationFrontend(Renderer::IRendererPtr renderer) :
+	mRenderer(renderer),
+	mMainRenderTarget(nullptr),
+	mRendererRuntime(nullptr)
 {
-	// Nothing to do in here
 }
 
-inline Color4::Color4(float _r, float _g, float _b, float _a) :
-	r(_r),
-	g(_g),
-	b(_b),
-	a(_a)
+void ExampleApplicationFrontend::setMainRenderTarget(Renderer::IRenderTarget* mainRenderTarget)
 {
-	// Nothing to do in here
+	mMainRenderTarget = mainRenderTarget;
 }
 
-inline Color4::~Color4()
+void ExampleApplicationFrontend::setupRendererRuntime()
 {
-	// Nothing to do in here
+	if (mRenderer && nullptr == mRendererRuntime)
+	{
+		mRendererRuntime = createRendererRuntime(*mRenderer);
+
+		// TODO(sw) Initialize asset system
+	}
 }
 
-inline Color4 &Color4::operator =(const Color4 &source)
+void ExampleApplicationFrontend::teardownRendererRuntime()
 {
-	r = source.r;
-	g = source.g;
-	b = source.b;
-	a = source.a;
-	return *this;
-}
-
-inline Color4::operator float *()
-{
-	return &r;
-}
-
-inline Color4::operator const float *() const
-{
-	return &r;
+	mRendererRuntime = nullptr;
 }
