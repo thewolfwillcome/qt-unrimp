@@ -21,7 +21,7 @@
 #include "unrimpitem.h"
 #include "unrimpnode.h"
 
-#include "UnrimpExamples/ExampleBase.h"
+#include "UnrimpExamples/UnrimpExample.h"
 
 #include <QtCore/QPropertyAnimation>
 
@@ -63,10 +63,10 @@ void UnrimpItem::setExampleItem(ExampleItem* item){
 		ExampleFabricatorMethod method = item->fabricator();
 		UnrimpExample* newExample(nullptr != method ? method() : nullptr);
 		if (m_node->setExample(std::unique_ptr<UnrimpExample>(newExample))) {
-            if (nullptr != newExample && newExample->wantsCyclicUpdate())
-                startCyclicTimer();
-            else
-                stopCyclicTimer();
+			if (nullptr != newExample && newExample->wantsCyclicUpdate())
+				startCyclicTimer();
+			else
+				stopCyclicTimer();
 
 			emit exampleChanged();
 			update();

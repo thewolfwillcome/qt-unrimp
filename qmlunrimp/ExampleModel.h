@@ -23,7 +23,7 @@
 
 #include <QAbstractListModel>
 
-#include "UnrimpExamples/ExampleBase.h"
+#include "UnrimpExamples/UnrimpExample.h"
 
 #include <functional> // For std::function
 

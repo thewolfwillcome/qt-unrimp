@@ -19,7 +19,7 @@
 
 
 #include "unrimpnode.h"
-#include "UnrimpExamples/ExampleBase.h"
+#include "UnrimpExamples/UnrimpExample.h"
 
 #include "ExampleApplicationFrontend.h"
 

@@ -83,7 +83,7 @@ set(SRC_FILES main.cpp
 	unrimpnode.cpp
 	ExampleModel.cpp
 	ExampleApplicationFrontend.cpp
-	UnrimpExamples/ExampleBase.cpp
+	UnrimpExamples/UnrimpExample.cpp
 )
 
 # unrimp example sources

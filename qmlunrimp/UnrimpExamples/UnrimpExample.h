@@ -18,72 +18,66 @@
 \*********************************************************/
 
 
-#include "ExampleBase.h"
-#include "ExampleApplicationFrontend.h"
+#ifndef UNRIMPEXAMPLE_H
+#define UNRIMPEXAMPLE_H
+
+#include <Framework/ExampleBase.h>
+
+#include <QString>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <cassert>
+#include <memory> // For "std::unique_ptr"
+
+class ExampleApplicationFrontend;
+
+struct UnrimpExampleMetaData
+{
+	QString name;
+	bool wantsCyclicUpdate;
+	bool needsRendererRuntime;
+};
+
+class UnrimpExample
+{
 
 
 //[-------------------------------------------------------]
 //[ Public methods                                        ]
 //[-------------------------------------------------------]
-UnrimpExample::UnrimpExample(std::unique_ptr<ExampleBase> example, UnrimpExampleMetaData metadata) :
-	mMetadata(metadata),
-	mExample(std::move(example)),
-	mFrontend(nullptr)
-{
-	// Nothing here
-}
+public:
+	UnrimpExample(std::unique_ptr<ExampleBase> example, UnrimpExampleMetaData metadata);
+	~UnrimpExample();
 
-UnrimpExample::~UnrimpExample()
-{
-	// Nothing here
-}
+	void Init(ExampleApplicationFrontend* applicationFrontend);
+	void Deinit();
 
-void UnrimpExample::Init(ExampleApplicationFrontend* applicationFrontend)
-{
-	mFrontend = applicationFrontend;
-	if (mExample)
-	{
-		// TODO(sw) Right location to do this? Might be better done outside if this class (e.g. urimpnode) where it knows if the next example needs the runtime too
-		if (nullptr != mFrontend && needsRendererRuntime())
-		{
-			mFrontend->setupRendererRuntime();
-		}
+	void setSize(int width, int height);
 
-		mExample->setApplicationFrontend(applicationFrontend);
-		
-		mExample->initialize();
-	}
-}
+	void Render();
+	QString name() {return mMetadata.name;}
+	bool wantsCyclicUpdate() {return mMetadata.wantsCyclicUpdate;}
 
-void UnrimpExample::Deinit()
-{
-	if (mExample)
-	{
-		mExample->deinitialize();
-	}
+	bool needsRendererRuntime() {return mMetadata.needsRendererRuntime;}
 
-	if (nullptr != mFrontend && needsRendererRuntime())
-	{
-		mFrontend->teardownRendererRuntime();
-	}
-}
+//[-------------------------------------------------------]
+//[ Protected data                                        ]
+//[-------------------------------------------------------]
+protected:
+	int mWidth, mHeigth;
+	
 
-void UnrimpExample::setSize(int width, int height)
-{
-	if (mWidth != width || mHeigth != height) {
-		mWidth = width;
-		mHeigth = height;
-		onSizeChanged();
-	}
-}
+//[-------------------------------------------------------]
+//[ Private data                                          ]
+//[-------------------------------------------------------]
+private:
+	UnrimpExampleMetaData mMetadata;
+	std::unique_ptr<ExampleBase> mExample;
+	ExampleApplicationFrontend* mFrontend;
+};
 
-void UnrimpExample::Render()
-{
-	if (mExample)
-	{
-		if (wantsCyclicUpdate())
-			mExample->onUpdate();
 
-		mExample->onDraw();
-	}
-}
+#endif // UNRIMPEXAMPLE_H
