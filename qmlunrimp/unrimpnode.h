@@ -83,6 +83,7 @@ private:
 	Renderer::IBufferManagerPtr  mBufferManager;	///< Buffer manager, can be a null pointer
     Renderer::ITextureManagerPtr mTextureManager;	///< Texture manager, can be a null pointer
 	Renderer::ITexture2DPtr m_renderTexture;
+	Renderer::ITexture2DPtr m_renderDepthStencilTexture;
 	Renderer::IFramebufferPtr m_frameBuffer;
 	Renderer::CommandBuffer		 mCommandBuffer;	///< Command buffer
 

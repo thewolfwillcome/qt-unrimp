@@ -38,7 +38,7 @@
 class EmptyExample : public UnrimpExample
 {
 public:
-	EmptyExample() : UnrimpExample(nullptr, {"", false})
+	EmptyExample() : UnrimpExample(nullptr, {"", false, false})
 	{}
 };
 
@@ -55,6 +55,7 @@ UnrimpNode::UnrimpNode()
 	, mBufferManager(nullptr)
 	, mTextureManager(nullptr)
 	, m_renderTexture(nullptr)
+	, m_renderDepthStencilTexture(nullptr)
 	, m_frameBuffer(nullptr)
 	, m_example(new EmptyExample)
 	, m_newExampel(nullptr)
@@ -78,6 +79,7 @@ UnrimpNode::~UnrimpNode()
 
 	m_frameBuffer = nullptr;
 	m_renderTexture = nullptr;
+	m_renderDepthStencilTexture = nullptr;
 	
 	mBufferManager = nullptr;
 	mTextureManager = nullptr;
@@ -138,6 +140,9 @@ void UnrimpNode::setQuickWindow(QQuickWindow *window)
 		qSurfaceFormat.setMinorVersion(1);
 		//format.setProfile(QSurfaceFormat::CompatibilityProfile);
 		qSurfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
+		#ifdef _DEBUG
+			qSurfaceFormat.setOption(QSurfaceFormat::DebugContext, true);
+		#endif
 	#endif
 	m_unrimpContext->setFormat(qSurfaceFormat);
 	m_unrimpContext->setShareContext(QOpenGLContext::currentContext());
@@ -227,7 +232,8 @@ void UnrimpNode::updateFBO()
 	format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
 
 	Renderer::ITexture *texture2D = m_renderTexture = mTextureManager->createTexture2D(m_size.width(), m_size.height(), Renderer::TextureFormat::R8G8B8A8, nullptr, Renderer::TextureFlag::RENDER_TARGET);
-	m_frameBuffer = m_renderer->createFramebuffer(1, &texture2D);
+	Renderer::ITexture* depthStencilTexture2D = m_renderDepthStencilTexture = mTextureManager->createTexture2D(m_size.width(), m_size.height(), Renderer::TextureFormat::D32_FLOAT, nullptr, Renderer::TextureFlag::RENDER_TARGET);
+	m_frameBuffer = m_renderer->createFramebuffer(1, &texture2D, depthStencilTexture2D);
 
 	mApplicationFrontend->setMainRenderTarget(m_frameBuffer);
 
