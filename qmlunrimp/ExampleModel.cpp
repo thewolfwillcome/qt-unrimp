@@ -31,6 +31,7 @@
 #ifndef ANDROID // Generates runtime errors such as "W/Adreno-GSL( 1320): <gsl_ldd_control:405>: ioctl fd 30 code 0x400c0907 (IOCTL_KGSL_DEVICE_WAITTIMESTAMP_CTXTID) failed: errno 35 Resource deadlock would occur" an my GLES 3 device with Adreno 330 GPU
 #include <Advanced/InstancedCubes/InstancedCubes.h>
 #endif
+#include <Runtime/FirstMesh/FirstMesh.h>
 
 
 template <class ExampleClass>
@@ -58,14 +59,9 @@ ExampleModel::ExampleModel(QObject *parent)
 #ifndef ANDROID // Generates runtime errors such as "W/Adreno-GSL( 1320): <gsl_ldd_control:405>: ioctl fd 30 code 0x400c0907 (IOCTL_KGSL_DEVICE_WAITTIMESTAMP_CTXTID) failed: errno 35 Resource deadlock would occur" an my GLES 3 device with Adreno 330 GPU
 					new ExampleItem("InstancedCubes",				"Advanced",	createFabricator<InstancedCubes>("InstancedCubes", true, true), this ),
 #endif
-// // 					new ExampleItem("IcosahedronTessellation",		"Advanced",	&ExampleFabricator<IcosahedronTessellation>, this ),
-// // 					new ExampleItem("FirstFont",					"Advanced",	&ExampleFabricator<FirstFont>, this ),
-// // 					new ExampleItem("FirstAssimp",					"Advanced",	&ExampleFabricator<FirstAssimp>, this ),
-// // 					new ExampleItem("AssimpMesh",					"Advanced",	&ExampleFabricator<AssimpMesh>, this ),
+					new ExampleItem("FirstMesh",				"Advanced",	createFabricator<FirstMesh>("FirstMesh", true, true), this )
 					})
 {
-	
-	//ExampleFabricatorMethod f = createFabricator<FirstTriangle>("FirstTriangle", false);
 }
 
 int ExampleModel::rowCount(const QModelIndex& ) const

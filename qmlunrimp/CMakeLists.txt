@@ -83,6 +83,7 @@ set(SRC_FILES main.cpp
 	unrimpnode.cpp
 	ExampleModel.cpp
 	ExampleApplicationFrontend.cpp
+	QtFileManager.cpp
 	UnrimpExamples/UnrimpExample.cpp
 )
 
@@ -110,6 +111,7 @@ set(SRC_FILES ${SRC_FILES}
 	${UNRIMP_EXAMPLES_PATH}/Advanced/InstancedCubes/CubeRendererInstancedArrays/CubeRendererInstancedArrays.cpp
 	${UNRIMP_EXAMPLES_PATH}/Advanced/InstancedCubes/ICubeRenderer.cpp
 	${UNRIMP_EXAMPLES_PATH}/Advanced/InstancedCubes/InstancedCubes.cpp
+	${UNRIMP_EXAMPLES_PATH}/Runtime/FirstMesh/FirstMesh.cpp
 )
   
 include_directories("${UNRIMPBASE_PATH}/include")

@@ -19,20 +19,30 @@
 
 
 #include "ExampleApplicationFrontend.h"
+#include "QtFileManager.h"
 
-RendererRuntime::IRendererRuntime* createRendererRuntime(Renderer::IRenderer& renderer)
+#include <RendererRuntime/Asset/AssetManager.h>
+
+
+RendererRuntime::IRendererRuntime* createRendererRuntime(Renderer::IRenderer& renderer, RendererRuntime::IFileManager& fileManager)
 {
-	extern RendererRuntime::IRendererRuntime *createRendererRuntimeInstance(Renderer::IRenderer &renderer);
+	extern RendererRuntime::IRendererRuntime *createRendererRuntimeInstance(Renderer::IRenderer &renderer, RendererRuntime::IFileManager& fileManager);
 
 	// Create the renderer runtime instance
-	return createRendererRuntimeInstance(renderer);
+	return createRendererRuntimeInstance(renderer, fileManager);
 }
 
 ExampleApplicationFrontend::ExampleApplicationFrontend(Renderer::IRendererPtr renderer) :
 	mRenderer(renderer),
 	mMainRenderTarget(nullptr),
-	mRendererRuntime(nullptr)
+	mRendererRuntime(nullptr),
+	mFileManager(nullptr)
 {
+}
+
+ExampleApplicationFrontend::~ExampleApplicationFrontend()
+{
+	delete mFileManager;
 }
 
 void ExampleApplicationFrontend::setMainRenderTarget(Renderer::IRenderTarget* mainRenderTarget)
@@ -44,9 +54,30 @@ void ExampleApplicationFrontend::setupRendererRuntime()
 {
 	if (mRenderer && nullptr == mRendererRuntime)
 	{
-		mRendererRuntime = createRendererRuntime(*mRenderer);
+		if (nullptr == mFileManager)
+		{
+			mFileManager = new QtFileManager();
+		}
+		mRendererRuntime = createRendererRuntime(*mRenderer, *mFileManager);
 
-		// TODO(sw) Initialize asset system
+		if (nullptr != mRendererRuntime)
+		{
+			// TODO(co) Under construction: Will probably become "mount asset package"
+			// Add used asset package
+			const bool rendererIsOpenGLES = 0 == strcmp(mRenderer->getName(), "OpenGLES2");
+			if (rendererIsOpenGLES)
+			{
+#ifdef ANDROID
+                mRendererRuntime->getAssetManager().addAssetPackageByFilename("assets:/DataMobile/Content/AssetPackage.assets");
+#else
+                mRendererRuntime->getAssetManager().addAssetPackageByFilename("android/assets/DataMobile/Content/AssetPackage.assets");
+#endif
+			}
+			else
+			{
+				mRendererRuntime->getAssetManager().addAssetPackageByFilename("android/assets/DataPc/Content/AssetPackage.assets");
+			}
+		}
 	}
 }
 

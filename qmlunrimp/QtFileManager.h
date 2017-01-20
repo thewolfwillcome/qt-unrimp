@@ -1,5 +1,5 @@
 /*********************************************************\
- * Copyright (c) 2013-2013 Stephan Wezel
+ * Copyright (c) 2013-2017 Stephan Wezel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without
@@ -20,45 +20,39 @@
 
 #pragma once
 
-#include <Framework/IApplicationFrontend.h>
 
-#include <Renderer/Renderer.h>
-#include <RendererRuntime/Public/RendererRuntime.h>
+//[-------------------------------------------------------]
+//[ Includes                                              ]
+//[-------------------------------------------------------]
+#include <RendererRuntime/Core/File/IFileManager.h>
 
-class QtFileManager;
 
-
-class ExampleApplicationFrontend : public IApplicationFrontend
+class QtFileManager : public RendererRuntime::IFileManager
 {
 
 
 //[-------------------------------------------------------]
-//[ Public methods                                        ]
+//[ Friends                                               ]
+//[-------------------------------------------------------]
+	friend class ExampleApplicationFrontend;	// Manages the instance
+
+
+//[-------------------------------------------------------]
+//[ Public virtual RendererRuntime::IFileManager methods  ]
 //[-------------------------------------------------------]
 public:
-	ExampleApplicationFrontend(Renderer::IRendererPtr renderer);
-	~ExampleApplicationFrontend();
-	void setMainRenderTarget(Renderer::IRenderTarget* mainRenderTarget);
-
-	void setupRendererRuntime();
-	void teardownRendererRuntime();
+	virtual RendererRuntime::IFile* openFile(const char* filename) override;
+	virtual void closeFile(RendererRuntime::IFile& file) override;
 
 
 //[-------------------------------------------------------]
-//[ Public virtual IApplicationFrontend methods           ]
+//[ Protected methods                                     ]
 //[-------------------------------------------------------]
-public:
-	inline virtual Renderer::IRenderer *getRenderer() const override { return mRenderer;}
-	inline virtual Renderer::IRenderTarget *getMainRenderTarget() const override { return mMainRenderTarget;}
-	inline virtual RendererRuntime::IRendererRuntime *getRendererRuntime() const override { return mRendererRuntime;}
-	inline virtual RendererToolkit::IRendererToolkit *getRendererToolkit() override { return nullptr;}
-
-private:
-	Renderer::IRendererPtr mRenderer;
-	Renderer::IRenderTarget* mMainRenderTarget;
-	RendererRuntime::IRendererRuntimePtr mRendererRuntime;
-
-	QtFileManager* mFileManager;
+protected:
+	QtFileManager();
+	virtual ~QtFileManager();
+	QtFileManager(const QtFileManager&) = delete;
+	QtFileManager& operator=(const QtFileManager&) = delete;
 
 
 };

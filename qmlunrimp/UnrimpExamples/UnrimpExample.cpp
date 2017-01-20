@@ -81,7 +81,19 @@ void UnrimpExample::Render()
 	if (mExample)
 	{
 		if (wantsCyclicUpdate())
+		{
+			if (nullptr != mFrontend)
+			{
+				RendererRuntime::IRendererRuntime* rendererRuntime = mFrontend->getRendererRuntime();
+				if (nullptr != rendererRuntime)
+				{
+					CLocaleChanger clocale;
+					rendererRuntime->update();
+				}
+			}
+			
 			mExample->onUpdate();
+		}
 
 		mExample->onDraw();
 	}
