@@ -87,7 +87,6 @@ void UnrimpExample::Render()
 				RendererRuntime::IRendererRuntime* rendererRuntime = mFrontend->getRendererRuntime();
 				if (nullptr != rendererRuntime)
 				{
-					CLocaleChanger clocale;
 					rendererRuntime->update();
 				}
 			}
