@@ -291,9 +291,9 @@ void UnrimpNode::init()
 	// Create the renderer instance
 	m_renderer = createOpenGLRendererInstance2(0, true);
 #elif USEGLES
-	extern Renderer::IRenderer *createOpenGLES2RendererInstance2(Renderer::handle, bool);
+	extern Renderer::IRenderer *createOpenGLES3RendererInstance2(Renderer::handle, bool);
 
-    m_renderer = createOpenGLES2RendererInstance2(0, true);
+    m_renderer = createOpenGLES3RendererInstance2(0, true);
 #endif
 
     if (nullptr != m_renderer)

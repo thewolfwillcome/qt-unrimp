@@ -64,7 +64,7 @@ void ExampleApplicationFrontend::setupRendererRuntime()
 		{
 			// TODO(co) Under construction: Will probably become "mount asset package"
 			// Add used asset package
-			const bool rendererIsOpenGLES = 0 == strcmp(mRenderer->getName(), "OpenGLES2");
+			const bool rendererIsOpenGLES = 0 == strcmp(mRenderer->getName(), "OpenGLES3");
 			if (rendererIsOpenGLES)
 			{
 #ifdef ANDROID
