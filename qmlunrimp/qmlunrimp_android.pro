@@ -53,7 +53,7 @@ INCLUDEPATH += $$quote($$UNRIMPBASE_PATH/Renderer/Renderer/include)
 android-g++ {
     # TODO(sw) Android ndk is switching to clang + llvm libc++ thus don't update gcc/gnustl. But Qt isn't yet released with an clang build so we need to use gcc 4.9 with gnustl which has some problems
     # e.g. std::to_string are not part of the gnustl c++ runtime library -> so Renderer debug disabled
-    LIBS += -L$$quote($$UNRIMPBASE_PATH/lib/Android_armeabi-v7a/) -lOpenGLES2RendererStatic -lRendererRuntimeStatic -ldl -landroid
+    LIBS += -L$$quote($$UNRIMPBASE_PATH/lib/Android_armeabi-v7a/) -lOpenGLES3RendererStatic -lRendererRuntimeStatic -ldl -landroid
     DEFINES += LINUX ANDROID USEGLES RENDERER_NO_DEBUG
 }
 
