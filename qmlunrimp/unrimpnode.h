@@ -30,6 +30,11 @@
 
 #include <memory> // for std::unique_ptr
 
+namespace Renderer
+{
+	class Context;
+}
+
 class UnrimpExample;
 class ExampleApplicationFrontend;
 
@@ -95,6 +100,7 @@ private:
 	bool m_dirtySize;
 	bool m_exampleChanged;
 	
+	std::unique_ptr<Renderer::Context> mRendererContext;
 	std::unique_ptr<ExampleApplicationFrontend> mApplicationFrontend;
 };
 

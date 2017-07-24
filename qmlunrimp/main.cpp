@@ -34,7 +34,7 @@ struct bla
 
 int main(int argc, char **argv)
 {
-	//QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    //QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
 	qmlRegisterType<UnrimpItem>("Unrimp", 1, 0, "UnrimpItem");
@@ -44,11 +44,6 @@ int main(int argc, char **argv)
     QString dataPath = QStandardPaths::displayName(QStandardPaths::AppDataLocation);
 
     QString fdataPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, "test.txt");
-
-    QUrl url("assets:/qml/main.qml");
-    QString tt = url.url();
-    QString tt1 = url.path();
-
 
     QQmlApplicationEngine engine;
     #ifdef Q_OS_ANDROID

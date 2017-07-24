@@ -26,6 +26,8 @@
 //[-------------------------------------------------------]
 #include <RendererRuntime/Core/File/IFileManager.h>
 
+#include <string>
+
 
 class QtFileManager : public RendererRuntime::IFileManager
 {
@@ -41,8 +43,11 @@ class QtFileManager : public RendererRuntime::IFileManager
 //[ Public virtual RendererRuntime::IFileManager methods  ]
 //[-------------------------------------------------------]
 public:
-	virtual RendererRuntime::IFile* openFile(const char* filename) override;
-	virtual void closeFile(RendererRuntime::IFile& file) override;
+	virtual const char* getAbsoluteLocalDataDirectoryName() const override;
+	virtual void createDirectories(const char* directoryName) const override;
+	virtual bool doesFileExist(const char* filename) const override;
+	virtual RendererRuntime::IFile* openFile(FileMode fileMode, const char* filename) const override;
+	virtual void closeFile(RendererRuntime::IFile& file) const override;
 
 
 //[-------------------------------------------------------]
@@ -53,6 +58,13 @@ protected:
 	virtual ~QtFileManager();
 	QtFileManager(const QtFileManager&) = delete;
 	QtFileManager& operator=(const QtFileManager&) = delete;
+
+
+//[-------------------------------------------------------]
+//[ Private data                                          ]
+//[-------------------------------------------------------]
+private:
+	const std::string mAbsoluteLocalDataDirectoryName;
 
 
 };

@@ -20,7 +20,6 @@ UNRIMP_EXAMPLES_PATH = "$$UNRIMPBASE_PATH/Example/Examples/src"
 
 SOURCES += $$UNRIMP_EXAMPLES_PATH/Framework/Color4.cpp
 SOURCES += $$UNRIMP_EXAMPLES_PATH/Framework/EulerAngles.cpp
-SOURCES += $$UNRIMP_EXAMPLES_PATH/Framework/Stopwatch.cpp
 SOURCES += $$UNRIMP_EXAMPLES_PATH/Framework/ExampleBase.cpp
     # Basic
 SOURCES += $$UNRIMP_EXAMPLES_PATH/Basics/FirstTriangle/FirstTriangle.cpp
@@ -76,9 +75,7 @@ QMAKE_CXXFLAGS += -std=c++11
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
-OTHER_FILES += android/AndroidManifest.xml \
-    android/assets/Imrod/ImrodLowPoly.obj \
-    android/assets/test.txt
+OTHER_FILES += android/AndroidManifest.xml
 
 HEADERS += \
     ExampleModel.h \

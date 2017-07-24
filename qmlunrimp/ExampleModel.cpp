@@ -32,6 +32,7 @@
 #include <Advanced/InstancedCubes/InstancedCubes.h>
 #endif
 #include <Runtime/FirstMesh/FirstMesh.h>
+#include <Runtime/FirstScene/FirstScene.h>
 
 
 template <class ExampleClass>
@@ -46,20 +47,21 @@ ExampleFabricatorMethod createFabricator(const char* name, bool cyclicUpdate = f
 ExampleModel::ExampleModel(QObject *parent)
 	: QAbstractListModel(parent), m_examples({
 					// Basic
-  					new ExampleItem("FirstTriangle",				"Basic",	createFabricator<FirstTriangle>("FirstTriangle", false), this ),
-					new ExampleItem("FirstIndirectBuffer",			"Basic",	createFabricator<FirstIndirectBuffer>("FirstIndirectBuffer", false), this ),
-					new ExampleItem("VertexBuffer",					"Basic",	createFabricator<VertexBuffer>("VertexBuffer", false), this ),
-					new ExampleItem("FirstTexture",					"Basic",	createFabricator<FirstTexture>("FirstTexture", false), this ),
-					new ExampleItem("FirstRenderToTexture",			"Basic",	createFabricator<FirstRenderToTexture>("FirstRenderToTexture", false), this ),
-					new ExampleItem("FirstInstancing",				"Basic",	createFabricator<FirstInstancing>("FirstInstancing", false), this ),
-					new ExampleItem("FirstMultipleRenderTargets",	"Basic",	createFabricator<FirstMultipleRenderTargets>("FirstMultipleRenderTargets", false), this ),
-					new ExampleItem("FirstGeometryShader",			"Basic",	createFabricator<FirstGeometryShader>("FirstGeometryShader", false), this ),
-					new ExampleItem("FirstTessellation",			"Basic",	createFabricator<FirstTessellation>("FirstTessellation", false), this ),
+   					new ExampleItem("FirstTriangle",				"Basic",	createFabricator<FirstTriangle>("FirstTriangle", false), this ),
+// 					new ExampleItem("FirstIndirectBuffer",			"Basic",	createFabricator<FirstIndirectBuffer>("FirstIndirectBuffer", false), this ),
+// 					new ExampleItem("VertexBuffer",					"Basic",	createFabricator<VertexBuffer>("VertexBuffer", false), this ),
+// 					new ExampleItem("FirstTexture",					"Basic",	createFabricator<FirstTexture>("FirstTexture", false), this ),
+// 					new ExampleItem("FirstRenderToTexture",			"Basic",	createFabricator<FirstRenderToTexture>("FirstRenderToTexture", false), this ),
+// 					new ExampleItem("FirstInstancing",				"Basic",	createFabricator<FirstInstancing>("FirstInstancing", false), this ),
+// 					new ExampleItem("FirstMultipleRenderTargets",	"Basic",	createFabricator<FirstMultipleRenderTargets>("FirstMultipleRenderTargets", false), this ),
+// 					new ExampleItem("FirstGeometryShader",			"Basic",	createFabricator<FirstGeometryShader>("FirstGeometryShader", false), this ),
+// 					new ExampleItem("FirstTessellation",			"Basic",	createFabricator<FirstTessellation>("FirstTessellation", false), this ),
 					// Advanced
-#ifndef ANDROID // Generates runtime errors such as "W/Adreno-GSL( 1320): <gsl_ldd_control:405>: ioctl fd 30 code 0x400c0907 (IOCTL_KGSL_DEVICE_WAITTIMESTAMP_CTXTID) failed: errno 35 Resource deadlock would occur" an my GLES 3 device with Adreno 330 GPU
-					new ExampleItem("InstancedCubes",				"Advanced",	createFabricator<InstancedCubes>("InstancedCubes", true, true), this ),
-#endif
-					new ExampleItem("FirstMesh",				"Advanced",	createFabricator<FirstMesh>("FirstMesh", true, true), this )
+// #ifndef ANDROID // Generates runtime errors such as "W/Adreno-GSL( 1320): <gsl_ldd_control:405>: ioctl fd 30 code 0x400c0907 (IOCTL_KGSL_DEVICE_WAITTIMESTAMP_CTXTID) failed: errno 35 Resource deadlock would occur" an my GLES 3 device with Adreno 330 GPU
+// 					new ExampleItem("InstancedCubes",				"Advanced",	createFabricator<InstancedCubes>("InstancedCubes", true, true), this ),
+// #endif
+					new ExampleItem("FirstMesh",				"Advanced",	createFabricator<FirstMesh>("FirstMesh", true, true), this ),
+					new ExampleItem("FirstScene",				"Advanced",	createFabricator<FirstScene>("FirstScene", true, true), this )
 					})
 {
 }

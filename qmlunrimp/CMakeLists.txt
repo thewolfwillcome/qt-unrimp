@@ -91,8 +91,6 @@ set(SRC_FILES main.cpp
 set(UNRIMP_EXAMPLES_PATH "${UNRIMPBASE_PATH}/Example/Examples/src")
 set(SRC_FILES ${SRC_FILES}
 	${UNRIMP_EXAMPLES_PATH}/Framework/Color4.cpp
-	${UNRIMP_EXAMPLES_PATH}/Framework/EulerAngles.cpp
-	${UNRIMP_EXAMPLES_PATH}/Framework/Stopwatch.cpp
 	${UNRIMP_EXAMPLES_PATH}/Framework/ExampleBase.cpp
 	# Basic
 	${UNRIMP_EXAMPLES_PATH}/Basics/FirstTriangle/FirstTriangle.cpp
@@ -112,10 +110,14 @@ set(SRC_FILES ${SRC_FILES}
 	${UNRIMP_EXAMPLES_PATH}/Advanced/InstancedCubes/ICubeRenderer.cpp
 	${UNRIMP_EXAMPLES_PATH}/Advanced/InstancedCubes/InstancedCubes.cpp
 	${UNRIMP_EXAMPLES_PATH}/Runtime/FirstMesh/FirstMesh.cpp
+	${UNRIMP_EXAMPLES_PATH}/Runtime/FirstScene/FirstScene.cpp
+	${UNRIMP_EXAMPLES_PATH}/Runtime/FirstScene/IController.cpp
+	${UNRIMP_EXAMPLES_PATH}/Runtime/FirstScene/FreeCameraController.cpp
 )
   
 include_directories("${UNRIMPBASE_PATH}/include")
 include_directories("${UNRIMPBASE_PATH}/Example/Examples/src")
+include_directories("${UNRIMPBASE_PATH}/External/ImGui/include/")
 
 # TODO(sw) Wy do we have to add an include path to the build directory of renderer runtime and renderer? For what are then the include files in UNRIMPBASE_PATH/include good for?
 include_directories("${UNRIMPBASE_PATH}/Renderer/RendererRuntime/include")

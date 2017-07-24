@@ -26,6 +26,8 @@
 #include <Framework/ExampleBase.h>
 #include <Framework/Color4.h>
 
+#include <Renderer/Public/StdLog.h>
+
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
 #include <QSurfaceFormat>
@@ -34,6 +36,28 @@
 #include <QtGui/QOpenGLFramebufferObject>
 
 #include <iostream>
+
+
+//[-------------------------------------------------------]
+//[ Anonymous detail namespace                            ]
+//[-------------------------------------------------------]
+namespace
+{
+	namespace detail
+	{
+
+
+		//[-------------------------------------------------------]
+		//[ Global variables                                      ]
+		//[-------------------------------------------------------]
+		Renderer::StdLog g_RendererLog;
+
+
+//[-------------------------------------------------------]
+//[ Anonymous detail namespace                            ]
+//[-------------------------------------------------------]
+	} // detail
+}
 
 class EmptyExample : public UnrimpExample
 {
@@ -140,10 +164,24 @@ void UnrimpNode::setQuickWindow(QQuickWindow *window)
 		qSurfaceFormat.setMinorVersion(1);
 		//format.setProfile(QSurfaceFormat::CompatibilityProfile);
 		qSurfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
-		#ifdef _DEBUG
-			qSurfaceFormat.setOption(QSurfaceFormat::DebugContext, true);
-		#endif
+		//#ifdef _DEBUG
+		qSurfaceFormat.setOption(QSurfaceFormat::DebugContext, true);
+		//#endif
 	#endif
+		
+	qSurfaceFormat.setRedBufferSize(8);
+	qSurfaceFormat.setGreenBufferSize(8);
+	qSurfaceFormat.setBlueBufferSize(8);
+	qSurfaceFormat.setAlphaBufferSize(8);
+	qSurfaceFormat.setStencilBufferSize(8);
+	qSurfaceFormat.setDepthBufferSize(24);
+
+	auto r = qSurfaceFormat.redBufferSize();
+	auto g = qSurfaceFormat.greenBufferSize();
+	auto b = qSurfaceFormat.blueBufferSize();
+	auto a = qSurfaceFormat.alphaBufferSize();
+	auto s = qSurfaceFormat.stencilBufferSize();
+	auto d = qSurfaceFormat.depthBufferSize();
 	m_unrimpContext->setFormat(qSurfaceFormat);
 	m_unrimpContext->setShareContext(QOpenGLContext::currentContext());
     m_unrimpContext->create();
@@ -228,12 +266,13 @@ void UnrimpNode::updateFBO()
     if (nullptr == mTextureManager)
         return;
 
-	QOpenGLFramebufferObjectFormat format;
-	format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
-
 	Renderer::ITexture *texture2D = m_renderTexture = mTextureManager->createTexture2D(m_size.width(), m_size.height(), Renderer::TextureFormat::R8G8B8A8, nullptr, Renderer::TextureFlag::RENDER_TARGET);
 	Renderer::ITexture* depthStencilTexture2D = m_renderDepthStencilTexture = mTextureManager->createTexture2D(m_size.width(), m_size.height(), Renderer::TextureFormat::D32_FLOAT, nullptr, Renderer::TextureFlag::RENDER_TARGET);
-	m_frameBuffer = m_renderer->createFramebuffer(1, &texture2D, depthStencilTexture2D);
+	{
+		Renderer::FramebufferAttachment colorFramebufferAttachment(texture2D);
+		Renderer::FramebufferAttachment depthStencilFramebufferAttachment(depthStencilTexture2D);
+		m_frameBuffer = m_renderer->createFramebuffer(1, &colorFramebufferAttachment);//, &depthStencilFramebufferAttachment);
+	}
 
 	mApplicationFrontend->setMainRenderTarget(m_frameBuffer);
 
@@ -284,16 +323,18 @@ void UnrimpNode::init()
 	m_samples = format.samples();
 
 	QSurfaceFormat qSurfaceFormat = m_quickWindow->requestedFormat();
+	// TODO(sw) We misuse the windows context because no window handle is given
+	mRendererContext = std::unique_ptr<Renderer::Context>(new Renderer::Context(Renderer::Context::ContextType::WINDOWS, ::detail::g_RendererLog, 0, true));
 
 #if USEOPENGL
-	extern Renderer::IRenderer *createOpenGLRendererInstance2(Renderer::handle, bool);
+	extern Renderer::IRenderer *createOpenGLRendererInstance(const Renderer::Context&);
 
 	// Create the renderer instance
-	m_renderer = createOpenGLRendererInstance2(0, true);
+	m_renderer = createOpenGLRendererInstance(*mRendererContext);
 #elif USEGLES
-	extern Renderer::IRenderer *createOpenGLES3RendererInstance2(Renderer::handle, bool);
+	extern Renderer::IRenderer *createOpenGLES3RendererInstance(const Renderer::Context&);
 
-    m_renderer = createOpenGLES3RendererInstance2(0, true);
+    m_renderer = createOpenGLES3RendererInstance(*mRendererContext);
 #endif
 
     if (nullptr != m_renderer)

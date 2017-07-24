@@ -23,7 +23,12 @@
 #include <Framework/IApplicationFrontend.h>
 
 #include <Renderer/Renderer.h>
-#include <RendererRuntime/Public/RendererRuntime.h>
+#include <RendererRuntime/IRendererRuntime.h>
+
+namespace RendererRuntime
+{
+	class Context;
+}
 
 class QtFileManager;
 
@@ -59,6 +64,7 @@ private:
 	RendererRuntime::IRendererRuntimePtr mRendererRuntime;
 
 	QtFileManager* mFileManager;
+	RendererRuntime::Context* mRendererRuntimeContext;
 
 
 };
