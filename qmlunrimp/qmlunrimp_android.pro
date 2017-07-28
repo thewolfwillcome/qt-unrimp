@@ -61,6 +61,8 @@ linux-g++ {
     LIBS += -L$$quote($$UNRIMPBASE_PATH/lib/Linux_x64/) -lOpenGLRendererStatic -ldl -lX11 -lRendererRuntimeStatic  -lpthread
 }
 
+DEFINES += GLM_FORCE_RADIANS GLM_FORCE_LEFT_HANDED GLM_FORCE_DEPTH_ZERO_TO_ONE
+
 linux-g++:QMAKE_TARGET.arch = $$QMAKE_HOST.arch
 linux-g++-32:QMAKE_TARGET.arch = x86
 linux-g++-64:QMAKE_TARGET.arch = x86_64
