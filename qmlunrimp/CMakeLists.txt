@@ -146,6 +146,8 @@ endif()
 add_executable(qmlunrimp ${SRC_FILES})
 target_link_libraries(qmlunrimp ${UNRIMP_OPENGLRENDERER_FOUND} ${UNRIMP_RENDERER_RUNTIME_FOUND})
 
+target_compile_definitions(qmlunrimp PRIVATE -DGLM_FORCE_RADIANS -DGLM_FORCE_LEFT_HANDED -DGLM_FORCE_DEPTH_ZERO_TO_ONE)
+
 if(UNIX)
 	# needed from the static opengl renderer and renderer runtime
 	target_link_libraries(qmlunrimp X11 dl pthread)

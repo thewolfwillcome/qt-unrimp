@@ -271,7 +271,7 @@ void UnrimpNode::updateFBO()
 	{
 		Renderer::FramebufferAttachment colorFramebufferAttachment(texture2D);
 		Renderer::FramebufferAttachment depthStencilFramebufferAttachment(depthStencilTexture2D);
-		m_frameBuffer = m_renderer->createFramebuffer(1, &colorFramebufferAttachment);//, &depthStencilFramebufferAttachment);
+		m_frameBuffer = m_renderer->createFramebuffer(1, &colorFramebufferAttachment, &depthStencilFramebufferAttachment);
 	}
 
 	mApplicationFrontend->setMainRenderTarget(m_frameBuffer);
